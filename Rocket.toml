@@ -1,0 +1,2 @@
+ [global.databases]
+ postgres_url = { url = "postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@localhost:5432/postgres", pool_size = 20 }
