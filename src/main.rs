@@ -8,6 +8,7 @@ mod settings;
 mod analytics;
 mod migration;
 mod error;
+mod application;
 
 use rocket_sync_db_pools::{database, postgres};
 use crate::settings::{Settings};
@@ -43,6 +44,7 @@ async fn get_health(con_str: &State<DBPost>) -> Json<health::Health>{
 }
 
 
+
 #[post("/analytics/log", data="<analytics>")]
 async fn log_analytics(conn: AnalyticsDB, analytics: Json<AnalyticData>) -> Json<Response>{
     let analytic_entry = AnalyticEntry::new(analytics.creation_date, analytics.os.clone(), analytics.device_size.clone(), analytics.session_id.clone(), analytics.session_length);
@@ -66,8 +68,6 @@ fn check_db_tables(connection_str: String){
     info!("analytics_table:  {}", analytics_table.done);
     info!("user_table: {}", user_table.done);
 }
-
-
 
 #[launch]
 fn rocket() -> _ {
