@@ -12,9 +12,14 @@ pub struct Database {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct General {
+    pub debug: bool,
+    pub token: String,
+}
+#[derive(Debug, Deserialize)]
 pub struct Settings{
     pub database: Database,
-    pub debug: bool
+    pub general: General,
 }
 
 impl Settings {

@@ -4,7 +4,7 @@ use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
 
 #[derive(Hash, Debug)]
-enum ApplicationType { IOS, Android, Web }
+pub enum ApplicationType { IOS, Android, Web }
 
 #[derive(Hash, Debug)]
 struct Application {

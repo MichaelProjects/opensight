@@ -7,18 +7,17 @@ mod info;
 mod settings;
 mod analytics;
 mod migration;
-mod error;
 mod application;
 
 use rocket_sync_db_pools::{database, postgres};
 use crate::settings::{Settings};
-use crate::migration::{MigrateAnalyticsTable, Migration, MigrateUserTable};
 use crate::analytics::{AnalyticData, AnalyticEntry};
 use rocket::serde::{Serialize, Deserialize};
 use rocket::serde::json::Json;
 use rocket::State;
 use std::thread;
-use log::{info, warn};
+use log::{info};
+use crate::migration::check_db_tables;
 
 struct DBPost{
     url: String
@@ -43,30 +42,12 @@ async fn get_health(con_str: &State<DBPost>) -> Json<health::Health>{
     Json(health::get_health_state(con_str.url.clone()))
 }
 
-
-
 #[post("/analytics/log", data="<analytics>")]
 async fn log_analytics(conn: AnalyticsDB, analytics: Json<AnalyticData>) -> Json<Response>{
     let analytic_entry = AnalyticEntry::new(analytics.creation_date, analytics.os.clone(), analytics.device_size.clone(), analytics.session_id.clone(), analytics.session_length);
     let result = conn.run(|c| analytic_entry.insert_entry(c)).await;
     info!("{}", result);
     Json(Response::new("a",  false))
-}
-
-#[post("/event/log")]
-async fn log_event() -> Json<Response>{
-    Json(Response::new("logged", false))
-}
-
-
-fn check_db_tables(connection_str: String){
-    let mut analytics_table = MigrateAnalyticsTable::new(String::from("analytics" ), connection_str.clone());
-    let mut user_table = MigrateUserTable::new(String::from("user_access"), connection_str.clone());
-    analytics_table.resolve();
-    user_table.resolve();
-
-    info!("analytics_table:  {}", analytics_table.done);
-    info!("user_table: {}", user_table.done);
 }
 
 #[launch]
@@ -79,7 +60,7 @@ fn rocket() -> _ {
                                                         conf.database.postgresql_password.clone());
     let a = connection_str.clone();
     thread::spawn(||{
-        check_db_tables(a)
+        check_db_tables(a);
     });
     rocket::build()
         .manage(DBPost{ url: connection_str.clone()})
