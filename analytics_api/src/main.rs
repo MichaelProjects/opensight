@@ -42,7 +42,7 @@ async fn get_health(con_str: &State<DBPost>) -> Json<health::Health>{
     Json(health::get_health_state(con_str.url.clone()))
 }
 
-#[post("/analytics/log", data="<analytics>")]
+#[post("/analytics/entry", data="<analytics>")]
 async fn log_analytics(conn: AnalyticsDB, analytics: Json<AnalyticData>) -> Json<Response>{
     let analytic_entry = AnalyticEntry::new(analytics.creation_date, analytics.os.clone(), analytics.device_size.clone(), analytics.session_id.clone(), analytics.session_length);
     let result = conn.run(|c| analytic_entry.insert_entry(c)).await;
