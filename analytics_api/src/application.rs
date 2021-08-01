@@ -2,18 +2,33 @@ use chrono::{DateTime, Utc};
 use uuid::Uuid;
 use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
+use serde::{Serialize, Deserialize};
+use postgres::{Client, SimpleQueryMessage, NoTls};
+use chrono::prelude::*;
+use juniper::GraphQLValue;
 
 #[derive(Hash, Debug)]
-pub enum ApplicationType { IOS, Android, Web }
-
+pub enum ApplicationType { IOS, Android, Web, NotFound }
+impl ApplicationType {
+    pub fn as_str(&self) -> &'static str {
+        match *self {
+            ApplicationType::IOS => "ios",
+            ApplicationType::Android => "android",
+            ApplicationType::Web => "web",
+            ApplicationType::NotFound => "notFound",
+        }
+    }
+}
 #[derive(Hash, Debug)]
-struct Application {
+pub struct Application {
     name: String,
     os: ApplicationType,
     uuid: String,
     added: DateTime<Utc>,
     token: String,
 }
+
+
 impl Application{
     pub fn new(name: &str, os: ApplicationType) -> Application{
         let uuid: String = Uuid::new_v4().to_string();
@@ -23,6 +38,33 @@ impl Application{
         app
     }
 }
+
+pub fn insert_entry(app: Application, conn: &mut Client) -> bool{
+    let mut successful = true;
+    let query = "INSERT INTO applications (application_id, application_name, created_time, token, os) values ($1,$2,$3,$4,$5,$6)".to_string();
+    let response = match conn.execute(query.as_str(),&[&app.uuid, &app.name, &app.added, &app.token, &app.os.as_str()]){
+        Ok(response) => response,
+        Err(err) => panic!("Error while inserting: {}", err)
+    };
+    println!("Rows Affected: {}", response);
+    if response == 0{
+        successful = false;
+    }
+    successful
+}
+
+
+pub fn get_application_details(connection_str: String)  {
+    let mut client = match Client::connect(connection_str.as_str(), NoTls) {
+        Ok(client) => client,
+        Err(e) => panic!("Error while connecting to db: {}", e)
+    };
+    let query = "SELECT application_id, token from application;";
+    for row in client.query(query, &[]) {
+        println!("{:?}", row);
+    }
+}
+
 
 fn create_token(app: &Application) -> String{
     let mut s = DefaultHasher::new();

@@ -2,7 +2,7 @@ use serde::Deserialize;
 use uuid::Uuid;
 use postgres::{Client};
 use chrono::prelude::*;
-
+use crate::application::ApplicationType;
 
 
 #[derive(Deserialize)]
@@ -27,6 +27,8 @@ pub struct AnalyticEntry{
 }
 impl AnalyticEntry{
     pub fn new(creation_time: DateTime<Utc>, os: String, device_size: String, session_id: String, session_length: i64) -> Self{
+
+
         AnalyticEntry{
             tracking_id: create_tracking_id(),
             creation_time,

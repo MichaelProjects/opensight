@@ -2,8 +2,6 @@
 #[macro_use] extern crate rocket;
 
 mod health;
-mod events;
-mod info;
 mod settings;
 mod analytics;
 mod migration;
@@ -18,6 +16,8 @@ use rocket::State;
 use std::thread;
 use log::{info};
 use crate::migration::check_db_tables;
+use crate::application::{get_application_details};
+use serde_json::Value;
 
 struct DBPost{
     url: String
@@ -38,12 +38,12 @@ impl Response{
 }
 
 #[get("/health")]
-async fn get_health(con_str: &State<DBPost>) -> Json<health::Health>{
+async fn get_health(conn: AnalyticsDB, con_str: &State<DBPost>) -> Json<health::Health>{
     Json(health::get_health_state(con_str.url.clone()))
 }
 
-#[post("/analytics/entry", data="<analytics>")]
-async fn log_analytics(conn: AnalyticsDB, analytics: Json<AnalyticData>) -> Json<Response>{
+#[post("/analytics/<application_id>/entry", data="<analytics>")]
+async fn insert_entry(conn: AnalyticsDB, application_id: String, analytics: Json<AnalyticData>) -> Json<Response>{
     let analytic_entry = AnalyticEntry::new(analytics.creation_date, analytics.os.clone(), analytics.device_size.clone(), analytics.session_id.clone(), analytics.session_length);
     let result = conn.run(|c| analytic_entry.insert_entry(c)).await;
     info!("{}", result);
@@ -54,17 +54,23 @@ async fn log_analytics(conn: AnalyticsDB, analytics: Json<AnalyticData>) -> Json
 fn rocket() -> _ {
     env_logger::init();
     let conf = Settings::new().unwrap();
+
     let connection_str = migration::build_connection_st(conf.database.postgresql_url.clone(),
                                                         String::from("postgres"),
                                                         conf.database.postgresql_user.clone(),
                                                         conf.database.postgresql_password.clone());
     let a = connection_str.clone();
+    let b = connection_str.clone();
+
     thread::spawn(||{
-        check_db_tables(a);
+        get_application_details(a);
+    });
+    thread::spawn(||{
+        check_db_tables(b);
     });
     rocket::build()
         .manage(DBPost{ url: connection_str.clone()})
         .attach(AnalyticsDB::fairing())
         .manage( conf)
-        .mount("/", routes![get_health, log_analytics])
+        .mount("/", routes![get_health, insert_entry] )
 }
