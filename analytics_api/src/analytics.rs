@@ -2,7 +2,6 @@ use serde::Deserialize;
 use uuid::Uuid;
 use postgres::{Client};
 use chrono::prelude::*;
-use crate::application::ApplicationType;
 
 
 #[derive(Deserialize)]

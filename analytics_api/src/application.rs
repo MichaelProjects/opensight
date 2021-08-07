@@ -2,9 +2,9 @@ use chrono::{DateTime, Utc};
 use uuid::Uuid;
 use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
-use serde::{Serialize, Deserialize};
-use postgres::{Client, SimpleQueryMessage, NoTls};
-use chrono::prelude::*;
+use postgres::{Client, NoTls};
+use crate::application_dao::ApplicationDao;
+use crate::dao::Dao;
 
 
 #[derive(Hash, Debug)]
@@ -18,14 +18,23 @@ impl ApplicationType {
             ApplicationType::NotFound => "notFound",
         }
     }
+    pub fn from_str(str: &str) ->  ApplicationType {
+        match str{
+            "ios" => ApplicationType::IOS,
+            "android" => ApplicationType::Android,
+            "web" => ApplicationType::Web,
+            "notFound" => ApplicationType::NotFound,
+            _ => ApplicationType::NotFound
+        }
+    }
 }
 #[derive(Hash, Debug)]
 pub struct Application {
-    name: String,
-    os: ApplicationType,
-    uuid: String,
-    added: DateTime<Utc>,
-    token: String,
+    pub name: String,
+    pub os: ApplicationType,
+    pub uuid: String,
+    pub added: DateTime<Utc>,
+    pub token: String,
 }
 
 
@@ -55,18 +64,15 @@ pub fn insert_entry(app: Application, conn: &mut Client) -> bool{
 
 
 pub fn get_application_details(connection_str: String)  {
-    let mut client = match Client::connect(connection_str.as_str(), NoTls) {
+    let mut client =  match Client::connect(connection_str.as_str(), NoTls) {
         Ok(client) => client,
         Err(e) => panic!("Error while connecting to db: {}", e)
     };
-    let query = "SELECT application_id, token from applications;";
-    for row in client.query(query, &[]) {
-        error!("content of application table: {:?}", row);
+    let application_dao = ApplicationDao::new();
+    let applications: Vec<Application> = application_dao.get_entry(&mut client);
+    for app in applications.iter() {
+        println!("Application {:?}", app);
     }
-}
-
-pub fn validate_token(token: String, application_id: String, connection_str: String){
-    let response = get_application_details(connection_str);
 }
 
 

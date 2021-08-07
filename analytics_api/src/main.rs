@@ -18,9 +18,6 @@ use std::thread;
 use log::{info};
 use crate::migration::check_db_tables;
 use crate::application::{get_application_details};
-use serde_json::Value;
-use crate::application_dao::ApplicationDao;
-use crate::dao::Dao;
 
 struct DBPost{
     url: String
@@ -68,9 +65,11 @@ fn rocket() -> _ {
     thread::spawn(||{
         get_application_details(a);
     });
-    thread::spawn(||{
+    let data = thread::spawn(||{
         check_db_tables(b);
     });
+    let result = data.join();
+
     rocket::build()
         .manage(DBPost{ url: connection_str.clone()})
         .attach(AnalyticsDB::fairing())
