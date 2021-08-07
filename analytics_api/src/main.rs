@@ -6,7 +6,8 @@ mod settings;
 mod analytics;
 mod migration;
 mod application;
-
+mod application_dao;
+mod dao;
 use rocket_sync_db_pools::{database, postgres};
 use crate::settings::{Settings};
 use crate::analytics::{AnalyticData, AnalyticEntry};
@@ -18,6 +19,8 @@ use log::{info};
 use crate::migration::check_db_tables;
 use crate::application::{get_application_details};
 use serde_json::Value;
+use crate::application_dao::ApplicationDao;
+use crate::dao::Dao;
 
 struct DBPost{
     url: String
@@ -44,7 +47,7 @@ async fn get_health(conn: AnalyticsDB, con_str: &State<DBPost>) -> Json<health::
 
 #[post("/analytics/<application_id>/entry", data="<analytics>")]
 async fn insert_entry(conn: AnalyticsDB, application_id: String, analytics: Json<AnalyticData>) -> Json<Response>{
-    let analytic_entry = AnalyticEntry::new(analytics.creation_date, analytics.os.clone(), analytics.device_size.clone(), analytics.session_id.clone(), analytics.session_length);
+    let analytic_entry = AnalyticEntry::new(application_id, analytics.creation_date, analytics.os.clone(), analytics.device_size.clone(), analytics.session_id.clone(), analytics.session_length);
     let result = conn.run(|c| analytic_entry.insert_entry(c)).await;
     info!("{}", result);
     Json(Response::new("a",  false))

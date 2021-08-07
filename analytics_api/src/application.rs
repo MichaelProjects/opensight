@@ -5,7 +5,7 @@ use std::collections::hash_map::DefaultHasher;
 use serde::{Serialize, Deserialize};
 use postgres::{Client, SimpleQueryMessage, NoTls};
 use chrono::prelude::*;
-use juniper::GraphQLValue;
+
 
 #[derive(Hash, Debug)]
 pub enum ApplicationType { IOS, Android, Web, NotFound }
@@ -59,10 +59,14 @@ pub fn get_application_details(connection_str: String)  {
         Ok(client) => client,
         Err(e) => panic!("Error while connecting to db: {}", e)
     };
-    let query = "SELECT application_id, token from application;";
+    let query = "SELECT application_id, token from applications;";
     for row in client.query(query, &[]) {
-        println!("{:?}", row);
+        error!("content of application table: {:?}", row);
     }
+}
+
+pub fn validate_token(token: String, application_id: String, connection_str: String){
+    let response = get_application_details(connection_str);
 }
 
 

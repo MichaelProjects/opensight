@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use postgres::{Client};
 
 #[derive(Deserialize, Serialize)]
 pub struct Health {

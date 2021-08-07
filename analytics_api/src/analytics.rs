@@ -18,6 +18,7 @@ pub struct AnalyticData{
 #[derive(Clone, Debug)]
 pub struct AnalyticEntry{
     tracking_id: String,
+    application_id: String,
     creation_time: DateTime<Utc>,
     os: String,
     device_size: String,
@@ -26,11 +27,10 @@ pub struct AnalyticEntry{
     // here should come _ features: Vec<String>
 }
 impl AnalyticEntry{
-    pub fn new(creation_time: DateTime<Utc>, os: String, device_size: String, session_id: String, session_length: i64) -> Self{
-
-
+    pub fn new(application_id: String, creation_time: DateTime<Utc>, os: String, device_size: String, session_id: String, session_length: i64) -> Self{
         AnalyticEntry{
             tracking_id: create_tracking_id(),
+            application_id,
             creation_time,
             os,
             device_size,
@@ -40,8 +40,8 @@ impl AnalyticEntry{
     }
     pub fn insert_entry(self, conn: &mut Client) -> bool{
         let mut successful = true;
-        let query = "INSERT INTO analytics (tracking_id, creation_time, os, device_size, session_length, session_id) values ($1,$2,$3,$4,$5,$6)".to_string();
-        let response = match conn.execute(query.as_str(),&[&self.tracking_id, &self.creation_time, &self.os, &self.device_size, &self.session_length, &self.session_id]){
+        let query = "INSERT INTO analytics (tracking_id, application_id, creation_time, os, device_size, session_length, session_id) values ($1,$2,$3,$4,$5,$6)".to_string();
+        let response = match conn.execute(query.as_str(),&[&self.tracking_id, &self.application_id, &self.creation_time, &self.os, &self.device_size, &self.session_length, &self.session_id]){
             Ok(response) => response,
             Err(err) => panic!("Error while inserting: {}", err)
         };
