@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use uuid::Uuid;
 use postgres::{Client};
-use chrono::prelude::*;
+use chrono::{DateTime, Utc};
 
 
 #[derive(Deserialize)]
@@ -39,7 +39,7 @@ impl AnalyticEntry{
     }
     pub fn insert_entry(self, conn: &mut Client) -> bool{
         let mut successful = true;
-        let query = "INSERT INTO analytics (tracking_id, application_id, creation_time, os, device_size, session_length, session_id) values ($1,$2,$3,$4,$5,$6)".to_string();
+        let query = "INSERT INTO analytics (tracking_id, application_id, creation_time, os, device_size, session_length, session_id) values ($1,$2,$3,$4,$5,$6,$7)".to_string();
         let response = match conn.execute(query.as_str(),&[&self.tracking_id, &self.application_id, &self.creation_time, &self.os, &self.device_size, &self.session_length, &self.session_id]){
             Ok(response) => response,
             Err(err) => panic!("Error while inserting: {}", err)

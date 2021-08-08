@@ -46,20 +46,10 @@ impl Application{
         app.token = create_token(&app);
         app
     }
-}
-
-pub fn insert_entry(app: Application, conn: &mut Client) -> bool{
-    let mut successful = true;
-    let query = "INSERT INTO applications (application_id, application_name, created_time, token, os) values ($1,$2,$3,$4,$5,$6)".to_string();
-    let response = match conn.execute(query.as_str(),&[&app.uuid, &app.name, &app.added, &app.token, &app.os.as_str()]){
-        Ok(response) => response,
-        Err(err) => panic!("Error while inserting: {}", err)
-    };
-    println!("Rows Affected: {}", response);
-    if response == 0{
-        successful = false;
+    pub fn insert_entry(app: Application, conn: &mut Client) -> bool{
+        let app_dao = ApplicationDao::new();
+        app_dao.insert_entry(app, conn)
     }
-    successful
 }
 
 

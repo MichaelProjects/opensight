@@ -62,9 +62,7 @@ fn rocket() -> _ {
     let a = connection_str.clone();
     let b = connection_str.clone();
 
-    thread::spawn(||{
-        get_application_details(a);
-    });
+
     let data = thread::spawn(||{
         check_db_tables(b);
     });
