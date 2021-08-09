@@ -1,7 +1,9 @@
 use serde::Deserialize;
 use uuid::Uuid;
-use postgres::{Client};
 use chrono::{DateTime, Utc};
+use rocket_sync_db_pools::diesel::PgConnection;
+use diesel::RunQueryDsl;
+use super::schema::*;
 
 
 #[derive(Deserialize)]
@@ -14,7 +16,9 @@ pub struct AnalyticData{
     pub session_id: String
 
 }
+#[derive(Insertable)]
 #[derive(Clone, Debug)]
+#[table_name="analytics"]
 pub struct AnalyticEntry{
     tracking_id: String,
     application_id: String,
@@ -27,6 +31,8 @@ pub struct AnalyticEntry{
 }
 impl AnalyticEntry{
     pub fn new(application_id: String, creation_time: DateTime<Utc>, os: String, device_size: String, session_id: String, session_length: i64) -> Self{
+        error!("{:?}", Utc::now(),);
+        error!("{:?}", creation_time);
         AnalyticEntry{
             tracking_id: create_tracking_id(),
             application_id,
@@ -37,13 +43,11 @@ impl AnalyticEntry{
             session_id
         }
     }
-    pub fn insert_entry(self, conn: &mut Client) -> bool{
+    pub fn insert_entry(self, conn: &mut PgConnection) -> bool{
         let mut successful = true;
-        let query = "INSERT INTO analytics (tracking_id, application_id, creation_time, os, device_size, session_length, session_id) values ($1,$2,$3,$4,$5,$6,$7)".to_string();
-        let response = match conn.execute(query.as_str(),&[&self.tracking_id, &self.application_id, &self.creation_time, &self.os, &self.device_size, &self.session_length, &self.session_id]){
-            Ok(response) => response,
-            Err(err) => panic!("Error while inserting: {}", err)
-        };
+        diesel::insert_into(analytics::table)
+            .values(&self)
+            .get_results(conn);
         println!("Rows Affected: {}", response);
         if response == 0{
             successful = false;

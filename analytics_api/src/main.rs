@@ -4,11 +4,13 @@
 mod health;
 mod settings;
 mod analytics;
-mod migration;
 mod application;
 mod application_dao;
 mod dao;
-use rocket_sync_db_pools::{database, postgres};
+pub mod schema;
+mod models;
+
+use rocket_sync_db_pools::{database, diesel};
 use crate::settings::{Settings};
 use crate::analytics::{AnalyticData, AnalyticEntry};
 use rocket::serde::{Serialize, Deserialize};
@@ -16,15 +18,20 @@ use rocket::serde::json::Json;
 use rocket::State;
 use std::thread;
 use log::{info};
-use crate::migration::check_db_tables;
 use crate::application::{get_application_details};
+use diesel::prelude::*;
+use diesel::pg::PgConnection;
+use dotenv::dotenv;
+use std::env;
+use self::diesel::prelude::*;
+use self::analytics::*;
 
 struct DBPost{
     url: String
 }
 
 #[database("postgres_url")]
-struct AnalyticsDB(postgres::Client);
+struct AnalyticsDB(diesel::PgConnection);
 
 #[derive(Serialize, Deserialize)]
 struct Response{
@@ -59,13 +66,7 @@ fn rocket() -> _ {
                                                         String::from("postgres"),
                                                         conf.database.postgresql_user.clone(),
                                                         conf.database.postgresql_password.clone());
-    let a = connection_str.clone();
-    let b = connection_str.clone();
 
-
-    let data = thread::spawn(||{
-        check_db_tables(b);
-    });
     let result = data.join();
 
     rocket::build()

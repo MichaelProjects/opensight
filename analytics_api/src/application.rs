@@ -2,7 +2,6 @@ use chrono::{DateTime, Utc};
 use uuid::Uuid;
 use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
-use postgres::{Client, NoTls};
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
 
@@ -28,7 +27,9 @@ impl ApplicationType {
         }
     }
 }
-#[derive(Hash, Debug)]
+#[derive(Insertable)]
+#[derive(Clone, Debug)]
+#[table_name="applications"]
 pub struct Application {
     pub name: String,
     pub os: ApplicationType,
