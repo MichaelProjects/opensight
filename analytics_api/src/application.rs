@@ -4,7 +4,8 @@ use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
-
+use diesel::Connection;
+use rocket_sync_db_pools::diesel::PgConnection;
 
 #[derive(Hash, Debug)]
 pub enum ApplicationType { IOS, Android, Web, NotFound }
@@ -47,20 +48,17 @@ impl Application{
         app.token = create_token(&app);
         app
     }
-    pub fn insert_entry(app: Application, conn: &mut Client) -> bool{
+    pub fn insert_entry(app: Application, conn: &mut PgConnection) -> bool{
         let app_dao = ApplicationDao::new();
         app_dao.insert_entry(app, conn)
     }
 }
 
 
-pub fn get_application_details(connection_str: String)  {
-    let mut client =  match Client::connect(connection_str.as_str(), NoTls) {
-        Ok(client) => client,
-        Err(e) => panic!("Error while connecting to db: {}", e)
-    };
+pub fn get_application_details(connection_str: &str)  {
+    let mut conn = diesel::PgConnection::establish(connection_str).unwrap();
     let application_dao = ApplicationDao::new();
-    let applications: Vec<Application> = application_dao.get_entry(&mut client);
+    let applications: Vec<Application> = application_dao.get_entry(&mut conn);
     for app in applications.iter() {
         println!("Application {:?}", app);
     }

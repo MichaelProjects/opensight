@@ -1,5 +1,7 @@
 #![feature(proc_macro_hygiene, decl_macro)]
-#[macro_use] extern crate rocket;
+#[macro_use]
+extern crate rocket;
+extern crate diesel;
 
 mod health;
 mod settings;
@@ -10,7 +12,7 @@ mod dao;
 pub mod schema;
 mod models;
 
-use rocket_sync_db_pools::{database, diesel};
+use rocket_sync_db_pools::{database};
 use crate::settings::{Settings};
 use crate::analytics::{AnalyticData, AnalyticEntry};
 use rocket::serde::{Serialize, Deserialize};
@@ -61,13 +63,6 @@ async fn insert_entry(conn: AnalyticsDB, application_id: String, analytics: Json
 fn rocket() -> _ {
     env_logger::init();
     let conf = Settings::new().unwrap();
-
-    let connection_str = migration::build_connection_st(conf.database.postgresql_url.clone(),
-                                                        String::from("postgres"),
-                                                        conf.database.postgresql_user.clone(),
-                                                        conf.database.postgresql_password.clone());
-
-    let result = data.join();
 
     rocket::build()
         .manage(DBPost{ url: connection_str.clone()})

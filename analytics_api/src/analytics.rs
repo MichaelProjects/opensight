@@ -1,9 +1,8 @@
 use serde::Deserialize;
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
-use rocket_sync_db_pools::diesel::PgConnection;
-use diesel::RunQueryDsl;
-use super::schema::*;
+use diesel::{RunQueryDsl, PgConnection};
+use super::schema::analytics;
 
 
 #[derive(Deserialize)]
@@ -16,8 +15,8 @@ pub struct AnalyticData{
     pub session_id: String
 
 }
-#[derive(Insertable)]
 #[derive(Clone, Debug)]
+#[derive(Queryable)]
 #[table_name="analytics"]
 pub struct AnalyticEntry{
     tracking_id: String,
@@ -46,7 +45,7 @@ impl AnalyticEntry{
     pub fn insert_entry(self, conn: &mut PgConnection) -> bool{
         let mut successful = true;
         diesel::insert_into(analytics::table)
-            .values(&self)
+            .values(self)
             .get_results(conn);
         println!("Rows Affected: {}", response);
         if response == 0{
