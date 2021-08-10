@@ -1,6 +1,7 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 #[macro_use]
 extern crate rocket;
+#[macro_use]
 extern crate diesel;
 
 mod health;
@@ -9,7 +10,7 @@ mod analytics;
 mod application;
 mod application_dao;
 mod dao;
-pub mod schema;
+mod schema;
 mod models;
 
 use rocket_sync_db_pools::{database};
@@ -18,19 +19,8 @@ use crate::analytics::{AnalyticData, AnalyticEntry};
 use rocket::serde::{Serialize, Deserialize};
 use rocket::serde::json::Json;
 use rocket::State;
-use std::thread;
 use log::{info};
-use crate::application::{get_application_details};
-use diesel::prelude::*;
-use diesel::pg::PgConnection;
-use dotenv::dotenv;
-use std::env;
-use self::diesel::prelude::*;
-use self::analytics::*;
 
-struct DBPost{
-    url: String
-}
 
 #[database("postgres_url")]
 struct AnalyticsDB(diesel::PgConnection);
@@ -47,8 +37,8 @@ impl Response{
 }
 
 #[get("/health")]
-async fn get_health(conn: AnalyticsDB, con_str: &State<DBPost>) -> Json<health::Health>{
-    Json(health::get_health_state(con_str.url.clone()))
+async fn get_health(conn: AnalyticsDB) -> Json<health::Health>{
+    Json(health::get_health_state())
 }
 
 #[post("/analytics/<application_id>/entry", data="<analytics>")]
@@ -63,9 +53,8 @@ async fn insert_entry(conn: AnalyticsDB, application_id: String, analytics: Json
 fn rocket() -> _ {
     env_logger::init();
     let conf = Settings::new().unwrap();
-
+        // how to manage state in rust         .manage(DBPost{ url: connection_str.clone()})
     rocket::build()
-        .manage(DBPost{ url: connection_str.clone()})
         .attach(AnalyticsDB::fairing())
         .manage( conf)
         .mount("/", routes![get_health, insert_entry] )

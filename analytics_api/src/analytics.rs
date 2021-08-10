@@ -1,9 +1,10 @@
+extern crate diesel;
+
 use serde::Deserialize;
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
 use diesel::{RunQueryDsl, PgConnection};
 use super::schema::analytics;
-
 
 #[derive(Deserialize)]
 pub struct AnalyticData{
@@ -15,8 +16,7 @@ pub struct AnalyticData{
     pub session_id: String
 
 }
-#[derive(Clone, Debug)]
-#[derive(Queryable)]
+#[derive(Clone, Debug, Queryable)]
 #[table_name="analytics"]
 pub struct AnalyticEntry{
     tracking_id: String,
@@ -47,11 +47,7 @@ impl AnalyticEntry{
         diesel::insert_into(analytics::table)
             .values(self)
             .get_results(conn);
-        println!("Rows Affected: {}", response);
-        if response == 0{
-            successful = false;
-        }
-        successful
+        true
     }
 }
 

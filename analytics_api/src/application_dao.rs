@@ -1,7 +1,9 @@
+extern crate diesel;
+
 use crate::dao::Dao;
-use crate::application::{Application, ApplicationType};
-use chrono::{DateTime, Utc};
+use crate::application::{Application};
 use diesel::{PgConnection, RunQueryDsl};
+use super::schema::applications;
 
 pub struct ApplicationDao{
     pub(crate) value: Vec<Application>

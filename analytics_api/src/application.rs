@@ -1,3 +1,5 @@
+extern crate diesel;
+
 use chrono::{DateTime, Utc};
 use uuid::Uuid;
 use std::hash::{Hash, Hasher};
@@ -6,6 +8,7 @@ use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
 use diesel::Connection;
 use rocket_sync_db_pools::diesel::PgConnection;
+use super::schema::applications;
 
 #[derive(Hash, Debug)]
 pub enum ApplicationType { IOS, Android, Web, NotFound }
@@ -28,23 +31,22 @@ impl ApplicationType {
         }
     }
 }
-#[derive(Insertable)]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Insertable)]
 #[table_name="applications"]
-pub struct Application {
-    pub name: String,
-    pub os: ApplicationType,
-    pub uuid: String,
-    pub added: DateTime<Utc>,
+pub struct Application<'a> {
+    pub application_name: &'a str,
+    pub os: &'a str,
+    pub application_id: String,
+    pub created_time: DateTime<Utc>,
     pub token: String,
 }
 
 
 impl Application{
     pub fn new(name: &str, os: ApplicationType) -> Application{
-        let uuid: String = Uuid::new_v4().to_string();
+        let application_id: String = Uuid::new_v4().to_string();
         let get_time = Utc::now();
-        let mut app = Application{name: String::from(name), os, uuid, added: get_time, token: String::new()};
+        let mut app = Application{application_name: name, os: os.as_str(), application_id, created_time: get_time, token: String::new()};
         app.token = create_token(&app);
         app
     }
