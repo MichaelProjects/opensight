@@ -5,8 +5,8 @@ use crate::application::{Application};
 use diesel::{PgConnection, RunQueryDsl};
 use super::schema::applications;
 
-pub struct ApplicationDao{
-    pub(crate) value: Vec<Application>
+pub struct ApplicationDao {
+    pub value: Vec<Application>
 
 }
 impl Dao<Vec<Application>, Application> for ApplicationDao{
@@ -20,11 +20,7 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
         diesel::insert_into(applications::table)
             .values(&self)
             .get_results(conn);
-        println!("Rows Affected: {}", response);
-        if response == 0{
-            successful = false;
-        }
-        successful
+        true
     }
 
     fn delete_entry(&self, conn: &mut PgConnection) {
