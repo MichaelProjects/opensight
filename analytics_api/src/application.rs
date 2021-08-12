@@ -1,6 +1,6 @@
 extern crate diesel;
 
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Utc, NaiveDateTime};
 use uuid::Uuid;
 use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
@@ -37,7 +37,7 @@ pub struct Application {
     pub application_name: String,
     pub os: String,
     pub application_id: String,
-    pub created_time: DateTime<Utc>,
+    pub created_time: NaiveDateTime,
     pub token: String,
 }
 

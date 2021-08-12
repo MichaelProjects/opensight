@@ -2,14 +2,14 @@ extern crate diesel;
 
 use serde::Deserialize;
 use uuid::Uuid;
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Utc, NaiveDateTime};
 use diesel::{RunQueryDsl, PgConnection};
 use super::schema::analytics;
 
 #[derive(Deserialize)]
 pub struct AnalyticData{
     #[serde(serialize_with = "to_ts")]
-    pub creation_date: DateTime<Utc>,
+    pub creation_date: NaiveDateTime,
     pub os: String,
     pub device_size: String,
     pub session_length: i64,
@@ -21,7 +21,7 @@ pub struct AnalyticData{
 pub struct AnalyticEntry{
     tracking_id: String,
     application_id: String,
-    creation_time: DateTime<Utc>,
+    creation_time: NaiveDateTime,
     os: String,
     device_size: String,
     session_length: i64,
@@ -29,7 +29,7 @@ pub struct AnalyticEntry{
     // here should come _ features: Vec<String>
 }
 impl AnalyticEntry{
-    pub fn new(application_id: String, creation_time: DateTime<Utc>, os: String, device_size: String, session_id: String, session_length: i64) -> Self{
+    pub fn new(application_id: String, creation_time: NaiveDateTime, os: String, device_size: String, session_id: String, session_length: i64) -> Self{
         error!("{:?}", Utc::now(),);
         error!("{:?}", creation_time);
         AnalyticEntry{
