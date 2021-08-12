@@ -33,9 +33,9 @@ impl ApplicationType {
 }
 #[derive(Clone, Debug, Insertable)]
 #[table_name="applications"]
-pub struct Application<'a> {
-    pub application_name: &'a str,
-    pub os: &'a str,
+pub struct Application {
+    pub application_name: String,
+    pub os: String,
     pub application_id: String,
     pub created_time: DateTime<Utc>,
     pub token: String,
@@ -46,7 +46,7 @@ impl Application{
     pub fn new(name: &str, os: ApplicationType) -> Application{
         let application_id: String = Uuid::new_v4().to_string();
         let get_time = Utc::now();
-        let mut app = Application{application_name: name, os: os.as_str(), application_id, created_time: get_time, token: String::new()};
+        let mut app = Application{application_name: String::from(name), os: String::from(os.as_str()), application_id, created_time: get_time, token: String::new()};
         app.token = create_token(&app);
         app
     }

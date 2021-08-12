@@ -16,7 +16,7 @@ pub struct AnalyticData{
     pub session_id: String
 
 }
-#[derive(Clone, Debug, Queryable)]
+#[derive(Clone, Debug, Queryable, Insertable)]
 #[table_name="analytics"]
 pub struct AnalyticEntry{
     tracking_id: String,
