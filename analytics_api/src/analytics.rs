@@ -12,7 +12,7 @@ pub struct AnalyticData{
     pub creation_date: NaiveDateTime,
     pub os: String,
     pub device_size: String,
-    pub session_length: i64,
+    pub session_length: i32,
     pub session_id: String
 
 }
@@ -24,12 +24,12 @@ pub struct AnalyticEntry{
     creation_time: NaiveDateTime,
     os: String,
     device_size: String,
-    session_length: i64,
+    session_length: i32,
     session_id: String
     // here should come _ features: Vec<String>
 }
 impl AnalyticEntry{
-    pub fn new(application_id: String, creation_time: NaiveDateTime, os: String, device_size: String, session_id: String, session_length: i64) -> Self{
+    pub fn new(application_id: String, creation_time: NaiveDateTime, os: String, device_size: String, session_id: String, session_length: i32) -> Self{
         error!("{:?}", Utc::now(),);
         error!("{:?}", creation_time);
         AnalyticEntry{
@@ -44,9 +44,6 @@ impl AnalyticEntry{
     }
     pub fn insert_entry(self, conn: &mut PgConnection) -> bool{
         let mut successful = true;
-        diesel::insert_into(analytics::table)
-            .values(self)
-            .get_results(conn);
         true
     }
 }

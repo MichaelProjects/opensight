@@ -17,9 +17,7 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
 
     fn insert_entry(&self, data: Application, conn: &mut PgConnection) -> bool {
         let mut successful = true;
-        diesel::insert_into(applications::table)
-            .values(&self)
-            .get_results(conn);
+
         true
     }
 

@@ -31,7 +31,7 @@ impl ApplicationType {
         }
     }
 }
-#[derive(Clone, Debug, Insertable)]
+#[derive(Clone, Debug, Hash, Insertable)]
 #[table_name="applications"]
 pub struct Application {
     pub application_name: String,
@@ -45,9 +45,9 @@ pub struct Application {
 impl Application{
     pub fn new(name: &str, os: ApplicationType) -> Application{
         let application_id: String = Uuid::new_v4().to_string();
-        let get_time = Utc::now();
+        let get_time = Utc::now().naive_utc();
         let mut app = Application{application_name: String::from(name), os: String::from(os.as_str()), application_id, created_time: get_time, token: String::new()};
-        app.token = create_token(&app);
+        app.token = create_token(app.clone());
         app
     }
     pub fn insert_entry(app: Application, conn: &mut PgConnection) -> bool{
@@ -67,7 +67,7 @@ pub fn get_application_details(connection_str: &str)  {
 }
 
 
-fn create_token(app: &Application) -> String{
+fn create_token(app: Application) -> String{
     let mut s = DefaultHasher::new();
     app.hash(&mut s);
     s.finish().to_string()
