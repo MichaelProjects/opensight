@@ -31,7 +31,7 @@ impl ApplicationType {
         }
     }
 }
-#[derive(Clone, Debug, Hash, Insertable)]
+#[derive(Clone, Debug, Hash, Insertable, Queryable)]
 #[table_name="applications"]
 pub struct Application {
     pub application_name: String,

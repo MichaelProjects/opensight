@@ -3,7 +3,8 @@ extern crate diesel;
 use crate::dao::Dao;
 use crate::application::{Application};
 use diesel::{PgConnection, RunQueryDsl};
-use super::schema::applications;
+use super::schema::*;
+use stackblog_analytics::schema::applications::dsl::*;
 
 pub struct ApplicationDao {
     pub value: Vec<Application>
@@ -17,7 +18,7 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
 
     fn insert_entry(&self, data: Application, conn: &mut PgConnection) -> bool {
         let mut successful = true;
-
+        let result = applications
         true
     }
 
@@ -30,7 +31,9 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
     }
 
     fn get_entry(&self, conn: &mut PgConnection) -> Vec<Application>{
+
+
         let result = vec![];
-        result
+        let response =
     }
 }
