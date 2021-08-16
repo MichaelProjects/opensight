@@ -2,8 +2,8 @@ extern crate diesel;
 
 use serde::Deserialize;
 use uuid::Uuid;
-use chrono::{DateTime, Utc, NaiveDateTime};
-use diesel::{RunQueryDsl, PgConnection};
+use chrono::{Utc, NaiveDateTime};
+use diesel::{PgConnection};
 use super::schema::analytics;
 
 #[derive(Deserialize)]

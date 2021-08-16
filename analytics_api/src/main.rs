@@ -1,9 +1,7 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 #![feature(in_band_lifetimes)]
-#[macro_use]
-extern crate rocket;
-#[macro_use]
-extern crate diesel;
+#[macro_use] extern crate rocket;
+#[macro_use] extern crate diesel;
 
 mod health;
 mod settings;
@@ -12,7 +10,6 @@ mod application;
 mod application_dao;
 mod dao;
 mod schema;
-mod models;
 
 use rocket_sync_db_pools::{database};
 use crate::settings::{Settings};

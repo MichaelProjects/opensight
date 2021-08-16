@@ -1,14 +1,12 @@
-extern crate diesel;
+use super::schema::applications;
 
-use chrono::{DateTime, Utc, NaiveDateTime};
+use chrono::{Utc, NaiveDateTime};
 use uuid::Uuid;
 use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
-use diesel::Connection;
-use rocket_sync_db_pools::diesel::PgConnection;
-use super::schema::applications;
+use diesel::{PgConnection, Connection};
 
 #[derive(Hash, Debug)]
 pub enum ApplicationType { IOS, Android, Web, NotFound }
@@ -31,7 +29,8 @@ impl ApplicationType {
         }
     }
 }
-#[derive(Clone, Debug, Hash, Insertable, Queryable)]
+
+#[derive(Clone, Debug, Hash, Queryable)]
 #[table_name="applications"]
 pub struct Application {
     pub application_name: String,
@@ -40,7 +39,6 @@ pub struct Application {
     pub created_time: NaiveDateTime,
     pub token: String,
 }
-
 
 impl Application{
     pub fn new(name: &str, os: ApplicationType) -> Application{
@@ -53,6 +51,26 @@ impl Application{
     pub fn insert_entry(app: Application, conn: &mut PgConnection) -> bool{
         let app_dao = ApplicationDao::new();
         app_dao.insert_entry(app, conn)
+    }
+}
+
+#[derive(Clone, Debug, Insertable)]
+#[table_name="applications"]
+pub struct InsertableApplication {
+    application_name: String,
+    os: String,
+    created_time: NaiveDateTime,
+    token: String
+}
+
+impl InsertableApplication {
+    pub fn from_application(app: Application) -> InsertableApplication {
+        InsertableApplication{
+            application_name: app.application_name,
+            os: app.os,
+            created_time: app.created_time,
+            token: app.token
+        }
     }
 }
 
