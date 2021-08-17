@@ -16,12 +16,12 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
 
     fn insert_entry(&self, data: Application, conn: &mut PgConnection) -> bool {
         let mut successful = true;
-        let response: QueryResult<Application> = diesel::insert_into(applications::table)
+        /*let response: QueryResult<Application> = diesel::insert_into(applications::table)
             .values(&InsertableApplication::from_application(data))
             .get_result(conn);
         for x in response.iter() {
             println!("{:?}", x);
-        }
+        }*/
         true
     }
 

@@ -1,5 +1,4 @@
 use super::schema::applications;
-
 use chrono::{Utc, NaiveDateTime};
 use uuid::Uuid;
 use std::hash::{Hash, Hasher};
