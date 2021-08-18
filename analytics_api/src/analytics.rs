@@ -2,11 +2,12 @@ extern crate diesel;
 
 use serde::Deserialize;
 use uuid::Uuid;
-use chrono::{Utc, NaiveDateTime};
+use chrono::NaiveDateTime;
 use diesel::{PgConnection};
 use super::schema::analytics;
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
+use crate::analytics_dao::AnalyticsDao;
 
 #[derive(Deserialize)]
 pub struct AnalyticData{
@@ -43,8 +44,8 @@ impl AnalyticEntry{
         }
     }
     pub fn insert_entry(self, conn: &mut PgConnection) -> bool{
-        let dao = ApplicationDao::new();
-        dao.insert_entry(&self);
+        let dao = AnalyticsDao::new();
+        dao.insert_entry(&self, conn);
         let mut successful = true;
         true
     }

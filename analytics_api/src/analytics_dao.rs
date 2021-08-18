@@ -18,15 +18,15 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao{
             .get_results(conn);
     }
 
-    fn delete_entry(&self, conn: &mut PgConnection) {
+    fn delete_entry(&self, id: &str, conn: &mut PgConnection) {
         todo!()
     }
 
-    fn update_entry(&self, conn: &mut PgConnection) {
+    fn update_entry(&self, id: &str, conn: &mut PgConnection) {
         todo!()
     }
 
-    fn get_entry(&self, conn: &mut PgConnection) -> AnalyticEntry {
+    fn get_entry(&self, id: &str, conn: &mut PgConnection) -> AnalyticEntry {
         todo!()
     }
 }

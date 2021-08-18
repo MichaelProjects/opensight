@@ -3,7 +3,6 @@ use crate::dao::Dao;
 use crate::application::*;
 use diesel::{PgConnection, RunQueryDsl, QueryResult};
 use super::schema::applications;
-use chrono::NaiveDateTime;
 
 pub struct ApplicationDao {
     pub value: Vec<Application>
@@ -29,15 +28,15 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
     fn delete_entry(&self, id: &str, conn: &mut PgConnection) {
         let mut successful = true;
         let result = diesel::delete(applications::table.find(id))
-        .get_result(conn)
+        .get_result(conn);
         
     }
 
-    fn update_entry(&self, conn: &mut PgConnection) {
+    fn update_entry(&self, id: &str, conn: &mut PgConnection) {
         todo!()
     }
 
-    fn get_entry(&self, conn: &mut PgConnection) -> Vec<Application>{
+    fn get_entry(&self, id: &str, conn: &mut PgConnection) -> Vec<Application>{
         let result = vec![];
         result
     }
