@@ -19,7 +19,11 @@ use crate::db::*;
 use handler::{get_health, insert_entry};
 use crate::application::{Application, get_application_details, get_all_apps};
 
-pub async fn create_routes(conf: Settings, app: Vec<Application>){
+pub struct Storage{
+    pub apps: Vec<Application>,
+}
+
+pub async fn create_routes(conf: Settings, app: Storage){
     rocket::build()
         .attach(AnalyticsDB::fairing())
         .manage( conf)
@@ -32,5 +36,6 @@ async fn main(){
     env_logger::init();
     let conf = Settings::new().unwrap();
     let apps = get_all_apps("postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@localhost/postgres");
-    create_routes(conf, apps).await;
+    let storage = Storage{apps};
+    create_routes(conf, storage).await;
 }

@@ -10,6 +10,11 @@ use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
 use diesel::{PgConnection, Connection};
 
+pub struct ApplicationData<'a>{
+    pub application_name: &'a str,
+    pub os: &'a str
+}
+
 #[derive(Clone, Debug, Hash, Queryable, AsChangeset, Insertable)]
 #[table_name="applications"]
 pub struct Application {
@@ -28,9 +33,9 @@ impl Application{
         app.token = create_token(app.clone());
         app
     }
-    pub fn insert_entry(app: Application, conn: &mut PgConnection) -> bool{
+    pub fn insert_entry(self, conn: &mut PgConnection) -> bool{
         let app_dao = ApplicationDao::new();
-        app_dao.insert_entry(app, conn)
+        app_dao.insert_entry(self, conn)
     }
 }
 
