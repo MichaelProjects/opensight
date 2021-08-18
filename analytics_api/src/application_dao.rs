@@ -1,4 +1,3 @@
-use diesel;
 use crate::dao::Dao;
 use crate::application::*;
 use diesel::{PgConnection, RunQueryDsl, QueryResult};
@@ -17,19 +16,16 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
     fn insert_entry(&self, data: Application, conn: &mut PgConnection) -> bool {
         let mut successful = true;
         let response: QueryResult<Application> = diesel::insert_into(applications::table)
-            .values(&InsertableApplication::from_application(data))
+            .values(&data)
             .get_result(conn);
-        for x in response.iter() {
-            println!("{:?}", x);
-        }
         true
     }
 
     fn delete_entry(&self, id: &str, conn: &mut PgConnection) {
         let mut successful = true;
-        let result = diesel::delete(applications::table.find(id))
+        /*let result = diesel::delete(applications::table.find(id))
         .get_result(conn);
-        
+        */
     }
 
     fn update_entry(&self, id: &str, conn: &mut PgConnection) {
@@ -38,7 +34,19 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
 
     fn get_entry(&self, id: &str, conn: &mut PgConnection) -> Vec<Application>{
         let result = vec![];
+        let response: QueryResult<Vec<Application>> = applications::table.load::<Application>(&*conn);
+        for x in response.iter(){
+            println!("{:?}", x);
+        }
         result
+    }
+
+    fn get_all(&self, conn: &mut PgConnection) -> Vec<Application> {
+        let response: QueryResult<Vec<Application>> = applications::table.load::<Application>(&*conn);
+        for x in response.iter(){
+            println!("{:?}", x);
+        }
+        response.unwrap()
     }
 }
 

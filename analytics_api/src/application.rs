@@ -10,7 +10,7 @@ use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
 use diesel::{PgConnection, Connection};
 
-#[derive(Clone, Debug, Hash, Queryable, AsChangeset)]
+#[derive(Clone, Debug, Hash, Queryable, AsChangeset, Insertable)]
 #[table_name="applications"]
 pub struct Application {
     pub application_id: String,
@@ -56,31 +56,22 @@ impl ApplicationType {
     }
 }
 
-#[derive(Insertable)]
-#[table_name="applications"]
-pub struct InsertableApplication {
-    application_name: String,
-    os: String,
-    created_time: NaiveDateTime,
-    token: String
-}
 
-impl InsertableApplication {
-    pub fn from_application(app: Application) -> InsertableApplication {
-        InsertableApplication{
-            application_name: app.application_name,
-            os: app.os,
-            created_time: app.created_time,
-            token: app.token
-        }
+pub fn get_all_apps(connection_str: &str) -> Vec<Application>{
+    let mut conn = diesel::PgConnection::establish(connection_str).unwrap();
+    let application_dao = ApplicationDao::new();
+    let applications: Vec<Application> = application_dao.get_all(&mut conn);
+    for app in applications.iter() {
+        println!("Application {:?}", app);
     }
+    applications
 }
 
 
 pub fn get_application_details(connection_str: &str)  {
     let mut conn = diesel::PgConnection::establish(connection_str).unwrap();
     let application_dao = ApplicationDao::new();
-    let applications: Vec<Application> = application_dao.get_entry(&mut conn);
+    let applications: Vec<Application> = application_dao.get_entry("", &mut conn);
     for app in applications.iter() {
         println!("Application {:?}", app);
     }

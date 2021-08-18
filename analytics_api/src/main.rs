@@ -17,8 +17,9 @@ mod analytics_dao;
 use crate::settings::{Settings};
 use crate::db::*;
 use handler::{get_health, insert_entry};
+use crate::application::{Application, get_application_details, get_all_apps};
 
-pub async fn create_routes(conf: Settings){
+pub async fn create_routes(conf: Settings, app: Vec<Application>){
     rocket::build()
         .attach(AnalyticsDB::fairing())
         .manage( conf)
@@ -30,5 +31,6 @@ pub async fn create_routes(conf: Settings){
 async fn main(){
     env_logger::init();
     let conf = Settings::new().unwrap();
-    create_routes(conf).await;
+    let apps = get_all_apps("postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@localhost/postgres");
+    create_routes(conf, apps).await;
 }
