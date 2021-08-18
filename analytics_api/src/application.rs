@@ -1,7 +1,7 @@
 use diesel;
 
 use super::schema::applications;
-
+use serde::{Deserialize, Serialize};
 use chrono::{Utc, NaiveDateTime};
 use uuid::Uuid;
 use std::hash::{Hash, Hasher};
@@ -10,6 +10,7 @@ use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
 use diesel::{PgConnection, Connection};
 
+#[derive(Serialize, Deserialize)]
 pub struct ApplicationData<'a>{
     pub application_name: &'a str,
     pub os: &'a str
@@ -72,15 +73,6 @@ pub fn get_all_apps(connection_str: &str) -> Vec<Application>{
     applications
 }
 
-
-pub fn get_application_details(connection_str: &str)  {
-    let mut conn = diesel::PgConnection::establish(connection_str).unwrap();
-    let application_dao = ApplicationDao::new();
-    let applications: Vec<Application> = application_dao.get_entry("", &mut conn);
-    for app in applications.iter() {
-        println!("Application {:?}", app);
-    }
-}
 
 fn create_token(app: Application) -> String{
     let mut s = DefaultHasher::new();
