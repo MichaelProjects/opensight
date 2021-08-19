@@ -2,6 +2,9 @@ use crate::dao::Dao;
 use crate::application::*;
 use diesel::{PgConnection, RunQueryDsl, QueryResult};
 use super::schema::applications;
+use log::{debug};
+use diesel::prelude::*;
+
 
 pub struct ApplicationDao {
     pub value: Vec<Application>
@@ -23,9 +26,9 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
 
     fn delete_entry(&self, id: &str, conn: &mut PgConnection) {
         let mut successful = true;
-        /*let result = diesel::delete(applications::table.find(id))
-        .get_result(conn);
-        */
+        let result = diesel::delete(applications::table.find(id))
+        .execute(conn);
+
     }
 
     fn update_entry(&self, id: &str, conn: &mut PgConnection) {
@@ -33,18 +36,13 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
     }
 
     fn get_entry(&self, id: &str, conn: &mut PgConnection) -> Vec<Application>{
-        let result = vec![];
-        let response: QueryResult<Vec<Application>> = applications::table.load::<Application>(&*conn);
-        for x in response.iter(){
-            println!("{:?}", x);
-        }
-        result
+        vec![]
     }
 
     fn get_all(&self, conn: &mut PgConnection) -> Vec<Application> {
         let response: QueryResult<Vec<Application>> = applications::table.load::<Application>(&*conn);
         for x in response.iter(){
-            println!("{:?}", x);
+            debug!("{:?}", x);
         }
         response.unwrap()
     }

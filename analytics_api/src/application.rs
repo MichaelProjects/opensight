@@ -9,6 +9,7 @@ use std::collections::hash_map::DefaultHasher;
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
 use diesel::{PgConnection, Connection};
+use log::{debug};
 
 #[derive(Serialize, Deserialize)]
 pub struct ApplicationData<'a>{
@@ -68,7 +69,7 @@ pub fn get_all_apps(connection_str: &str) -> Vec<Application>{
     let application_dao = ApplicationDao::new();
     let applications: Vec<Application> = application_dao.get_all(&mut conn);
     for app in applications.iter() {
-        println!("Application {:?}", app);
+        debug!("Application {:?}", app);
     }
     applications
 }

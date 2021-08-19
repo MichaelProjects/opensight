@@ -2,7 +2,7 @@ use crate::dao::Dao;
 use crate::analytics::{AnalyticEntry};
 use diesel::{PgConnection, RunQueryDsl, QueryResult};
 use super::schema::analytics;
-
+use log::{debug};
 pub struct AnalyticsDao{
 
 }
@@ -16,7 +16,7 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao{
         let response: QueryResult<AnalyticEntry> = diesel::insert_into(analytics::table)
             .values(&data)
             .get_result(conn);
-        println!("{:?}", response);
+        debug!("{:?}", response);
         successful
     }
 
