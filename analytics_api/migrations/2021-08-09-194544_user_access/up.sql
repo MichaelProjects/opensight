@@ -1,0 +1,1 @@
+CREATE TABLE if not exists user_access (userid text NOT NULL, username text NOT NULL, email text NOT NULL, password text NOT NULL, creation_date TIMESTAMP WITH TIME ZONE NOT NULL, power_level text NOT NULL, CONSTRAINT PK_user PRIMARY KEY ( userid ));
