@@ -2,6 +2,7 @@
 #![feature(in_band_lifetimes)]
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate diesel;
+#[macro_use] extern crate diesel_migrations;
 
 mod health;
 mod settings;
@@ -19,23 +20,34 @@ use crate::settings::{Settings};
 use crate::db::*;
 use handler::{get_health, insert_entry, insert_application};
 use crate::application::{Application, get_all_apps};
-use std::sync::Mutex;
+use diesel::prelude::*;
 use crate::cache::Cache;
+use rocket::{config, Config};
+use std::net::{IpAddr, Ipv4Addr};
+use rocket::config::LogLevel;
 
+pub async fn create_routes(conf: Settings, app: Cache,){
 
-pub async fn create_routes(conf: Settings, app: Cache){
     rocket::build()
         .attach(AnalyticsDB::fairing())
-        .manage( conf)
+        .manage(conf)
         .manage(app)
         .mount("/analytic", routes![get_health, insert_entry, insert_application] )
         .launch()
         .await;
 }
+
+
+embed_migrations!("./migrations/");
+
 #[rocket::main]
 async fn main(){
     env_logger::init();
     let conf = Settings::new().unwrap();
-    let apps = get_all_apps("postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@localhost/postgres");
-    create_routes(conf, cache::Cache{all_apps: apps}).await;
+    // This will run the necessary migrations.
+    let connection = PgConnection::establish(conf.database.connection_string.as_str()).unwrap();
+    embedded_migrations::run(&connection);
+
+
+    create_routes(conf, cache::Cache{all_apps: vec![]}).await;
 }

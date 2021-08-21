@@ -5,17 +5,13 @@ use config::{ConfigError, Config, File};
 
 #[derive(Debug, Deserialize)]
 pub struct Database {
-    pub postgresql_url: String,
-    pub postgresql_user: String,
-    pub postgresql_port: String,
-    pub postgresql_dbname: String,
-    pub postgresql_password: String
+    pub connection_string: String
 }
 
 #[derive(Debug, Deserialize)]
 pub struct General {
     pub debug: bool,
-    pub token: String,
+    pub port: u16,
 }
 #[derive(Debug, Deserialize)]
 pub struct Settings{
