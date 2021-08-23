@@ -1,0 +1,1 @@
+docker build -t analytics_api:0.1 .
