@@ -9,4 +9,4 @@ RUN cargo build --release
 FROM debian:buster-slim
 RUN apt-get update && apt upgrade -y && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /analytics_api/target/release/analytics_api /usr/lokal/bin/analytics_api
-CMD ["/analytics_api"]
+CMD ["./usr/lokal/bin/analytics_api"]
