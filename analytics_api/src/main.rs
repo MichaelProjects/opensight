@@ -25,10 +25,16 @@ use crate::cache::Cache;
 use rocket::{config, Config};
 use std::net::{IpAddr, Ipv4Addr};
 use rocket::config::LogLevel;
+use rocket::figment::Figment;
+
+pub fn insert_conf_values(conf: &Settings) -> Figment {
+    Config::figment()
+        .merge(("port", &conf.general.port))
+        .merge(("databases.postgres_url.url", &conf.database.connection_string))
+}
 
 pub async fn create_routes(conf: Settings, app: Cache,){
-
-    rocket::build()
+    rocket::custom(insert_conf_values(&conf))
         .attach(AnalyticsDB::fairing())
         .manage(conf)
         .manage(app)
