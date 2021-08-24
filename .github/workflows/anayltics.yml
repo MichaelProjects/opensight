@@ -26,6 +26,6 @@ jobs:
         run: cargo test --verbose
         working-directory: analytics_api
 
-      - name: run cargo test /error_api
-        run: cargo test --verbose
-        working-directory: error_api
+      - name: run clippy tests /analytics_api
+        run: cargo clippy
+        working-directory: analytics_api
