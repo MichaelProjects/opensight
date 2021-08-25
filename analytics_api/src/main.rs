@@ -30,6 +30,7 @@ use rocket::figment::Figment;
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     Config::figment()
         .merge(("port", &conf.general.port))
+        .merge(("address", &conf.general.address))
         .merge(("databases.postgres_url.url", &conf.database.connection_string))
 }
 
