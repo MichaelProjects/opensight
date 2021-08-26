@@ -11,5 +11,4 @@ RUN useradd -u 8877 notroot
 USER notroot
 RUN apt update && apt install postgresql-client -y
 COPY --from=builder /analytics_api/target/release/analytics_api analytics_api
-#COPY config.toml .
 CMD ["./analytics_api"]

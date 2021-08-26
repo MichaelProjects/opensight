@@ -42,7 +42,6 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
     fn get_all(&self, conn: &mut PgConnection) -> Vec<Application> {
         let response: QueryResult<Vec<Application>> = applications::table.load::<Application>(&*conn);
         for x in response.iter(){
-            debug!("{:?}", x);
         }
         response.unwrap()
     }
