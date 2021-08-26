@@ -12,7 +12,7 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao{
     }
 
     fn insert_entry(&self, data: AnalyticEntry, conn: &mut PgConnection) -> bool {
-        let mut successful = true;
+        let successful = true;
         let response: QueryResult<AnalyticEntry> = diesel::insert_into(analytics::table)
             .values(&data)
             .get_result(conn);
@@ -20,19 +20,19 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao{
         successful
     }
 
-    fn delete_entry(&self, id: &str, conn: &mut PgConnection) {
+    fn delete_entry(&self, _id: &str, _conn: &mut PgConnection) {
         todo!()
     }
 
-    fn update_entry(&self, id: &str, conn: &mut PgConnection) {
+    fn update_entry(&self, _id: &str, _conn: &mut PgConnection) {
         todo!()
     }
 
-    fn get_entry(&self, id: &str, conn: &mut PgConnection) -> AnalyticEntry {
+    fn get_entry(&self, _id: &str, _conn: &mut PgConnection) -> AnalyticEntry {
         todo!()
     }
 
-    fn get_all(&self, conn: &mut PgConnection) -> Vec<AnalyticEntry> {
+    fn get_all(&self, _conn: &mut PgConnection) -> Vec<AnalyticEntry> {
         let result = vec![];
         result
     }

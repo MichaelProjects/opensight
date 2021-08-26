@@ -19,11 +19,11 @@ mod cache;
 use crate::settings::{Settings};
 use crate::db::*;
 use handler::{get_health, insert_entry, insert_application};
-use crate::application::{Application, get_all_apps};
+
 use diesel::prelude::*;
 use crate::cache::Cache;
-use std::net::{IpAddr, Ipv4Addr};
-use rocket::config::LogLevel;
+
+
 use rocket::figment::Figment;
 use log4rs::append::file::FileAppender;
 use log4rs::encode::pattern::PatternEncoder;

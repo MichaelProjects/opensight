@@ -45,7 +45,7 @@ impl AnalyticEntry{
     pub fn insert_entry(self, conn: &mut PgConnection) -> bool{
         let dao = AnalyticsDao::new();
         dao.insert_entry(self, conn);
-        let mut successful = true;
+        let _successful = true;
         true
     }
 }
