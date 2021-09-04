@@ -67,7 +67,7 @@ async fn main(){
 
     let logfile = FileAppender::builder()
         .encoder(Box::new(PatternEncoder::new("{l} - {m}\n")))
-        .build("log/output.log").unwrap();
+        .build("/var/logs/opensight/output.log").unwrap();
 
     let config = Config::builder()
         .appender(Appender::builder().build("logfile", Box::new(logfile)))

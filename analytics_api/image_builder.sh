@@ -1,1 +1,1 @@
-docker build -t docker-dev.stackblog.io:5000/analytics_api:0.5 .
+docker build -t docker-dev.stackblog.io:5000/opensight:0.5 .
