@@ -1,0 +1,26 @@
+WARN - 🔧 Configured for debug.
+WARN - address: [1;49;39m0.0.0.0[0m
+WARN - port: [1;49;39m28018[0m
+WARN - workers: [1;49;39m8[0m
+WARN - ident: [1;49;39mRocket[0m
+WARN - keep-alive: [1;49;39m5s[0m
+WARN - limits: [1;49;39mbytes = 8KiB, data-form = 2MiB, file = 1MiB, form = 32KiB, json = 1MiB, msgpack = 1MiB, string = 8KiB[0m
+WARN - tls: [1;49;39mdisabled[0m
+WARN - temp dir: [1;49;39m/var/folders/ck/dsdnl4mx29zf72h1bcw78tc00000gn/T/[0m
+WARN - log level: [1;49;39mdebug[0m
+WARN - cli colors: [1;49;39mfalse[0m
+WARN - shutdown: [1;49;39mctrlc = true, force = true, signals = [SIGTERM], grace = 2s, mercy = 3s[0m
+WARN - 🛰  [35mRoutes[0m:
+WARN - [36m([0m[37mget_health[0m[36m)[0m [32mGET[0m [4;34m/analytic[0m[34m/health[0m
+WARN - [36m([0m[37minsert_application[0m[36m)[0m [32mPOST[0m [4;34m/analytic[0m[34m/admin/application[0m
+WARN - [36m([0m[37minsert_entry[0m[36m)[0m [32mPOST[0m [4;34m/analytic[0m[34m/<application_id>/entry[0m
+WARN - 📡 [35mFairings[0m:
+WARN - [1;49;39m'postgres_url' Database Pool[0m ([1;34mignite[0m)
+WARN - [1;49;39mShield[0m ([1;34mliftoff, response, singleton[0m)
+INFO - 🛡️ [35mShield[0m:
+INFO - X-Content-Type-Options: [49;39mnosniff[0m
+INFO - Permissions-Policy: [49;39minterest-cohort=()[0m
+INFO - X-Frame-Options: [49;39mSAMEORIGIN[0m
+WARN - 🚀 [1;49;39mRocket has launched from[0m [1;4;49;39mhttp://0.0.0.0:28018[0m
+WARN - Received SIGINT. Requesting shutdown.
+INFO - Received shutdown request. Waiting for pending I/O...
