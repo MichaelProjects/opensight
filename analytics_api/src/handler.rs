@@ -28,7 +28,7 @@ pub(crate) async fn insert_entry(_apps: &State<Cache>,conn: AnalyticsDB, applica
     if !found{
         return Status::NotFound
     }
-    let analytic_entry = AnalyticEntry::new(application_id, analytics.creation_date, analytics.os.clone(), analytics.device_size.clone(), analytics.session_id.clone(), analytics.session_length);
+    let analytic_entry = AnalyticEntry::new(application_id, analytics.creation_date, analytics.os.clone(), analytics.device_size.clone(), analytics.is_new_user.clone() ,analytics.session_id.clone(), analytics.session_length);
     let _result = conn.run(|c| analytic_entry.insert_entry(c)).await;
     Status::Accepted
 }

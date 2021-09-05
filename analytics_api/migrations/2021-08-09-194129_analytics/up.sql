@@ -1,1 +1,0 @@
-CREATE TABLE if not exists analytics (tracking_id text NOT NULL,application_id text NOT NULL,creation_time timestamp  NOT NULL,os text NOT NULL,device_size text NOT NULL,session_length int NOT NULL,session_id text NOT NULL,CONSTRAINT PK_analytics PRIMARY KEY ( tracking_id, application_id ));

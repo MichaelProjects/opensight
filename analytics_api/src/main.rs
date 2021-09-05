@@ -1,5 +1,5 @@
-#![feature(proc_macro_hygiene, decl_macro)]
-#![feature(in_band_lifetimes)]
+//#![feature(proc_macro_hygiene, decl_macro)]
+//#![feature(in_band_lifetimes)]
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate diesel;
 #[macro_use] extern crate diesel_migrations;
@@ -53,8 +53,8 @@ pub async fn create_routes(conf: Settings, app: Cache,){
         .await;
 }
 
-
 embed_migrations!("./migrations/");
+
 
 #[rocket::main]
 async fn main(){
@@ -67,7 +67,7 @@ async fn main(){
 
     let logfile = FileAppender::builder()
         .encoder(Box::new(PatternEncoder::new("{l} - {m}\n")))
-        .build("/var/logs/opensight/output.log").unwrap();
+        .build("output.log").unwrap();
 
     let config = Config::builder()
         .appender(Appender::builder().build("logfile", Box::new(logfile)))

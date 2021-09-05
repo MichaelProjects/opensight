@@ -14,6 +14,7 @@ pub struct AnalyticData{
     pub creation_date: NaiveDateTime,
     pub os: String,
     pub device_size: String,
+    pub is_new_user: bool,
     pub session_length: i32,
     pub session_id: String
 
@@ -26,18 +27,20 @@ pub struct AnalyticEntry{
     creation_time: NaiveDateTime,
     os: String,
     device_size: String,
+    is_new_user: bool,
     session_length: i32,
     session_id: String
     // here should come _ features: Vec<String>
 }
 impl AnalyticEntry{
-    pub fn new(application_id: String, creation_time: NaiveDateTime, os: String, device_size: String, session_id: String, session_length: i32) -> Self{
+    pub fn new(application_id: String, creation_time: NaiveDateTime, os: String, device_size: String, is_new_user:bool, session_id: String, session_length: i32) -> Self{
         AnalyticEntry{
             tracking_id: create_tracking_id(),
             application_id,
             creation_time,
             os,
             device_size,
+            is_new_user,
             session_length,
             session_id
         }
