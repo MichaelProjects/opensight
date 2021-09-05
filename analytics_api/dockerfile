@@ -6,7 +6,10 @@ RUN rustup default nightly
 RUN rustup update
 RUN cargo build --release
 
-FROM debian:buster-slim
-RUN apt-get update && apt upgrade -y && rm -rf /var/lib/apt/lists/*
-COPY --from=builder /analytics_api/target/release/analytics_api /usr/lokal/bin/analytics_api
-CMD ["./usr/lokal/bin/analytics_api"]
+FROM ubuntu:21.04
+RUN apt update && apt install postgresql-client -y
+COPY --from=builder /analytics_api/target/release/analytics_api analytics_api
+
+RUN useradd -u 8877 notroot
+USER notroot
+CMD ["./analytics_api"]

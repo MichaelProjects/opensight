@@ -17,9 +17,8 @@ config = "0.11.0"
 uuid = { version = "0.8", features = ["serde", "v4"] }
 juniper = "0.15.7"
 diesel = { version = "1.4.4", features = ["postgres", "chrono"] }
-dotenv = "0.15.0"
-num_cpus = "1.13.0"
 diesel_migrations = "1.4.0"
+log4rs = "1.0.0"
 
 [dependencies.rocket_sync_db_pools]
 version = "0.1.0-rc.1"
