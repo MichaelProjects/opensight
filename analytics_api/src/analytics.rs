@@ -27,9 +27,9 @@ pub struct AnalyticEntry{
     creation_time: NaiveDateTime,
     os: String,
     device_size: String,
-    is_new_user: bool,
     session_length: i32,
-    session_id: String
+    session_id: String,
+    is_new_user: bool
     // here should come _ features: Vec<String>
 }
 impl AnalyticEntry{

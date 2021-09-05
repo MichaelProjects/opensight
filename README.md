@@ -14,11 +14,11 @@ We support features like:
 Opensight consists out of 2 parts, the Client and the Backend. The Backend is build in an microservice-architecture, the advantages of that is, if you dont want to use the whole Opensight-Stack you are free to choose which services you like, and dont need to pay for unused features.
 
 
-| Services          | Version  | State  |
+| Services          | Version  | Ci  |
 |-|-|-|
-|[Analytic-Service](https://github.com/MichaelProjects/opensight/tree/master/analytics_api)   | 0.1 |    | 
-|[Error-Service](https://github.com/MichaelProjects/opensight/tree/master/errorapi)      | 0.1      |   $12 |
-|[Event-Service](https://github.com/MichaelProjects/opensight/tree/master/eventapi)      | 0.1      |    $1 |
+|[Analytic-Service](https://github.com/MichaelProjects/opensight/tree/master/analytics_api)   | 0.1 |  ![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/anayltics.yml/badge.svg)
+|[Error-Service](https://github.com/MichaelProjects/opensight/tree/master/errorapi)      | 0.1      |   [Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/error.yml/badge.svg) |
+|[Event-Service](https://github.com/MichaelProjects/opensight/tree/master/eventapi)      | 0.1      |   [Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/event.yml/badge.svg)  |
 
 ## How to deploy
 instruction comming soon
