@@ -16,9 +16,9 @@ Opensight consists out of 2 parts, the Client and the Backend. The Backend is bu
 
 | Services          | Version  | Ci  |
 |-|-|-|
-|[Analytic-Service](https://github.com/MichaelProjects/opensight/tree/master/analytics_api)   | 0.1 |  ![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/anayltics.yml/badge.svg)
-|[Error-Service](https://github.com/MichaelProjects/opensight/tree/master/errorapi)      | 0.1      |   [Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/error.yml/badge.svg) |
-|[Event-Service](https://github.com/MichaelProjects/opensight/tree/master/eventapi)      | 0.1      |   [Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/event.yml/badge.svg)  |
+|[Analytic-Service](https://github.com/MichaelProjects/opensight/tree/master/analytics_api) | 0.1      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/anayltics.yml/badge.svg)
+|[Error-Service](https://github.com/MichaelProjects/opensight/tree/master/errorapi)      | 0.1      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/error.yml/badge.svg) |
+|[Event-Service](https://github.com/MichaelProjects/opensight/tree/master/eventapi)      | 0.1      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/event.yaml/badge.svg)  |
 
 ## How to deploy
 instruction comming soon
