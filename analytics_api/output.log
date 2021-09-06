@@ -15,6 +15,7 @@ WARN - [36m([0m[37mget_health[0m[36m)[0m [32mGET[0m [4;34m/analytic[0m
 WARN - [36m([0m[37minsert_application[0m[36m)[0m [32mPOST[0m [4;34m/analytic[0m[34m/admin/application[0m
 WARN - [36m([0m[37minsert_entry[0m[36m)[0m [32mPOST[0m [4;34m/analytic[0m[34m/<application_id>/entry[0m
 WARN - 📡 [35mFairings[0m:
+<<<<<<< HEAD
 WARN - [1;49;39mShield[0m ([1;34mliftoff, response, singleton[0m)
 WARN - [1;49;39m'postgres_url' Database Pool[0m ([1;34mignite[0m)
 INFO - 🛡️ [35mShield[0m:
@@ -74,3 +75,14 @@ INFO - Permissions-Policy: [49;39minterest-cohort=()[0m
 INFO - X-Content-Type-Options: [49;39mnosniff[0m
 INFO - X-Frame-Options: [49;39mSAMEORIGIN[0m
 WARN - 🚀 [1;49;39mRocket has launched from[0m [1;4;49;39mhttp://0.0.0.0:28018[0m
+=======
+WARN - [1;49;39m'postgres_url' Database Pool[0m ([1;34mignite[0m)
+WARN - [1;49;39mShield[0m ([1;34mliftoff, response, singleton[0m)
+INFO - 🛡️ [35mShield[0m:
+INFO - X-Content-Type-Options: [49;39mnosniff[0m
+INFO - Permissions-Policy: [49;39minterest-cohort=()[0m
+INFO - X-Frame-Options: [49;39mSAMEORIGIN[0m
+WARN - 🚀 [1;49;39mRocket has launched from[0m [1;4;49;39mhttp://0.0.0.0:28018[0m
+WARN - Received SIGINT. Requesting shutdown.
+INFO - Received shutdown request. Waiting for pending I/O...
+>>>>>>> 6c24140f8721a3b80d1fd9c5ee081a6f3088daf0
