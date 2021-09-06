@@ -1,5 +1,5 @@
 [package]
-name = "errorapi"
+name = "event_api"
 version = "0.1.0"
 edition = "2018"
 

@@ -1,8 +1,4 @@
-# Stackblog Analytics
 
-Why should you choose Stackblog Analytics?
+## Analytics Service
 
-- Privacy build in
-- Its open source
-- 3rd Party integrations
 

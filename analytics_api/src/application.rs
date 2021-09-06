@@ -1,4 +1,4 @@
-use diesel;
+
 
 use super::schema::applications;
 use serde::{Deserialize, Serialize};

@@ -12,6 +12,7 @@ pub struct Database {
 pub struct General {
     pub debug: bool,
     pub port: u16,
+    pub address: String,
 }
 #[derive(Debug, Deserialize)]
 pub struct Settings{
@@ -22,7 +23,7 @@ pub struct Settings{
 impl Settings {
     pub fn new() -> Result<Self, ConfigError>{
         let mut s = Config::default();
-        s.merge(File::with_name("conf/default"))?;
+        s.merge(File::with_name("config"))?;
 
         let env = env::var("RUN_MODE").unwrap_or_else(|_| "development".into());
         s.merge(File::with_name(&format!("conf/{}", env)).required(false))?;
