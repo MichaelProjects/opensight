@@ -12,4 +12,5 @@ COPY --from=builder /analytics_api/target/release/analytics_api analytics_api
 
 RUN useradd -u 8877 notroot
 USER notroot
+ENTRYPOINT ["bash"]
 CMD ["./analytics_api"]

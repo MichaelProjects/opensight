@@ -15,6 +15,7 @@ mod handler;
 mod db;
 mod analytics_dao;
 mod cache;
+mod logs;
 
 use crate::settings::{Settings};
 use crate::db::*;
@@ -23,12 +24,15 @@ use handler::{get_health, insert_entry, insert_application};
 use diesel::prelude::*;
 use crate::cache::Cache;
 
-
 use rocket::figment::Figment;
 use log4rs::append::file::FileAppender;
 use log4rs::encode::pattern::PatternEncoder;
 use log4rs::config::{Appender, Config, Root};
 use log::LevelFilter;
+use rocket_sync_db_pools::rocket::Rocket;
+use rocket::{Ignite, Build};
+use rocket::response::status::Custom;
+use rocket::fairing::AdHoc;
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     let mut logging_string = "critical";
@@ -43,44 +47,44 @@ pub fn insert_conf_values(conf: &Settings) -> Figment {
         .merge(("databases.postgres_url.url", &conf.database.connection_string))
 }
 
-pub async fn create_routes(conf: Settings, app: Cache,){
+pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
     rocket::custom(insert_conf_values(&conf))
         .attach(AnalyticsDB::fairing())
         .manage(conf)
-        .manage(app)
         .mount("/analytic", routes![get_health, insert_entry, insert_application] )
-        .launch()
-        .await;
 }
 
 embed_migrations!("./migrations/");
-
 
 #[rocket::main]
 async fn main(){
     let conf = Settings::new().unwrap();
 
-    let mut logging_level = LevelFilter::Error;
-    if &conf.general.debug == &true{
-        logging_level = LevelFilter::Debug;
-    }
-
-    let logfile = FileAppender::builder()
-        .encoder(Box::new(PatternEncoder::new("{l} - {m}\n")))
-        .build("output.log").unwrap();
-
-    let config = Config::builder()
-        .appender(Appender::builder().build("logfile", Box::new(logfile)))
-        .build(Root::builder()
-            .appender("logfile")
-            .build(logging_level)).unwrap();
-
-    log4rs::init_config(config);
+    logs::init_logger(&conf);
 
     // This will run the necessary migrations.
     let connection = PgConnection::establish(conf.database.connection_string.as_str()).unwrap();
     embedded_migrations::run(&connection);
 
 
-    create_routes(conf, cache::Cache{all_apps: vec![]}).await;
+    rocket_creator(conf).launch().await;
+}
+
+
+#[cfg(test)]
+mod test {
+    use super::rocket_creator;
+    use rocket::local::Client;
+    use rocket::http::Status;
+    use rocket::local::asynchronous::Client;
+    use crate::settings::Settings;
+
+    #[test]
+    async fn test_hello() {
+        let conf = Settings::new().unwrap();
+        let client = Client::new(rocket_creator(conf)).await.unwrap();
+        let mut response = client.get("/").dispatch().await;
+        assert_eq!(response.status(), Status::Ok);
+        assert_eq!(response.body_string(), Some("Hello, world!".into()));
+    }
 }
