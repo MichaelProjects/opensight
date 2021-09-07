@@ -15,20 +15,17 @@ mod handler;
 mod db;
 mod analytics_dao;
 mod cache;
+mod logs;
 
 use crate::settings::{Settings};
 use crate::db::*;
 use handler::{get_health, insert_entry, insert_application};
-
 use diesel::prelude::*;
-use crate::cache::Cache;
-
-
 use rocket::figment::Figment;
-use log4rs::append::file::FileAppender;
-use log4rs::encode::pattern::PatternEncoder;
-use log4rs::config::{Appender, Config, Root};
-use log::LevelFilter;
+use rocket_sync_db_pools::rocket::Rocket;
+use rocket::{Build};
+
+
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     let mut logging_string = "critical";
@@ -43,44 +40,50 @@ pub fn insert_conf_values(conf: &Settings) -> Figment {
         .merge(("databases.postgres_url.url", &conf.database.connection_string))
 }
 
-pub async fn create_routes(conf: Settings, app: Cache,){
+pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
     rocket::custom(insert_conf_values(&conf))
         .attach(AnalyticsDB::fairing())
         .manage(conf)
-        .manage(app)
         .mount("/analytic", routes![get_health, insert_entry, insert_application] )
-        .launch()
-        .await;
 }
 
 embed_migrations!("./migrations/");
 
+fn run_migration(conf: &Settings){
+    let connection = match PgConnection::establish(conf.database.connection_string.as_str()){
+        Ok(conn) => conn,
+        Err(err) => panic!("Could not connect to Database, Postgres-Error: {}", err)
+    };
+    match embedded_migrations::run(&connection) {
+        Ok(result) => result,
+        Err(err) => panic!("Cloud not migrate Database Tables, error: {}", err)
+    };
+}
 
 #[rocket::main]
 async fn main(){
-    let conf = Settings::new().unwrap();
+    let conf = match Settings::new(){
+        Ok(conf) => conf,
+        Err(err) => panic!("Cloud not read Config, ensure it in the right place")
+    };
+    logs::init_logger(&conf);
+    run_migration(&conf);
+    rocket_creator(conf).launch().await;
+}
 
-    let mut logging_level = LevelFilter::Error;
-    if &conf.general.debug == &true{
-        logging_level = LevelFilter::Debug;
+
+#[cfg(test)]
+mod test {
+    use super::rocket_creator;
+    use rocket::http::Status;
+    use crate::settings::Settings;
+    use rocket::local::blocking::Client;
+
+    #[test]
+    fn test_health_check() {
+        let conf = Settings::new().unwrap();
+        let client = Client::tracked(rocket_creator(conf)).unwrap();
+        let response = client.get("/analytic/health");
+        println!("{:?}", response);
     }
-
-    let logfile = FileAppender::builder()
-        .encoder(Box::new(PatternEncoder::new("{l} - {m}\n")))
-        .build("output.log").unwrap();
-
-    let config = Config::builder()
-        .appender(Appender::builder().build("logfile", Box::new(logfile)))
-        .build(Root::builder()
-            .appender("logfile")
-            .build(logging_level)).unwrap();
-
-    log4rs::init_config(config);
-
-    // This will run the necessary migrations.
-    let connection = PgConnection::establish(conf.database.connection_string.as_str()).unwrap();
-    embedded_migrations::run(&connection);
-
-
-    create_routes(conf, cache::Cache{all_apps: vec![]}).await;
 }

@@ -11,5 +11,9 @@ RUN apt update && apt install postgresql-client -y
 COPY --from=builder /analytics_api/target/release/analytics_api analytics_api
 
 RUN useradd -u 8877 notroot
+
+RUN mkdir -p /var/log/opensight/
+RUN chmod -R 777 /var/log/opensight
+
 USER notroot
 CMD ["./analytics_api"]

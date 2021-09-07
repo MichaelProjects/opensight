@@ -53,7 +53,6 @@ impl AnalyticEntry{
     }
 }
 
-
 pub fn create_tracking_id() -> String {
     let tracking_id = Uuid::new_v4();
     tracking_id.to_string()
