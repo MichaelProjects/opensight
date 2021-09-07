@@ -20,19 +20,12 @@ mod logs;
 use crate::settings::{Settings};
 use crate::db::*;
 use handler::{get_health, insert_entry, insert_application};
-
 use diesel::prelude::*;
-use crate::cache::Cache;
-
 use rocket::figment::Figment;
-use log4rs::append::file::FileAppender;
-use log4rs::encode::pattern::PatternEncoder;
-use log4rs::config::{Appender, Config, Root};
-use log::LevelFilter;
 use rocket_sync_db_pools::rocket::Rocket;
-use rocket::{Ignite, Build};
-use rocket::response::status::Custom;
-use rocket::fairing::AdHoc;
+use rocket::{Build};
+
+
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     let mut logging_string = "critical";
@@ -56,17 +49,25 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
 
 embed_migrations!("./migrations/");
 
+fn run_migration(conf: &Settings){
+    let connection = match PgConnection::establish(conf.database.connection_string.as_str()){
+        Ok(conn) => conn,
+        Err(err) => panic!("Could not connect to Database, Postgres-Error: {}", err)
+    };
+    match embedded_migrations::run(&connection) {
+        Ok(result) => result,
+        Err(err) => panic!("Cloud not migrate Database Tables, error: {}", err)
+    };
+}
+
 #[rocket::main]
 async fn main(){
-    let conf = Settings::new().unwrap();
-
+    let conf = match Settings::new(){
+        Ok(conf) => conf,
+        Err(err) => panic!("Cloud not read Config, ensure it in the right place")
+    };
     logs::init_logger(&conf);
-
-    // This will run the necessary migrations.
-    let connection = PgConnection::establish(conf.database.connection_string.as_str()).unwrap();
-    embedded_migrations::run(&connection);
-
-
+    run_migration(&conf);
     rocket_creator(conf).launch().await;
 }
 
@@ -74,17 +75,15 @@ async fn main(){
 #[cfg(test)]
 mod test {
     use super::rocket_creator;
-    use rocket::local::Client;
     use rocket::http::Status;
-    use rocket::local::asynchronous::Client;
     use crate::settings::Settings;
+    use rocket::local::blocking::Client;
 
     #[test]
-    async fn test_hello() {
+    fn test_health_check() {
         let conf = Settings::new().unwrap();
-        let client = Client::new(rocket_creator(conf)).await.unwrap();
-        let mut response = client.get("/").dispatch().await;
-        assert_eq!(response.status(), Status::Ok);
-        assert_eq!(response.body_string(), Some("Hello, world!".into()));
+        let client = Client::tracked(rocket_creator(conf)).unwrap();
+        let response = client.get("/analytic/health");
+        println!("{:?}", response);
     }
 }

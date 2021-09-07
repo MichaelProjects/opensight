@@ -16,7 +16,7 @@ pub(crate) async fn get_health(_conn: AnalyticsDB) -> Json<health::Health>{
 }
 
 #[post("/<application_id>/entry", data="<analytics>")]
-pub(crate) async fn insert_entry(_apps: &State<Cache>,conn: AnalyticsDB, application_id: String, analytics: Json<AnalyticData>) -> Status{
+pub(crate) async fn insert_entry(conn: AnalyticsDB, application_id: String, analytics: Json<AnalyticData>) -> Status{
     let mut found = false;
     let dao = ApplicationDao::new();
     let apps = conn.run(move |c| dao.get_all(c)).await;
@@ -34,7 +34,7 @@ pub(crate) async fn insert_entry(_apps: &State<Cache>,conn: AnalyticsDB, applica
 }
 
 #[post("/admin/application", data="<data>")]
-pub(crate) async fn insert_application(_cache: &State<Cache>, conn: AnalyticsDB, data: Json<ApplicationData<'_>>) -> Status{
+pub(crate) async fn insert_application (conn: AnalyticsDB, data: Json<ApplicationData<'_>>) -> Status{
     let application = Application::new(data.application_name, ApplicationType::from_str(data.os));
     let _result = conn.run(|c| application.insert_entry(c)).await;
     Status::Accepted
