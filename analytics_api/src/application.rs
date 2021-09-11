@@ -69,17 +69,6 @@ impl ApplicationType {
 }
 
 
-pub fn get_all_apps(connection_str: &str) -> Vec<Application>{
-    let mut conn = diesel::PgConnection::establish(connection_str).unwrap();
-    let application_dao = ApplicationDao::new();
-    let applications: Vec<Application> = application_dao.get_all(&mut conn);
-    for app in applications.iter() {
-        debug!("Application {:?}", app);
-    }
-    applications
-}
-
-
 fn create_token(app: Application) -> String{
     let mut s = DefaultHasher::new();
     app.hash(&mut s);

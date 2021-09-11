@@ -62,7 +62,7 @@ fn run_migration(conf: &Settings){
 async fn main(){
     let conf = match Settings::new(){
         Ok(conf) => conf,
-        Err(err) => panic!("Cloud not read Config, ensure it in the right place")
+        Err(_err) => panic!("Cloud not read Config, ensure it in the right place")
     };
     logs::init_logger(&conf);
     run_migration(&conf);

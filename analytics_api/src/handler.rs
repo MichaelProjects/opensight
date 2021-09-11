@@ -2,7 +2,6 @@ use crate::analytics::{AnalyticEntry, AnalyticData};
 use rocket::serde::json::Json;
 use crate::{health, application};
 use crate::db::{AnalyticsDB};
-use rocket::State;
 use crate::application::{Application, ApplicationData, ApplicationType};
 use rocket::http::Status;
 
