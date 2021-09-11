@@ -1,11 +1,10 @@
 use crate::analytics::{AnalyticEntry, AnalyticData};
 use rocket::serde::json::Json;
-use crate::{health};
+use crate::{health, application};
 use crate::db::{AnalyticsDB};
 use rocket::State;
 use crate::application::{Application, ApplicationData, ApplicationType};
 use rocket::http::Status;
-use crate::cache::Cache;
 
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
@@ -38,4 +37,10 @@ pub(crate) async fn insert_application (conn: AnalyticsDB, data: Json<Applicatio
     let application = Application::new(data.application_name, ApplicationType::from_str(data.os));
     let _result = conn.run(|c| application.insert_entry(c)).await;
     Status::Accepted
+}
+
+#[get("/admin/application")]
+pub(crate) async fn get_applications(conn: AnalyticsDB) -> Json<Vec<Application>>{
+    let data = conn.run(|c| application::get_all(c)).await;
+    Json(data)
 }

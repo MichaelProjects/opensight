@@ -17,7 +17,7 @@ pub struct ApplicationData<'a>{
     pub os: &'a str
 }
 
-#[derive(Clone, Debug, Hash, Queryable, AsChangeset, Insertable)]
+#[derive(Serialize, Clone, Debug, Hash, Queryable, AsChangeset, Insertable)]
 #[table_name="applications"]
 pub struct Application {
     pub application_id: String,
@@ -39,6 +39,11 @@ impl Application{
         let app_dao = ApplicationDao::new();
         app_dao.insert_entry(self, conn)
     }
+}
+
+pub fn get_all(conn:  &mut PgConnection) -> Vec<Application>{
+    let app_dao = ApplicationDao::new();
+    app_dao.get_all(conn)
 }
 
 #[derive(Hash, Debug)]

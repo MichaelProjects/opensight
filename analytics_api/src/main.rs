@@ -14,17 +14,15 @@ mod schema;
 mod handler;
 mod db;
 mod analytics_dao;
-mod cache;
 mod logs;
 
 use crate::settings::{Settings};
 use crate::db::*;
-use handler::{get_health, insert_entry, insert_application};
+use handler::{get_health, insert_entry, insert_application, get_applications};
 use diesel::prelude::*;
 use rocket::figment::Figment;
 use rocket_sync_db_pools::rocket::Rocket;
 use rocket::{Build};
-
 
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
@@ -44,7 +42,7 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
     rocket::custom(insert_conf_values(&conf))
         .attach(AnalyticsDB::fairing())
         .manage(conf)
-        .mount("/analytic", routes![get_health, insert_entry, insert_application] )
+        .mount("/analytic", routes![get_health, insert_entry, insert_application, get_applications] )
 }
 
 embed_migrations!("./migrations/");
