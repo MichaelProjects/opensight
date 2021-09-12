@@ -8,8 +8,7 @@ use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
-use diesel::{PgConnection, Connection};
-use log::{debug};
+use diesel::{PgConnection};
 
 #[derive(Serialize, Deserialize)]
 pub struct ApplicationData<'a>{
