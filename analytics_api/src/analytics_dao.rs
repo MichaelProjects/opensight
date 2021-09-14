@@ -32,8 +32,8 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao{
         todo!()
     }
 
-    fn get_all(&self, _conn: &mut PgConnection) -> Vec<AnalyticEntry> {
-        let result = vec![];
-        result
+    fn get_all(&self, conn: &mut PgConnection) -> Vec<AnalyticEntry> {
+        let response: Vec<AnalyticEntry> = analytics::table.load::<AnalyticEntry>(conn).expect("Entrys");
+        return response;
     }
 }

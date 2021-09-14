@@ -1,12 +1,13 @@
 extern crate diesel;
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use chrono::NaiveDateTime;
 use diesel::{PgConnection};
 use super::schema::analytics;
 use crate::dao::Dao;
 use crate::analytics_dao::AnalyticsDao;
+use crate::application_dao::ApplicationDao;
 
 #[derive(Deserialize)]
 pub struct AnalyticData{
@@ -19,7 +20,7 @@ pub struct AnalyticData{
     pub session_id: String
 
 }
-#[derive(Clone, Debug, Queryable, AsChangeset, Insertable)]
+#[derive(Serialize, Deserialize, Clone, Debug, Queryable, AsChangeset, Insertable)]
 #[table_name="analytics"]
 pub struct AnalyticEntry{
     tracking_id: String,
@@ -51,6 +52,11 @@ impl AnalyticEntry{
         let _successful = true;
         true
     }
+}
+pub fn get_all_entrys(conn: &mut PgConnection) -> Vec<AnalyticEntry>{
+    let dao = AnalyticsDao::new();
+    let entrys = dao.get_all(conn);
+    return entrys;
 }
 
 pub fn create_tracking_id() -> String {

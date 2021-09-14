@@ -1,4 +1,4 @@
-use crate::analytics::{AnalyticEntry, AnalyticData};
+use crate::analytics::{AnalyticEntry, AnalyticData, get_all_entrys};
 use rocket::serde::json::Json;
 use crate::{health, application};
 use crate::db::{AnalyticsDB};
@@ -42,4 +42,10 @@ pub(crate) async fn insert_application (conn: AnalyticsDB, data: Json<Applicatio
 pub(crate) async fn get_applications(conn: AnalyticsDB) -> Json<Vec<Application>>{
     let data = conn.run(|c| application::get_all(c)).await;
     Json(data)
+}
+
+#[get("/admin/application/entry")]
+pub(crate) async fn get_application_entrys(conn: AnalyticsDB) -> Json<Vec<AnalyticEntry>>{
+    let entry = conn.run(|c| get_all_entrys(c)).await;
+    Json(entry)
 }
