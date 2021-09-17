@@ -1,13 +1,15 @@
 table! {
-    analytics (tracking_id, application_id) {
-        tracking_id -> Text,
+    analytics (session_id, application_id) {
+        session_id -> Text,
         application_id -> Text,
         creation_time -> Timestamp,
         os -> Text,
         device_size -> Text,
-        session_length -> Int4,
-        session_id -> Text,
-        is_new_user -> Bool,
+        new_user -> Bool,
+        country -> Text,
+        last_session -> Int4,
+        device_type -> Text,
+        version -> Text,
     }
 }
 
