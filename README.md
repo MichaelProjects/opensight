@@ -22,3 +22,7 @@ Opensight consists out of 2 parts, the Client and the Backend. The Backend is bu
 
 ## How to deploy
 instruction comming soon
+
+## Want to contribute
+
+Please contact me under info@stackblog.io
