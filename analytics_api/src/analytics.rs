@@ -17,33 +17,37 @@ pub struct AnalyticData{
     pub device_size: String,
     pub is_new_user: bool,
     pub session_length: i32,
-    pub session_id: String
+    pub session_id: String,
 
 }
 #[derive(Serialize, Deserialize, Clone, Debug, Queryable, AsChangeset, Insertable)]
 #[table_name="analytics"]
 pub struct AnalyticEntry{
-    tracking_id: String,
+    session_id: String,
     application_id: String,
     creation_time: NaiveDateTime,
     os: String,
     device_size: String,
-    session_length: i32,
-    session_id: String,
-    is_new_user: bool
+    new_user: bool,
+    country: String,
+    last_session: i32,
+    device_typ: String,
+    version: String
     // here should come _ features: Vec<String>
 }
 impl AnalyticEntry{
-    pub fn new(application_id: String, creation_time: NaiveDateTime, os: String, device_size: String, is_new_user:bool, session_id: String, session_length: i32) -> Self{
+    pub fn new(application_id: String, creation_time: NaiveDateTime, os: String, device_size: String, new_user:bool, country: String, last_session: i32, device_typ: String, version: String) -> Self{
         AnalyticEntry{
-            tracking_id: create_tracking_id(),
+            session_id: create_tracking_id(),
             application_id,
             creation_time,
             os,
             device_size,
-            is_new_user,
-            session_length,
-            session_id
+            new_user,
+            country,
+            last_session,
+            device_typ,
+            version
         }
     }
     pub fn insert_entry(self, conn: &mut PgConnection) -> bool{
