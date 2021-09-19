@@ -16,9 +16,10 @@ pub(crate) async fn get_health(_conn: AnalyticsDB) -> Json<health::Health>{
 #[post("/<application_id>/entry", data="<analytics>")]
 pub(crate) async fn insert_entry(conn: AnalyticsDB, application_id: String, analytics: Json<AnalyticData>) -> Status{
     let mut found = false;
-    let dao = ApplicationDao::new();
-    let apps = conn.run(move |c| dao.get_all(c)).await;
+    let apps = conn.run(|c| ApplicationDao::new().get_all(c)).await;
+    println!("Hier start");
     for x in apps.iter(){
+        println!("{:?}", x.application_id);
         if x.application_id == application_id{
             found = true;
         }

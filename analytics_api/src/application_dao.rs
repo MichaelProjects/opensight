@@ -40,10 +40,8 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
     }
 
     fn get_all(&self, conn: &mut PgConnection) -> Vec<Application> {
-        let response: QueryResult<Vec<Application>> = applications::table.load::<Application>(&*conn);
-        for _x in response.iter(){
-        }
-        response.unwrap()
+        let response: Vec<Application> = applications::table.load::<Application>(conn).expect("abc");
+        response
     }
 }
 
