@@ -12,12 +12,14 @@ use crate::application_dao::ApplicationDao;
 #[derive(Deserialize)]
 pub struct AnalyticData{
     #[serde(serialize_with = "to_ts")]
-    pub creation_date: NaiveDateTime,
+    pub creation_time: NaiveDateTime,
     pub os: String,
     pub device_size: String,
-    pub is_new_user: bool,
-    pub session_length: i32,
-    pub session_id: String,
+    pub new_user: bool,
+    pub country: String,
+    pub last_session: i32,
+    pub device_type: String,
+    pub version: String
 
 }
 #[derive(Serialize, Deserialize, Clone, Debug, Queryable, AsChangeset, Insertable)]
@@ -31,23 +33,23 @@ pub struct AnalyticEntry{
     new_user: bool,
     country: String,
     last_session: i32,
-    device_typ: String,
+    device_type: String,
     version: String
     // here should come _ features: Vec<String>
 }
 impl AnalyticEntry{
-    pub fn new(application_id: String, creation_time: NaiveDateTime, os: String, device_size: String, new_user:bool, country: String, last_session: i32, device_typ: String, version: String) -> Self{
+    pub fn new(data: AnalyticData, application_id: String) -> Self{
         AnalyticEntry{
             session_id: create_tracking_id(),
             application_id,
-            creation_time,
-            os,
-            device_size,
-            new_user,
-            country,
-            last_session,
-            device_typ,
-            version
+            creation_time: data.creation_time,
+            os: data.os,
+            device_size: data.device_size,
+            new_user: data.new_user,
+            country: data.country,
+            last_session: data.last_session,
+            device_type: data.device_type,
+            version: data.version
         }
     }
     pub fn insert_entry(self, conn: &mut PgConnection) -> bool{

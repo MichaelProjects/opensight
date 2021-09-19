@@ -26,7 +26,7 @@ pub(crate) async fn insert_entry(conn: AnalyticsDB, application_id: String, anal
     if !found{
         return Status::NotFound
     }
-    let analytic_entry = AnalyticEntry::new(application_id, analytics.creation_date, analytics.os.clone(), analytics.device_size.clone(), analytics.is_new_user.clone() ,analytics.session_id.clone(), analytics.session_length);
+    let analytic_entry = AnalyticEntry::new(analytics.into_inner(), application_id);
     let _result = conn.run(|c| analytic_entry.insert_entry(c)).await;
     Status::Accepted
 }
