@@ -77,11 +77,11 @@ mod test {
     use crate::settings::Settings;
     use rocket::local::blocking::Client;
 
-    #[test]
+    /*#[test]
     fn test_health_check() {
         let conf = Settings::new().unwrap();
         let client = Client::tracked(rocket_creator(conf)).unwrap();
         let response = client.get("/analytic/health");
         println!("{:?}", response);
-    }
+    }*/
 }
