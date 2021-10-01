@@ -64,7 +64,7 @@ async fn main(){
         Ok(conf) => conf,
         Err(_err) => panic!("Cloud not read Config, ensure it in the right place")
     };
-    logs::init_logger(&conf);
+    let _a = logs::init_logger(&conf);
     run_migration(&conf);
     rocket_creator(conf).launch().await;
 }

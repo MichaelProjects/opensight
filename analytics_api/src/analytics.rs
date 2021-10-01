@@ -7,7 +7,6 @@ use diesel::{PgConnection};
 use super::schema::analytics;
 use crate::dao::Dao;
 use crate::analytics_dao::AnalyticsDao;
-use crate::application_dao::ApplicationDao;
 
 #[derive(Deserialize)]
 pub struct AnalyticData{

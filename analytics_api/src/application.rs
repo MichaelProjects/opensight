@@ -1,5 +1,3 @@
-
-
 use super::schema::applications;
 use serde::{Deserialize, Serialize};
 use chrono::{Utc, NaiveDateTime};
