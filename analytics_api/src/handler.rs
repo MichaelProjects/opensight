@@ -18,7 +18,6 @@ pub(crate) async fn insert_entry(conn: AnalyticsDB, application_id: String, anal
     let mut found = false;
     let apps = conn.run(|c| ApplicationDao::new().get_all(c)).await;
     for x in apps.iter(){
-        println!("{:?}", x.application_id);
         if x.application_id == application_id{
             found = true;
         }

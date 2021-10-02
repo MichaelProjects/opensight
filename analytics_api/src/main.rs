@@ -67,7 +67,7 @@ async fn main(){
         Ok(conf) => conf,
         Err(_err) => panic!("Cloud not read Config, ensure it in the right place")
     };
-    logs::init_logger(&conf);
+    let _a = logs::init_logger(&conf);
     run_migration(&conf);
     rocket_creator(conf).launch().await;
 }
@@ -79,11 +79,16 @@ mod test {
     use rocket::http::Status;
     use crate::settings::Settings;
     use rocket::local::blocking::Client;
+<<<<<<< HEAD
     #[test]
+=======
+
+    /*#[test]
+>>>>>>> aa9aec92ac8659adb47ce91e64725f25b907a872
     fn test_health_check() {
         let conf = Settings::new().unwrap();
         let client = Client::tracked(rocket_creator(conf)).unwrap();
         let response = client.get("/analytic/health");
         println!("{:?}", response);
-    }
+    }*/
 }
