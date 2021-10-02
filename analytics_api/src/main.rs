@@ -23,7 +23,7 @@ use diesel::prelude::*;
 use rocket::figment::Figment;
 use rocket_sync_db_pools::rocket::Rocket;
 use rocket::{Build};
-
+use crate::application::Application;
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     let mut logging_string = "critical";
@@ -39,9 +39,11 @@ pub fn insert_conf_values(conf: &Settings) -> Figment {
 }
 
 pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
+
     rocket::custom(insert_conf_values(&conf))
         .attach(AnalyticsDB::fairing())
         .manage(conf)
+
         .mount("/analytic", routes![get_health, insert_entry, insert_application, get_applications, get_application_entrys] )
 }
 
@@ -60,6 +62,7 @@ fn run_migration(conf: &Settings){
 
 #[rocket::main]
 async fn main(){
+
     let conf = match Settings::new(){
         Ok(conf) => conf,
         Err(_err) => panic!("Cloud not read Config, ensure it in the right place")
@@ -76,7 +79,6 @@ mod test {
     use rocket::http::Status;
     use crate::settings::Settings;
     use rocket::local::blocking::Client;
-
     #[test]
     fn test_health_check() {
         let conf = Settings::new().unwrap();

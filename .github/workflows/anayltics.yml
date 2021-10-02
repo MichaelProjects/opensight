@@ -2,9 +2,9 @@ name: Analytics-Pipeline
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ dev ]
   pull_request:
-    branches: [ main, dev ]
+    branches: [  dev ]
 
 env:
   CARGO_TERM_COLOR: always
