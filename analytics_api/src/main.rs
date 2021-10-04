@@ -79,12 +79,7 @@ mod test {
     use rocket::http::Status;
     use crate::settings::Settings;
     use rocket::local::blocking::Client;
-<<<<<<< HEAD
-    #[test]
-=======
-
     /*#[test]
->>>>>>> aa9aec92ac8659adb47ce91e64725f25b907a872
     fn test_health_check() {
         let conf = Settings::new().unwrap();
         let client = Client::tracked(rocket_creator(conf)).unwrap();
