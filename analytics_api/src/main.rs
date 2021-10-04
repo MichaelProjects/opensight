@@ -15,15 +15,16 @@ mod handler;
 mod db;
 mod analytics_dao;
 mod logs;
+mod admin_handler;
 
 use crate::settings::{Settings};
 use crate::db::*;
-use handler::{get_health, insert_entry, insert_application, get_applications, get_application_entrys};
+use handler::{get_health, insert_entry};
+use admin_handler::{insert_application, get_applications, get_application_entrys};
 use diesel::prelude::*;
 use rocket::figment::Figment;
 use rocket_sync_db_pools::rocket::Rocket;
 use rocket::{Build};
-use crate::application::Application;
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     let mut logging_string = "critical";
@@ -44,7 +45,8 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
         .attach(AnalyticsDB::fairing())
         .manage(conf)
 
-        .mount("/analytic", routes![get_health, insert_entry, insert_application, get_applications, get_application_entrys] )
+        .mount("/analytic", routes![get_health, insert_entry])
+        .mount("/analytic/admin", routes![insert_application, get_applications, get_application_entrys])
 }
 
 embed_migrations!("./migrations/");
