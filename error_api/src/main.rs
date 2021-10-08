@@ -1,3 +1,7 @@
+mod logs;
+mod settings;
+mod handler;
+
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate diesel;
 #[macro_use] extern crate diesel_migrations;
@@ -24,15 +28,14 @@ pub fn insert_conf_values(conf: &Settings) -> Figment {
 pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
 
     rocket::custom(insert_conf_values(&conf))
-        .attach(AnalyticsDB::fairing())
         .manage(conf)
 
         .mount("/error", routes![] )
 }
 
-embed_migrations!("./migrations/");
+//embed_migrations!("./migrations/");
 
-fn run_migration(conf: &Settings){
+/*fn run_migration(conf: &Settings){
     let connection = match PgConnection::establish(conf.database.connection_string.as_str()){
         Ok(conn) => conn,
         Err(err) => panic!("Could not connect to Database, Postgres-Error: {}", err)
@@ -41,7 +44,7 @@ fn run_migration(conf: &Settings){
         Ok(result) => result,
         Err(err) => panic!("Cloud not migrate Database Tables, error: {}", err)
     };
-}
+}*/
 
 #[rocket::main]
 async fn main(){
@@ -51,6 +54,6 @@ async fn main(){
         Err(_err) => panic!("Cloud not read Config, ensure it in the right place")
     };
     let _a = logs::init_logger(&conf);
-    run_migration(&conf);
+    //run_migration(&conf);
     rocket_creator(conf).launch().await;
 }

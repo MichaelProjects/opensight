@@ -26,4 +26,4 @@ features = ["diesel_postgres_pool"]
 
 [dependencies.rocket]
 version = "0.5.0-rc.1"
-features = ["json"]
+features = ["json", "tls"]
