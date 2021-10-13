@@ -71,4 +71,3 @@ fn create_token(app: Application) -> String{
     app.hash(&mut s);
     s.finish().to_string()
 }
-

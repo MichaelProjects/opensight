@@ -1,9 +1,12 @@
-use crate::analytics::{AnalyticEntry, AnalyticData};
+/// As you can see, in this file are the non admin Rest-Endpoints.
+/// These Endpoints are used to collect/recieve data from the clients using the Opensight SDK's.
+
+use crate::analytics::{AnalyticEntry, AnalyticData, SessionUpdate};
 use rocket::serde::json::Json;
 use crate::{health};
 use crate::db::{AnalyticsDB};
 use rocket::http::Status;
-
+use crate::analytics_dao::AnalyticsDao;
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
 
@@ -29,3 +32,17 @@ pub(crate) async fn insert_entry(conn: AnalyticsDB, application_id: String, anal
     Status::Accepted
 }
 
+#[patch("/<application_id>/entry/session", data="<session_update>")]
+pub(crate) async fn update_session(conn: AnalyticsDB, application_id: String, session_update: Json<SessionUpdate>) -> Status{
+    let mut found = false;
+    let apps = conn.run(|c| ApplicationDao::new().get_all(c)).await;
+    for x in apps.iter(){
+        if x.application_id == application_id{
+            found = true;
+        }
+    }
+    if !found{
+        return Status::NotFound
+    }
+    Status::Accepted
+}

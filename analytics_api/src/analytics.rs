@@ -21,6 +21,12 @@ pub struct AnalyticData{
     pub version: String
 
 }
+#[derive(Deserialize)]
+pub struct SessionUpdate{
+    pub session_id: String,
+    pub session_length: i32,
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug, Queryable, AsChangeset, Insertable)]
 #[table_name="analytics"]
 pub struct AnalyticEntry{
@@ -39,7 +45,7 @@ pub struct AnalyticEntry{
 impl AnalyticEntry{
     pub fn new(data: AnalyticData, application_id: String) -> Self{
         AnalyticEntry{
-            session_id: create_tracking_id(),
+            session_id: Uuid::new_v4().to_string(),
             application_id,
             creation_time: data.creation_time,
             os: data.os,
@@ -57,14 +63,11 @@ impl AnalyticEntry{
         let _successful = true;
         true
     }
+
+
 }
-pub fn get_all_entrys(conn: &mut PgConnection) -> Vec<AnalyticEntry>{
+pub fn get_all_entries(conn: &mut PgConnection) -> Vec<AnalyticEntry>{
     let dao = AnalyticsDao::new();
     let entrys = dao.get_all(conn);
     return entrys;
-}
-
-pub fn create_tracking_id() -> String {
-    let tracking_id = Uuid::new_v4();
-    tracking_id.to_string()
 }

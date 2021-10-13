@@ -1,8 +1,11 @@
+use std::process::id;
 use crate::dao::Dao;
 use crate::analytics::{AnalyticEntry};
-use diesel::{PgConnection, RunQueryDsl, QueryResult};
+use diesel::{PgConnection, RunQueryDsl, QueryResult, QueryDsl, ExpressionMethods};
 use super::schema::analytics;
 use log::{debug};
+use crate::schema::analytics::columns::{last_session, session_id};
+
 pub struct AnalyticsDao{
 
 }
