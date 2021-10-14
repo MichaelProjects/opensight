@@ -21,7 +21,7 @@ pub struct AnalyticData{
     pub version: String
 
 }
-#[derive(Deserialize)]
+#[derive(Deserialize,Debug)]
 pub struct SessionUpdate{
     pub session_id: String,
     pub session_length: i32,

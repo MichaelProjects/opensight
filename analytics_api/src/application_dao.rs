@@ -31,7 +31,7 @@ impl Dao<Vec<Application>, Application> for ApplicationDao{
 
     }
 
-    fn update_entry(&self, _id: &str, _conn: &mut PgConnection) {
+    fn update_entry(&self, _id: &str, update: i32, _conn: &mut PgConnection) {
         todo!()
     }
 
