@@ -6,6 +6,7 @@ use rocket::serde::json::Json;
 use crate::{health};
 use crate::db::{AnalyticsDB};
 use rocket::http::Status;
+use crate::analytics_dao::AnalyticsDao;
 
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
@@ -44,7 +45,7 @@ pub(crate) async fn update_session(conn: AnalyticsDB, application_id: String, se
     if !found{
         return Status::NotFound
     }
-
-
+    let dao = AnalyticsDao::new();
+    let result = conn.run(move |c| dao.update_entry(session_update.session_id.as_str().clone(), session_update.session_length.clone(), c)).await;
     Status::Accepted
 }

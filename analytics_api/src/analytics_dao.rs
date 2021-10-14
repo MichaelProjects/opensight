@@ -31,9 +31,9 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao{
     /// [update_entry] function in analytics dao is used to update the [session_length]
     /// using the [session_id] and returns the result of that operation.
     fn update_entry(&self, id: &str, update: i32, conn: &mut PgConnection) {
-        let response = diesel::update(analytics::table.filter(session_id.eq(id)))
+        let result = diesel::update(analytics::table.filter(session_id.eq(id)))
             .set(last_session.eq(update))
-            .get_result(&conn);
+            .get_result::<AnalyticEntry>(conn).expect("");
     }
 
     fn get_entry(&self, _id: &str, _conn: &mut PgConnection) -> AnalyticEntry {
