@@ -46,6 +46,6 @@ pub(crate) async fn update_session(conn: AnalyticsDB, application_id: String, se
         return Status::NotFound
     }
     let dao = AnalyticsDao::new();
-    let result = conn.run(move |c| dao.update_entry(session_update.session_id.as_str().clone(), session_update.session_length.clone(), c)).await;
+    let _result = conn.run(move |c| dao.update_entry(session_update.session_id.as_str().clone(), session_update.session_length.clone(), c)).await;
     Status::Accepted
 }
