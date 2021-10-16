@@ -6,9 +6,6 @@ rust:
 services:
   - docker
 
-before_install:
-  - docker build -t docker-dev.stackblog.io:5000/opensight_analytics_api:2
-
 script:
   - cargo build --verbose --workspace analytics_api
   - cargo test --verbose --workspace analytics_api
