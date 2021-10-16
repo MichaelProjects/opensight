@@ -16,7 +16,7 @@ Opensight consists out of 2 parts, the Client and the Backend. The Backend is bu
 
 | Services          | Version  | Ci  |
 |-|-|-|
-|[Analytic-Service](https://github.com/MichaelProjects/opensight/tree/master/analytics_api) | 0.1      |![Pipeline](https://app.travis-ci.com/MichaelProjects/opensight.svg?branch=master)
+|[Analytic-Service](https://github.com/MichaelProjects/opensight/tree/master/analytics_api) | 0.1      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/analytics.yml/badge.svg)
 |[Error-Service](https://github.com/MichaelProjects/opensight/tree/master/error_api)      | in construction      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/error.yml/badge.svg) |
 |[Event-Service](https://github.com/MichaelProjects/opensight/tree/master/event_api)      | in construction      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/event.yaml/badge.svg)  |
 

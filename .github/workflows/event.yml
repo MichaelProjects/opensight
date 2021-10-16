@@ -1,0 +1,31 @@
+name: Event-Pipeline
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          components: clippy
+          override: true
+
+      - name: run cargo test in /event_api
+        run: cargo test --verbose
+        working-directory: event_api
+
+      - name: run clippy tests /event_api
+        run: cargo clippy
+        working-directory: event_api

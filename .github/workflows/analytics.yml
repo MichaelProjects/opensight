@@ -1,0 +1,31 @@
+name: Analytics-Pipeline
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [  dev ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          components: clippy
+          override: true
+
+      - name: run cargo test in /analytics_api
+        run: cargo test --verbose
+        working-directory: analytics_api
+
+      - name: run clippy tests /analytics_api
+        run: cargo clippy
+        working-directory: analytics_api
