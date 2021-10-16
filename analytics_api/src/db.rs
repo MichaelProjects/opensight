@@ -1,16 +1,19 @@
+use rocket_sync_db_pools::database;
 use serde::{Deserialize, Serialize};
-use rocket_sync_db_pools::{database};
 
 #[database("postgres_url")]
 pub struct AnalyticsDB(diesel::PgConnection);
 
 #[derive(Serialize, Deserialize)]
-pub struct Response{
+pub struct Response {
     message: String,
-    error: bool
+    error: bool,
 }
-impl Response{
-    pub fn new(message: &str, error: bool) -> Self{
-        Response{message: String::from(message), error}
+impl Response {
+    pub fn new(message: &str, error: bool) -> Self {
+        Response {
+            message: String::from(message),
+            error,
+        }
     }
 }

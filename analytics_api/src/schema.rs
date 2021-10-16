@@ -34,8 +34,4 @@ table! {
     }
 }
 
-allow_tables_to_appear_in_same_query!(
-    analytics,
-    applications,
-    user_access,
-);
+allow_tables_to_appear_in_same_query!(analytics, applications, user_access,);

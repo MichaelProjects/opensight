@@ -1,34 +1,37 @@
 //#![feature(proc_macro_hygiene, decl_macro)]
 //#![feature(in_band_lifetimes)]
-#[macro_use] extern crate rocket;
-#[macro_use] extern crate diesel;
-#[macro_use] extern crate diesel_migrations;
+#[macro_use]
+extern crate rocket;
+#[macro_use]
+extern crate diesel;
+#[macro_use]
+extern crate diesel_migrations;
 
-mod health;
-mod settings;
+mod admin_handler;
 mod analytics;
+mod analytics_dao;
 mod application;
 mod application_dao;
 mod dao;
-mod schema;
-mod handler;
 mod db;
-mod analytics_dao;
+mod handler;
+mod health;
 mod logs;
-mod admin_handler;
+mod schema;
+mod settings;
 
-use crate::settings::{Settings};
 use crate::db::*;
-use handler::{get_health, insert_entry};
-use admin_handler::{insert_application, get_applications, get_application_entrys};
+use crate::settings::Settings;
+use admin_handler::{get_application_entrys, get_applications, insert_application};
 use diesel::prelude::*;
+use handler::{get_health, insert_entry, update_session};
 use rocket::figment::Figment;
+use rocket::Build;
 use rocket_sync_db_pools::rocket::Rocket;
-use rocket::{Build};
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     let mut logging_string = "critical";
-    if &conf.general.debug == &true{
+    if &conf.general.debug == &true {
         logging_string = "debug";
     }
     rocket::Config::figment()
@@ -36,50 +39,49 @@ pub fn insert_conf_values(conf: &Settings) -> Figment {
         .merge(("address", &conf.general.address))
         .merge(("log_level", logging_string))
         .merge(("cli_colors", false))
-        .merge(("databases.postgres_url.url", &conf.database.connection_string))
+        .merge((
+            "databases.postgres_url.url",
+            &conf.database.connection_string,
+        ))
 }
 
 pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
-
     rocket::custom(insert_conf_values(&conf))
         .attach(AnalyticsDB::fairing())
         .manage(conf)
-
-        .mount("/analytic", routes![get_health, insert_entry])
-        .mount("/analytic/admin", routes![insert_application, get_applications, get_application_entrys])
+        .mount(
+            "/analytic",
+            routes![get_health, insert_entry, update_session],
+        )
+        .mount(
+            "/analytic/admin",
+            routes![insert_application, get_applications, get_application_entrys],
+        )
 }
 
 embed_migrations!("./migrations/");
 
-fn run_migration(conf: &Settings){
-    let connection = match PgConnection::establish(conf.database.connection_string.as_str()){
+fn run_migration(conf: &Settings) {
+    let connection = match PgConnection::establish(conf.database.connection_string.as_str()) {
         Ok(conn) => conn,
-        Err(err) => panic!("Could not connect to Database, Postgres-Error: {}", err)
+        Err(err) => panic!("Could not connect to Database, Postgres-Error: {}", err),
     };
     match embedded_migrations::run(&connection) {
         Ok(result) => result,
-        Err(err) => panic!("Cloud not migrate Database Tables, error: {}", err)
+        Err(err) => panic!("Cloud not migrate Database Tables, error: {}", err),
     };
 }
 
 #[rocket::main]
-async fn main(){
-
-    let conf = match Settings::new(){
+async fn main() {
+    let conf = match Settings::new() {
         Ok(conf) => conf,
-        Err(_err) => panic!("Cloud not read Config, ensure it in the right place")
+        Err(_err) => panic!("Cloud not read Config, ensure it in the right place"),
     };
     let _a = logs::init_logger(&conf);
     run_migration(&conf);
     rocket_creator(conf).launch().await;
 }
 
-
 #[cfg(test)]
-mod test {
-    
-    
-    
-    
-
-}
+mod test {}
