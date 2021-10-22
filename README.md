@@ -19,6 +19,7 @@ Opensight consists out of 2 parts, the Client and the Backend. The Backend is bu
 |[Analytic-Service](https://github.com/MichaelProjects/opensight/tree/master/analytics_api) | 0.1      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/analytics.yml/badge.svg)
 |[Error-Service](https://github.com/MichaelProjects/opensight/tree/master/error_api)      | in construction      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/error.yml/badge.svg) |
 |[Event-Service](https://github.com/MichaelProjects/opensight/tree/master/event_api)      | in construction      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/event.yml/badge.svg)  |
+[Dashboard](https://github.com/MichaelProjects/opensight/tree/master/dashboard) | in construction | ![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/dashboard.yml/badge.svg)
 
 ## How to deploy
 instruction comming soon
