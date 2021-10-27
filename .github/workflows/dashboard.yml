@@ -14,9 +14,11 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.5.1'
+        
       - name: get packages
         run: flutter pub get
         working-directory: dashboard
+
       - name: test dashboard
         run: flutter test
         working-directory: dashboard

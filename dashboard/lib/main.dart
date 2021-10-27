@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const Dashboard());
 }
 
-class MyApp extends StatelessWidget {
+class Dashboard extends StatelessWidget {
+  const Dashboard({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold());
+    return const MaterialApp();
   }
 }
