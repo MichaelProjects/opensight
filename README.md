@@ -1,7 +1,7 @@
 # Opensight
 
 ## What is Opensight
-Opensight is an Application Monitoring Software, and should be a better alternative to other analytics and Application Monitoring Software. You are able to host it On-Premis, or in the cloud managed by Opensight.
+Opensight is an Application Insight Platform, and should be a better alternative to other analytics and Application Insight Platform. You are able to host it On-Premis, or in the cloud managed by Opensight.
 
 We support features like: 
 
