@@ -12,6 +12,7 @@ pub struct General {
     pub debug: bool,
     pub port: u16,
     pub address: String,
+    pub log_file: String,
 }
 #[derive(Debug, Deserialize)]
 pub struct Settings {

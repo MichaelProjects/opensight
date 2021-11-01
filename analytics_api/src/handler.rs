@@ -10,6 +10,7 @@ use rocket::serde::json::Json;
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
 
+
 #[get("/health")]
 pub(crate) async fn get_health(_conn: AnalyticsDB) -> Json<health::Health> {
     Json(health::get_health_state())

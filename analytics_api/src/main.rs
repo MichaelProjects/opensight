@@ -20,6 +20,7 @@ mod logs;
 mod schema;
 mod settings;
 
+
 use crate::db::*;
 use crate::settings::Settings;
 use admin_handler::{get_application_entrys, get_applications, insert_application};
@@ -72,13 +73,15 @@ fn run_migration(conf: &Settings) {
     };
 }
 
+
+
 #[rocket::main]
 async fn main() {
     let conf = match Settings::new() {
         Ok(conf) => conf,
         Err(_err) => panic!("Cloud not read Config, ensure it in the right place"),
     };
-    let _a = logs::init_logger(&conf);
+    logs::init_logger(&conf);
     run_migration(&conf);
     rocket_creator(conf).launch().await;
 }
