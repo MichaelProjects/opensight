@@ -1,4 +1,8 @@
+import 'package:dashboard/utils/dark_theme.dart';
+import 'package:dashboard/utils/light_theme.dart';
 import 'package:flutter/material.dart';
+
+import 'screens/overlay/sidebar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,9 +17,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Dashboard | Opensight',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Container());
+        darkTheme: buildDarkThemeData(context),
+        theme: buildLightThemeData(context),
+        home: Scaffold(body: Sidebar()));
   }
 }
