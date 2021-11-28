@@ -3,8 +3,6 @@ mod settings;
 mod handler;
 
 #[macro_use] extern crate rocket;
-#[macro_use] extern crate diesel;
-#[macro_use] extern crate diesel_migrations;
 
 use diesel::prelude::*;
 use rocket::figment::Figment;
