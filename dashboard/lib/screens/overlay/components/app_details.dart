@@ -37,11 +37,9 @@ class Appdetails extends StatelessWidget {
     return Container(
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-        height: 100,
-        width: 210,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +47,7 @@ class Appdetails extends StatelessWidget {
             visuals,
             Text(
               app.name,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.headline5,
             ),
             Text(app.packageId, style: Theme.of(context).textTheme.subtitle1),
           ],

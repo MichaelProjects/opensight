@@ -1,7 +1,7 @@
+import 'package:dashboard/screens/overlay/topbar.dart';
 import 'package:dashboard/utils/dark_theme.dart';
 import 'package:dashboard/utils/light_theme.dart';
 import 'package:flutter/material.dart';
-
 import 'screens/overlay/sidebar.dart';
 
 void main() {
@@ -19,6 +19,12 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         darkTheme: buildDarkThemeData(context),
         theme: buildLightThemeData(context),
-        home: Scaffold(body: Sidebar()));
+        home: Scaffold(
+            body: Column(children: [
+          TopBar(),
+          Row(
+            children: [Sidebar()],
+          )
+        ])));
   }
 }
