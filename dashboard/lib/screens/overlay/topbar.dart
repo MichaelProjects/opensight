@@ -22,7 +22,13 @@ class _TopBarState extends State<TopBar> {
         width: size.width,
         height: 80,
         child: Row(
-          children: [LogoContainer(), Timeline(), Searchbar(), Profile()],
+          children: [
+            LogoContainer(),
+            Timeline(),
+            Searchbar(),
+            Expanded(child: Container()),
+            Profile()
+          ],
         ));
   }
 }

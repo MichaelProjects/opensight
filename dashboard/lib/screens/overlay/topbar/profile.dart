@@ -1,3 +1,4 @@
+import 'package:coolicons/coolicons.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
@@ -16,7 +17,8 @@ class Profile extends StatelessWidget {
               backgroundColor: Colors.grey,
             )),
         SizedBox(width: 15),
-        Text("Max Mustermann")
+        Text("Max Mustermann"),
+        IconButton(onPressed: () {}, icon: Icon(Coolicons.caret_down))
       ],
     ));
   }
