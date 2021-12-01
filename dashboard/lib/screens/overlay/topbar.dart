@@ -1,5 +1,7 @@
-import 'package:dashboard/screens/overlay/components/logo_container.dart';
-import 'package:dashboard/screens/overlay/components/timeline.dart';
+import 'package:dashboard/screens/overlay/topbar/logo_container.dart';
+import 'package:dashboard/screens/overlay/topbar/profile.dart';
+import 'package:dashboard/screens/overlay/topbar/searchbar.dart';
+import 'package:dashboard/screens/overlay/topbar/timeline.dart';
 import 'package:flutter/material.dart';
 
 class TopBar extends StatefulWidget {
@@ -20,7 +22,7 @@ class _TopBarState extends State<TopBar> {
         width: size.width,
         height: 80,
         child: Row(
-          children: [LogoContainer(), Timeline()],
+          children: [LogoContainer(), Timeline(), Searchbar(), Profile()],
         ));
   }
 }
