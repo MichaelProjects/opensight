@@ -28,7 +28,7 @@ class _SidebarButtonState extends State<SidebarButton> {
             padding: EdgeInsets.only(left: 15),
             decoration: BoxDecoration(
               color: hoverState == false
-                  ? Theme.of(context).primaryColor
+                  ? Theme.of(context).primaryColor.withOpacity(0)
                   : Colors.blue.withOpacity(0.4),
               borderRadius: BorderRadius.circular(5),
             ),

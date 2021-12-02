@@ -15,7 +15,8 @@ class _SearchbarState extends State<Searchbar> {
         height: 50,
         width: 250,
         child: TextField(
-          decoration: InputDecoration(hintText: "Search..."),
+          decoration:
+              InputDecoration(hintText: "Search...", border: InputBorder.none),
         ));
 
     return Container(
