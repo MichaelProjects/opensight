@@ -6,10 +6,10 @@ use crate::db::AnalyticsDB;
 use crate::health;
 use rocket::http::Status;
 use rocket::serde::json::Json;
+use rocket_okapi::{openapi, routes_with_openapi, JsonSchema};
 
 use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
-
 
 #[get("/health")]
 pub(crate) async fn get_health(_conn: AnalyticsDB) -> Json<health::Health> {

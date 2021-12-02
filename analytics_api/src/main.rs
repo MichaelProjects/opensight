@@ -20,7 +20,6 @@ mod logs;
 mod schema;
 mod settings;
 
-
 use crate::db::*;
 use crate::settings::Settings;
 use admin_handler::{get_application_entrys, get_applications, insert_application};
@@ -29,6 +28,8 @@ use handler::{get_health, insert_entry, update_session};
 use rocket::figment::Figment;
 use rocket::Build;
 use rocket_sync_db_pools::rocket::Rocket;
+use rocket_okapi::{openapi, routes_with_openapi};
+use rocket_okapi::swagger_ui::{make_swagger_ui, SwaggerUIConfig};
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     let mut logging_string = "critical";
@@ -52,7 +53,7 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
         .manage(conf)
         .mount(
             "/analytic",
-            routes![get_health, insert_entry, update_session],
+            routes![insert_entry, update_session],
         )
         .mount(
             "/analytic/admin",
@@ -73,6 +74,15 @@ fn run_migration(conf: &Settings) {
     };
 }
 
+fn get_docs() -> SwaggerUIConfig {
+    use rocket_okapi::swagger_ui::UrlObject;
+
+    SwaggerUIConfig {
+        url: "/my_resource/openapi.json".to_string(),
+        urls: vec![UrlObject::new("My Resource", "/v1/company/openapi.json")],
+        ..Default::default()
+    }
+}
 
 
 #[rocket::main]
