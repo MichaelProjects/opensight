@@ -28,8 +28,6 @@ use handler::{get_health, insert_entry, update_session};
 use rocket::figment::Figment;
 use rocket::Build;
 use rocket_sync_db_pools::rocket::Rocket;
-use rocket_okapi::{openapi, routes_with_openapi};
-use rocket_okapi::swagger_ui::{make_swagger_ui, SwaggerUIConfig};
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     let mut logging_string = "critical";
@@ -72,16 +70,6 @@ fn run_migration(conf: &Settings) {
         Ok(result) => result,
         Err(err) => panic!("Cloud not migrate Database Tables, error: {}", err),
     };
-}
-
-fn get_docs() -> SwaggerUIConfig {
-    use rocket_okapi::swagger_ui::UrlObject;
-
-    SwaggerUIConfig {
-        url: "/my_resource/openapi.json".to_string(),
-        urls: vec![UrlObject::new("My Resource", "/v1/company/openapi.json")],
-        ..Default::default()
-    }
 }
 
 
