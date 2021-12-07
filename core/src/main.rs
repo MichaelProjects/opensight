@@ -1,4 +1,13 @@
-use rocket::figment::Figment;
+#[macro_use]
+extern crate rocket;
+#[macro_use]
+extern crate diesel;
+#[macro_use]
+extern crate diesel_migrations;
+
+mod logs;
+mod settings;
+use rocket::{figment::Figment, Rocket};
 use crate::settings::Settings;
 use rocket::Build;
 
@@ -21,14 +30,22 @@ pub fn insert_conf_values(conf: &Settings) -> Figment {
 
 pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
     rocket::custom(insert_conf_values(&conf))
-        .attach(AnalyticsDB::fairing())
         .manage(conf)
         .mount(
             "/analytic",
-            routes![insert_entry, update_session],
+            routes![],
         )
-        .mount(
-            "/analytic/admin",
-            routes![insert_application, get_applications, get_application_entrys],
-        )
+}
+
+#[rocket::main]
+async fn main(){
+    let conf = match Settings::new() {
+        Ok(conf) => conf,
+        Err(e) => {
+            println!("{}", e);
+            std::process::exit(1);
+        }
+    };
+    logs::init_logger(&conf);
+    rocket_creator(conf).launch().await;
 }
