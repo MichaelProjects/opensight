@@ -1,0 +1,8 @@
+[general]
+debug = true
+log_file = ""
+port = 28019
+address = "0.0.0.0"
+
+[database]
+connection_string = "postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@127.0.0.1/postgres"

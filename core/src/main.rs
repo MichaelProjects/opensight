@@ -7,10 +7,16 @@ extern crate diesel_migrations;
 
 mod logs;
 mod settings;
+mod db;
+mod handle;
+mod health;
+mod health_dao;
+
 use rocket::{figment::Figment, Rocket};
 use crate::settings::Settings;
 use rocket::Build;
-
+use handle::{get_health};
+use db::DatabaseConnection;
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     let mut logging_string = "critical";
@@ -30,10 +36,11 @@ pub fn insert_conf_values(conf: &Settings) -> Figment {
 
 pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
     rocket::custom(insert_conf_values(&conf))
+        .attach(DatabaseConnection::fairing())    
         .manage(conf)
         .mount(
-            "/analytic",
-            routes![],
+            "/core",
+            routes![get_health],
         )
 }
 
