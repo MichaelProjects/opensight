@@ -1,10 +1,10 @@
 use rocket;
-use crate::health::{check_health,};
+use crate::health;
 use crate::db::DatabaseConnection;
 
 #[get("/health")]
 pub(crate) async fn get_health(conn: DatabaseConnection,) {
-    check_health(conn).await;
+    health::check_app_health(conn).await;
 }
 
 #[post("/application")]
