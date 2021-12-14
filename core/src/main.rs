@@ -10,6 +10,7 @@ mod settings;
 mod db;
 mod handle;
 mod health;
+mod application;
 
 use rocket::{figment::Figment, Rocket};
 use crate::settings::Settings;
