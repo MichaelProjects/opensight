@@ -6,10 +6,10 @@ use std::hash::{Hash, Hasher};
 use uuid::Uuid;
 
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct ApplicationData {
-    pub application_name: String,
-    pub os: String
+    pub name: String,
+    pub os: ApplicationType
 }
 
 #[derive(Serialize, Clone, Debug, Hash, Queryable, Insertable)]
@@ -21,7 +21,7 @@ pub struct Application {
     pub os: String,
 }
 impl Application {
-    pub fn new(name: &str, os: ApplicationType) -> Application {
+    pub fn new(name: String, os: ApplicationType) -> Application {
         let application_id: String = Uuid::new_v4().to_string();
         let get_time = Utc::now().naive_utc();
         let mut app = Application {
@@ -36,7 +36,7 @@ impl Application {
     }
 }
 
-#[derive(Hash, Debug)]
+#[derive(Hash, Debug, Serialize, Deserialize)]
 pub enum ApplicationType {
     IOS,
     Android,

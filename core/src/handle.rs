@@ -1,16 +1,17 @@
 use rocket;
-use crate::health::{Health};
+use crate::{health::{Health}, application::ApplicationData};
 use rocket::serde::json::Json;
 use crate::db::DatabaseConnection;
+use crate::application::Application;
 
 #[get("/health")]
 pub(crate) fn get_health(conn: DatabaseConnection,) -> Json<Health> {
     Json(Health::new(200, true))
 }
 
-#[post("/application")]
-pub(crate) async fn create_application(){
-    
+#[post("/application", data="<app_data>")]
+pub(crate) async fn create_application(conn: DatabaseConnection, app_data: Json<ApplicationData>){
+    let app = Application::new(app_data.name.clone(), app_data.os);
 }
 
 #[get("/application/<id>")]
