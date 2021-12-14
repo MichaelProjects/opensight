@@ -1,10 +1,11 @@
 use rocket;
-use crate::health;
+use crate::health::{Health};
+use rocket::serde::json::Json;
 use crate::db::DatabaseConnection;
 
 #[get("/health")]
-pub(crate) async fn get_health(conn: DatabaseConnection,) {
-    health::check_app_health(conn).await;
+pub(crate) fn get_health(conn: DatabaseConnection,) -> Json<Health> {
+    Json(Health::new(200, true))
 }
 
 #[post("/application")]

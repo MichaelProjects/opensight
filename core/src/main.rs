@@ -10,7 +10,6 @@ mod settings;
 mod db;
 mod handle;
 mod health;
-mod health_dao;
 
 use rocket::{figment::Figment, Rocket};
 use crate::settings::Settings;
