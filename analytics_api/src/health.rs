@@ -1,6 +1,5 @@
 use log::debug;
 use serde::{Deserialize, Serialize};
-use rocket_okapi::JsonSchema;
 
 #[derive(Deserialize, Serialize)]
 pub struct Health {
