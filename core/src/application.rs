@@ -36,7 +36,7 @@ impl Application {
     }
 }
 
-#[derive(Hash, Debug, Serialize, Deserialize)]
+#[derive(Hash, Debug, Serialize, Deserialize, Clone)]
 pub enum ApplicationType {
     IOS,
     Android,
