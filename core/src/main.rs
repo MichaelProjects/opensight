@@ -11,11 +11,14 @@ mod db;
 mod handle;
 mod health;
 mod application;
+mod schema;
+mod application_dao;
+mod user;
 
 use rocket::{figment::Figment, Rocket};
 use crate::settings::Settings;
 use rocket::Build;
-use handle::{get_health};
+use handle::{get_health, create_application};
 use db::DatabaseConnection;
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
@@ -39,8 +42,8 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
         .attach(DatabaseConnection::fairing())    
         .manage(conf)
         .mount(
-            "/core",
-            routes![get_health],
+            "/core/v1",
+            routes![get_health, create_application],
         )
 }
 
