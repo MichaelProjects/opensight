@@ -7,9 +7,9 @@ use serde::{Deserialize, Serialize};
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use uuid::Uuid;
-use crate::application_dao::{insert_application, get_application};
+use crate::application_dao::{insert_application, get_application, get_all_applications};
 use crate::db::DatabaseConnection;
-
+use std::error::Error;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ApplicationData {
@@ -40,16 +40,24 @@ impl Application {
         app.token = create_token(&app);
         app
     }
-    pub fn insert(self, conn: &PgConnection)  {
-        insert_application(&self, conn);
+    pub async fn insert(app: Application, conn: DatabaseConnection) -> Result<Application, Box<dyn Error>> {
+        let response = conn.run(|c| insert_application(app, c)).await?;
+        Ok(response)
     }
-    pub async fn get(app_id: String, conn: DatabaseConnection) -> Application {
-        let app = conn.run(|c| get_application(&app_id, c)).await;
-        app
+
+    pub async fn get(app_id: String, conn: DatabaseConnection) -> Result<Application, Box<dyn Error>>{
+        let app = conn.run(|c| get_application(app_id, c)).await?;
+        Ok(app)
+    }
+    
+    pub async fn get_all(conn: &DatabaseConnection) -> Vec<Application> {
+        let apps = conn.run(|c| get_all_applications(c)).await;
+        return apps;
     }
 }
 
 #[derive(Hash, Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "lowercase")]
 pub enum ApplicationType {
     IOS,
     Android,
@@ -66,7 +74,7 @@ impl ApplicationType {
         }
     }
     pub fn from_str(str: &str) -> ApplicationType {
-        match str {
+        match str.to_lowercase().as_str() {
             "ios" => ApplicationType::IOS,
             "android" => ApplicationType::Android,
             "web" => ApplicationType::Web,

@@ -1,5 +1,5 @@
 
 
-pub fn inser_user(){
+pub fn insert_user(){
     
 }
