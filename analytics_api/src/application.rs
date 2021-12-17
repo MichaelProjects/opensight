@@ -25,6 +25,7 @@ pub struct Application {
 impl Application {
     pub fn from_str(s: String) -> Result<Application, Box<dyn std::error::Error>> {
         let a: Value = serde_json::from_str(&s)?;
+        let a = a["data"];
         let app = Application{
             application_id: a["application_id"].as_str().unwrap().to_string(),
             application_name: a["application_name"].as_str().unwrap().to_string(),
@@ -35,13 +36,16 @@ impl Application {
         Ok(app)
     }
     pub async fn get(conf: &Settings, application_id: String) -> Result<Application, Box<dyn std::error::Error>> {
-        let app_data = application_dao::get_application(&conf, &application_id).await?;
+        let app_data = application_dao::get(&conf, &application_id).await?;
         let app = Application::from_str(app_data)?;
         Ok(app)
     }
     pub async fn get_all(conf: &Settings) -> Result<Application, Box<dyn std::error::Error>> {
-        let app_data = application_dao::get_application(&conf).await?;
-    }
+        let app_data = application_dao::get_all(&conf).await?;
+        let error = app_data.get_key_value("error").unwrap();
+        if error.1.eq("false") {
+            let app_data = app_data.get_key_value("data").unwrap();
+        }
 }
 
 #[derive(Hash, Debug)]

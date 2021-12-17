@@ -17,7 +17,7 @@ pub fn get_application(id: String, conn: &PgConnection) -> Result<Application, d
     response
 }
 
-pub fn get_all_applications(conn: &PgConnection) -> Vec<Application> {
+pub fn get_all_applications(conn: &PgConnection) -> Result<Vec<Application>, diesel::result::Error> {
     let response: QueryResult<Vec<Application>> = applications::table.load::<Application>(conn);
-    return response.unwrap();
+    return response;
 }

@@ -1,1 +1,0 @@
-CREATE TABLE if not exists applications ( application_id text NOT NULL, application_name text NOT NULL, created_time timestamp NOT NULL, token text NOT NULL, os text NOT NULL, CONSTRAINT PK_applications PRIMARY KEY ( application_id ) );

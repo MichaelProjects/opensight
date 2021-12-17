@@ -50,9 +50,9 @@ impl Application {
         Ok(app)
     }
     
-    pub async fn get_all(conn: &DatabaseConnection) -> Vec<Application> {
-        let apps = conn.run(|c| get_all_applications(c)).await;
-        return apps;
+    pub async fn get_all(conn: &DatabaseConnection) -> Result<Vec<Application>, Box<dyn Error>> {
+        let apps = conn.run(|c| get_all_applications(c)).await?;
+        Ok(apps)
     }
 }
 

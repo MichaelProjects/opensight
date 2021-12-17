@@ -16,7 +16,7 @@ pub(crate) fn get_health(_conn: DatabaseConnection,) -> Json<Health> {
 
 #[post("/application", data="<app_data>")]
 pub(crate) async fn create_application(conn: DatabaseConnection, app_data: Json<ApplicationData>) -> ApiResponse{
-    let apps = Application::get_all(&conn).await;
+    let apps = Application::get_all(&conn).await.unwrap();
     for app in apps.iter(){
         if app.application_name == app_data.name {
             return ApiResponse::new(Status::Conflict, json!({"message": "App does already exist"}));
@@ -32,10 +32,17 @@ pub(crate) async fn create_application(conn: DatabaseConnection, app_data: Json<
 #[get("/application/<id>")]
 pub(crate) async fn get_application(conn: DatabaseConnection, id: String) -> ApiResponse{
     match Application::get(id.clone(), conn).await{
-        Ok(app) => ApiResponse::new(Status::Ok, json!(app)),
+        Ok(app) => ApiResponse::new(Status::Ok, json!({"error": false, "data": app})),
         Err(_) => ApiResponse::new(Status::BadRequest, json!({"message": "an error occurred"}))
     }
 
+}
+#[get("/application")]
+pub(crate) async fn get_all_application(conn: DatabaseConnection) -> ApiResponse{
+    match Application::get_all(&conn).await{
+        Ok(apps) => ApiResponse::new(Status::Ok, json!({"data": apps})),
+        Err(_) => ApiResponse::new(Status::BadRequest, json!({"message": "an error occurred"}))
+    }
 }
 
 #[post("/login", data="<user_data>")]
