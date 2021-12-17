@@ -7,7 +7,6 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-mod admin_handler;
 mod analytics;
 mod analytics_dao;
 mod application;
@@ -22,7 +21,6 @@ mod settings;
 
 use crate::db::*;
 use crate::settings::Settings;
-use admin_handler::{get_application_entrys, get_applications, insert_application};
 use diesel::prelude::*;
 use handler::{get_health, insert_entry, update_session};
 use rocket::figment::Figment;
@@ -52,10 +50,6 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
         .mount(
             "/analytic",
             routes![insert_entry, update_session],
-        )
-        .mount(
-            "/analytic/admin",
-            routes![insert_application, get_applications, get_application_entrys],
         )
 }
 

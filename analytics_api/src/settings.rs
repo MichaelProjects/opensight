@@ -13,6 +13,7 @@ pub struct General {
     pub port: u16,
     pub address: String,
     pub log_file: String,
+    pub opensight_core: String,
 }
 #[derive(Debug, Deserialize)]
 pub struct Settings {

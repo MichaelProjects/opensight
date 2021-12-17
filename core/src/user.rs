@@ -3,6 +3,12 @@ use rocket::serde::json::Json;
 use serde::{Serialize, Deserialize};
 use uuid::Uuid;
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct LoginData {
+    pub loginname: String,
+    pub password: String
+}
+
 #[derive(Serialize, Deserialize, Clone)]
 pub struct UserData{
     username: String,

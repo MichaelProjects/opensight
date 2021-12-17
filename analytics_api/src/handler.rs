@@ -7,7 +7,6 @@ use crate::health;
 use rocket::http::Status;
 use rocket::serde::json::Json;
 
-use crate::application_dao::ApplicationDao;
 use crate::dao::Dao;
 
 #[get("/health")]

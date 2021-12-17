@@ -16,6 +16,7 @@ mod application_dao;
 mod user;
 mod response;
 
+use diesel::{PgConnection, Connection};
 use rocket::{figment::Figment, Rocket};
 use crate::settings::Settings;
 use rocket::Build;
@@ -48,6 +49,19 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
         )
 }
 
+embed_migrations!("./migrations/");
+
+fn run_migration(conf: &Settings) {
+    let connection = match PgConnection::establish(conf.database.connection_string.as_str()) {
+        Ok(conn) => conn,
+        Err(err) => panic!("Could not connect to Database, Postgres-Error: {}", err),
+    };
+    match embedded_migrations::run(&connection) {
+        Ok(result) => result,
+        Err(err) => panic!("Cloud not migrate Database Tables, error: {}", err),
+    };
+}
+
 #[rocket::main]
 async fn main(){
     let conf = match Settings::new() {
@@ -57,6 +71,7 @@ async fn main(){
             std::process::exit(1);
         }
     };
+    run_migration(&conf);
     logs::init_logger(&conf);
     rocket_creator(conf).launch().await;
 }

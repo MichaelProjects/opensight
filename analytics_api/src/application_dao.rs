@@ -1,42 +1,10 @@
-use super::schema::applications;
-use crate::application::*;
-use crate::dao::Dao;
-use diesel::{PgConnection, QueryResult, RunQueryDsl};
+use reqwest;
+use std::error::Error;
+use crate::settings::Settings;
 
-use diesel::prelude::*;
-
-pub struct ApplicationDao {
-    pub value: Vec<Application>,
+pub async fn get_application(conf: &Settings, application_id: &String) -> Result<String, Box<dyn Error>> {
+    let response = reqwest::get(conf.general.opensight_core.as_str()).await?;
+    let a = response.text().await?;
+    Ok(a)
 }
-impl Dao<Vec<Application>, Application> for ApplicationDao {
-    fn new() -> Self {
-        ApplicationDao { value: vec![] }
-    }
 
-    fn insert_entry(&self, data: Application, conn: &mut PgConnection) -> bool {
-        let _successful = true;
-        let _response: QueryResult<Application> = diesel::insert_into(applications::table)
-            .values(&data)
-            .get_result(conn);
-        true
-    }
-
-    fn delete_entry(&self, id: &str, conn: &mut PgConnection) {
-        let _successful = true;
-        let _result = diesel::delete(applications::table.find(id)).execute(conn);
-    }
-
-    fn update_entry(&self, _id: &str, _update: i32, _conn: &mut PgConnection) {
-        todo!()
-    }
-
-    fn get_entry(&self, _id: &str, _conn: &mut PgConnection) -> Vec<Application> {
-        vec![]
-    }
-
-    fn get_all(&self, conn: &mut PgConnection) -> Vec<Application> {
-        let response: Vec<Application> =
-            applications::table.load::<Application>(conn).expect("abc");
-        response
-    }
-}

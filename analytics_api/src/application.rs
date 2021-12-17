@@ -1,12 +1,11 @@
-use super::schema::applications;
-use crate::application_dao::ApplicationDao;
-use crate::dao::Dao;
 use chrono::{NaiveDateTime, Utc};
 use diesel::PgConnection;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
-use uuid::Uuid;
+use crate::application_dao;
+use crate::settings::Settings;
 
 #[derive(Serialize, Deserialize)]
 pub struct ApplicationData<'a> {
@@ -14,39 +13,35 @@ pub struct ApplicationData<'a> {
     pub os: &'a str,
 }
 
-#[derive(Serialize, Clone, Debug, Hash, Queryable, AsChangeset, Insertable)]
-#[table_name = "applications"]
-pub struct Application {
+#[derive(Serialize, Clone, Debug, Hash)]
+pub struct Application {    
     pub application_id: String,
     pub application_name: String,
-    pub created_time: NaiveDateTime,
+    pub creation_time: NaiveDateTime,
     pub token: String,
     pub os: String,
 }
 
 impl Application {
-    pub fn new(name: &str, os: ApplicationType) -> Application {
-        let application_id: String = Uuid::new_v4().to_string();
-        let get_time = Utc::now().naive_utc();
-        let mut app = Application {
-            application_name: String::from(name),
-            os: String::from(os.as_str()),
-            application_id,
-            created_time: get_time,
-            token: String::new(),
+    pub fn from_str(s: String) -> Result<Application, Box<dyn std::error::Error>> {
+        let a: Value = serde_json::from_str(&s)?;
+        let app = Application{
+            application_id: a["application_id"].as_str().unwrap().to_string(),
+            application_name: a["application_name"].as_str().unwrap().to_string(),
+            creation_time: NaiveDateTime::from_timestamp(a["creation_time"].as_i64().unwrap(), 0),
+            token: a["token"].as_str().unwrap().to_string(),
+            os: a["os"].as_str().unwrap().to_string(),
         };
-        app.token = create_token(app.clone());
-        app
+        Ok(app)
     }
-    pub fn insert_entry(self, conn: &mut PgConnection) -> bool {
-        let app_dao = ApplicationDao::new();
-        app_dao.insert_entry(self, conn)
+    pub async fn get(conf: &Settings, application_id: String) -> Result<Application, Box<dyn std::error::Error>> {
+        let app_data = application_dao::get_application(&conf, &application_id).await?;
+        let app = Application::from_str(app_data)?;
+        Ok(app)
     }
-}
-
-pub fn get_all(conn: &mut PgConnection) -> Vec<Application> {
-    let app_dao = ApplicationDao::new();
-    app_dao.get_all(conn)
+    pub async fn get_all(conf: &Settings) -> Result<Application, Box<dyn std::error::Error>> {
+        let app_data = application_dao::get_application(&conf).await?;
+    }
 }
 
 #[derive(Hash, Debug)]
