@@ -23,21 +23,9 @@ pub struct Application {
 }
 
 impl Application {
-    pub fn from_str(s: String) -> Result<Application, Box<dyn std::error::Error>> {
-        let a: Value = serde_json::from_str(&s)?;
-        let a = a["data"];
-        let app = Application{
-            application_id: a["application_id"].as_str().unwrap().to_string(),
-            application_name: a["application_name"].as_str().unwrap().to_string(),
-            creation_time: NaiveDateTime::from_timestamp(a["creation_time"].as_i64().unwrap(), 0),
-            token: a["token"].as_str().unwrap().to_string(),
-            os: a["os"].as_str().unwrap().to_string(),
-        };
-        Ok(app)
-    }
+
     pub async fn get(conf: &Settings, application_id: String) -> Result<Application, Box<dyn std::error::Error>> {
-        let app_data = application_dao::get(&conf, &application_id).await?;
-        let app = Application::from_str(app_data)?;
+        let app = application_dao::get(&conf, &application_id).await?;
         Ok(app)
     }
     pub async fn get_all(conf: &Settings) -> Result<Vec<Application>, Box<dyn std::error::Error>> {

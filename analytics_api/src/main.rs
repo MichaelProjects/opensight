@@ -18,6 +18,7 @@ mod health;
 mod logs;
 mod schema;
 mod settings;
+mod response;
 
 use crate::db::*;
 use crate::settings::Settings;

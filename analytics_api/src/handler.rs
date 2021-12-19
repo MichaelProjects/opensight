@@ -26,9 +26,8 @@ pub(crate) async fn insert_entry(
     settings: &State<Settings>,
     analytics: Json<AnalyticData>,
 ) -> Status {
-    let settings = settings.load(Ordering::Relaxed);
     let mut found = false;
-    let apps = Application::get_all(&settings).await;
+    let apps = Application::get_all(&settings).await.unwrap();
     for x in apps.iter() {
         if x.application_id == application_id {
             found = true;
@@ -46,10 +45,11 @@ pub(crate) async fn insert_entry(
 pub(crate) async fn update_session(
     conn: AnalyticsDB,
     application_id: String,
+    settings: &State<Settings>,
     session_update: Json<SessionUpdate>,
 ) -> Status {
     let mut found = false;
-    let apps: Vec<Application> = Application::get_all(c).await;
+    let apps: Vec<Application> = Application::get_all(settings).await.unwrap();
     for x in apps.iter() {
         if x.application_id == application_id {
             found = true;
