@@ -13,7 +13,7 @@ pub struct ApplicationData<'a> {
     pub os: &'a str,
 }
 
-#[derive(Serialize, Clone, Debug, Hash)]
+#[derive(Serialize, Deserialize, Clone, Debug, Hash)]
 pub struct Application {    
     pub application_id: String,
     pub application_name: String,
@@ -40,12 +40,10 @@ impl Application {
         let app = Application::from_str(app_data)?;
         Ok(app)
     }
-    pub async fn get_all(conf: &Settings) -> Result<Application, Box<dyn std::error::Error>> {
-        let app_data = application_dao::get_all(&conf).await?;
-        let error = app_data.get_key_value("error").unwrap();
-        if error.1.eq("false") {
-            let app_data = app_data.get_key_value("data").unwrap();
-        }
+    pub async fn get_all(conf: &Settings) -> Result<Vec<Application>, Box<dyn std::error::Error>> {
+        let response = application_dao::get_all(&conf).await?;
+        Ok(response)
+    }
 }
 
 #[derive(Hash, Debug)]

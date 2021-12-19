@@ -1,5 +1,6 @@
 use reqwest;
-use std::{error::Error, collections::HashMap};
+use serde::Deserialize;
+use std::{error::Error, collections::HashMap, io::ErrorKind};
 use crate::{settings::Settings, application::Application};
 
 
@@ -9,14 +10,18 @@ pub async fn get(conf: &Settings, application_id: &String) -> Result<String, Box
     let a = response.text().await?;
     Ok(a)
 }
-struct AllAppPayload{
+#[derive(Debug, Deserialize)]
+struct ApiResponse{
     error: bool,
     data: Vec<Application>
 }
 
-pub async fn get_all(conf: &Settings) -> Result<HashMap<String, String>, Box<dyn Error>> {
+pub async fn get_all(conf: &Settings) -> Result<Vec<Application>, Box<dyn Error>> {
     let url: String = format!("{}/core/v1/application", conf.general.opensight_core);
     let response = reqwest::get(url).await?;
-    let a: AllAppPayload = response.json().await?;
-    Ok(a)
+    let api_response: ApiResponse = response.json().await?;
+    if api_response.error.eq(&true){
+        let a = api_response.data;
+        Ok(a)
+    }
 }

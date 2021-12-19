@@ -1,9 +1,14 @@
+use std::sync::atomic::Ordering;
+
 /// As you can see, in this file are the non admin Rest-Endpoints.
 /// These Endpoints are used to collect/recieve data from the clients using the Opensight SDK's.
 use crate::analytics::{AnalyticData, AnalyticEntry, SessionUpdate};
 use crate::analytics_dao::AnalyticsDao;
+use crate::application::Application;
 use crate::db::AnalyticsDB;
 use crate::health;
+use crate::settings::Settings;
+use rocket::State;
 use rocket::http::Status;
 use rocket::serde::json::Json;
 
@@ -18,10 +23,12 @@ pub(crate) async fn get_health(_conn: AnalyticsDB) -> Json<health::Health> {
 pub(crate) async fn insert_entry(
     conn: AnalyticsDB,
     application_id: String,
+    settings: &State<Settings>,
     analytics: Json<AnalyticData>,
 ) -> Status {
+    let settings = settings.load(Ordering::Relaxed);
     let mut found = false;
-    let apps = conn.run(|c| ApplicationDao::new().get_all(c)).await;
+    let apps = Application::get_all(&settings).await;
     for x in apps.iter() {
         if x.application_id == application_id {
             found = true;
@@ -42,7 +49,7 @@ pub(crate) async fn update_session(
     session_update: Json<SessionUpdate>,
 ) -> Status {
     let mut found = false;
-    let apps = conn.run(|c| ApplicationDao::new().get_all(c)).await;
+    let apps: Vec<Application> = Application::get_all(c).await;
     for x in apps.iter() {
         if x.application_id == application_id {
             found = true;
