@@ -23,3 +23,8 @@ pub async fn get_all(conf: &Settings) -> Result<Vec<Application>, Box<dyn Error>
     let api_response: ApiResponse = response.json().await?;
     Ok(api_response.data)
 }
+
+#[test]
+fn get_all_test(){
+    
+}

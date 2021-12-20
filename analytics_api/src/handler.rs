@@ -7,10 +7,12 @@ use crate::analytics_dao::AnalyticsDao;
 use crate::application::Application;
 use crate::db::AnalyticsDB;
 use crate::health;
+use crate::response::ApiResponse;
 use crate::settings::Settings;
 use rocket::State;
 use rocket::http::Status;
 use rocket::serde::json::Json;
+use serde_json::json;
 
 use crate::dao::Dao;
 
@@ -25,7 +27,7 @@ pub(crate) async fn insert_entry(
     application_id: String,
     settings: &State<Settings>,
     analytics: Json<AnalyticData>,
-) -> Status {
+) -> ApiResponse {
     let mut found = false;
     let apps = Application::get_all(&settings).await.unwrap();
     for x in apps.iter() {
@@ -34,11 +36,11 @@ pub(crate) async fn insert_entry(
         }
     }
     if !found {
-        return Status::NotFound;
+        return ApiResponse::new(Status::NotFound, json!({"":""}));
     }
     let analytic_entry = AnalyticEntry::new(analytics.into_inner(), application_id);
     let _result = conn.run(|c| analytic_entry.insert_entry(c)).await;
-    Status::Accepted
+    ApiResponse::new(Status::Ok, json!({"":""}))
 }
 
 #[patch("/<application_id>/session", data = "<session_update>")]

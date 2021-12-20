@@ -2,3 +2,4 @@ target/
 Cargo.lock
 conf/
 .idea/
+testing.sh
