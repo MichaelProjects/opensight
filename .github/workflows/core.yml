@@ -18,8 +18,9 @@ jobs:
       - uses: Swatinem/rust-cache@v1
         with: 
           sharedKey: key
-      - name: build depploy
+      - name: build core
         run: cargo build --release
+        working-directory: core
 
   testing:
     needs: build
@@ -36,6 +37,8 @@ jobs:
             sharedKey: key
       - name: run tests
         run: cargo test --release
+        working-directory: core
 
       - name: run clippy
         run: cargo clippy --release
+        working-directory: core
