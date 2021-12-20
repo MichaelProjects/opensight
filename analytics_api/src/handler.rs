@@ -1,5 +1,3 @@
-use std::sync::atomic::Ordering;
-
 /// As you can see, in this file are the non admin Rest-Endpoints.
 /// These Endpoints are used to collect/recieve data from the clients using the Opensight SDK's.
 use crate::analytics::{AnalyticData, AnalyticEntry, SessionUpdate};

@@ -1,4 +1,5 @@
 use reqwest;
+use rocket::tokio;
 use serde::Deserialize;
 use serde_json::Value;
 use std::{error::Error, collections::HashMap, io::ErrorKind};
@@ -17,14 +18,16 @@ struct ApiResponse{
     data: Vec<Application>
 }
 
-pub async fn get_all(conf: &Settings) -> Result<Vec<Application>, Box<dyn Error>> {
-    let url: String = format!("{}/core/v1/application", conf.general.opensight_core);
+pub async fn get_all(host: &String) -> Result<Vec<Application>, Box<dyn Error>> {
+    let url: String = format!("{}/core/v1/application", host);
     let response = reqwest::get(url).await?;
     let api_response: ApiResponse = response.json().await?;
     Ok(api_response.data)
 }
 
-#[test]
-fn get_all_test(){
+#[tokio::test]
+async fn get_all_test(){
+    let url ="http://metrics.stackblog.io";
+    let result = get_all(&url.to_string()).await.unwrap();
     
 }

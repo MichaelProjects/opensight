@@ -18,7 +18,7 @@ impl Application {
         Ok(app)
     }
     pub async fn get_all(conf: &Settings) -> Result<Vec<Application>, Box<dyn std::error::Error>> {
-        let response = application_dao::get_all(&conf).await?;
+        let response = application_dao::get_all(&conf.general.opensight_core).await?;
         Ok(response)
     }
 }
