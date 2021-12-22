@@ -1,8 +1,7 @@
 use reqwest;
 use rocket::tokio;
 use serde::Deserialize;
-use serde_json::Value;
-use std::{error::Error, collections::HashMap, io::ErrorKind};
+use std::{error::Error};
 use crate::{settings::Settings, application::Application};
 
 
@@ -14,7 +13,6 @@ pub async fn get(conf: &Settings, application_id: &String) -> Result<Application
 }
 #[derive(Debug, Deserialize)]
 struct ApiResponse{
-    error: Value,
     data: Vec<Application>
 }
 
@@ -25,9 +23,9 @@ pub async fn get_all(host: &String) -> Result<Vec<Application>, Box<dyn Error>> 
     Ok(api_response.data)
 }
 
+
 #[tokio::test]
 async fn get_all_test(){
     let url ="http://metrics.stackblog.io";
     let result = get_all(&url.to_string()).await.unwrap();
-    
 }

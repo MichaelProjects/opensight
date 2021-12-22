@@ -27,7 +27,12 @@ pub(crate) async fn insert_entry(
     analytics: Json<AnalyticData>,
 ) -> ApiResponse {
     let mut found = false;
-    let apps = Application::get_all(&settings).await.unwrap();
+    let apps = match Application::get_all(&settings).await{
+        Ok(app) => app,
+        Err(err) => {
+            println!("{}", err);
+            return  ApiResponse::new(Status::InternalServerError, json!({}))}
+    };
     for x in apps.iter() {
         if x.application_id == application_id {
             found = true;

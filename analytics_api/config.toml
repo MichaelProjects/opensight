@@ -3,7 +3,7 @@ debug = true
 log_file = ""
 port = 28018
 address = "0.0.0.0"
-opensight_core = "127.0.0.1:28019"
+opensight_core = "http://127.0.0.1:28019"
 
 [database]
 connection_string = "postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@127.0.0.1/postgres"
