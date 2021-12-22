@@ -1,0 +1,11 @@
+input: .
+output: .retype
+url: 127.0.0.1
+branding:
+  title: Opensight
+  label: Docs
+links:
+- text: Getting Started
+  link: https://retype.com/guides/getting-started/
+footer:
+  copyright: "&copy; Copyright {{ year }}. All rights reserved."
