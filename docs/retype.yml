@@ -2,10 +2,18 @@ input: .
 output: .retype
 url: 127.0.0.1
 branding:
-  title: Opensight
-  label: Docs
+  logoDark: static/logo.png
+  logoAlign: right
+  #title: Opensight
+  #label: Docs
+favicon: static/favicon.ico
 links:
 - text: Getting Started
   link: https://retype.com/guides/getting-started/
+- text: Github
+  link: https://github.com/MichaelProjects/opensight
+- text: Report Issue
+  link: https://github.com/MichaelProjects/opensight/issues/new
+
 footer:
   copyright: "&copy; Copyright {{ year }}. All rights reserved."
