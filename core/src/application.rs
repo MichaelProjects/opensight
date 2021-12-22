@@ -14,6 +14,7 @@ use std::error::Error;
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ApplicationData {
     pub name: String,
+    pub package_name: String,
     pub os: ApplicationType
 }
 
@@ -22,16 +23,18 @@ pub struct ApplicationData {
 pub struct Application {    
     pub application_id: String,
     pub application_name: String,
+    pub package_name: String,
     pub creation_time: NaiveDateTime,
     pub token: String,
     pub os: String,
 }
 impl Application {
-    pub fn new(name: &String, os: &ApplicationType) -> Application {
+    pub fn new(name: &String, os: &ApplicationType, package_name: &String) -> Application {
         let application_id: String = Uuid::new_v4().to_string();
         let get_time = Utc::now().naive_utc();
         let mut app = Application {
             application_name: String::from(name),
+            package_name: package_name.clone(),
             os: String::from(os.as_str()),
             application_id,
             creation_time: get_time,

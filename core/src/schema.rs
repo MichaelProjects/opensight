@@ -2,6 +2,7 @@ table! {
     applications (application_id) {
         application_id -> Text,
         application_name -> Text,
+        package_name -> Text,
         creation_time -> Timestamp,
         token -> Text,
         os -> Text,
