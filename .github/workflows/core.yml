@@ -55,12 +55,6 @@ jobs:
         with: 
             sharedKey: key
 
-      - name: adjust config
-      - run: | 
-          rm conf.toml
-          mv test_conf.toml conf.toml
-        id: config
-
       - name: run tests
         run: cargo test --release
         working-directory: core
