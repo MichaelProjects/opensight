@@ -2,6 +2,8 @@ name: Dashboard-Pipeline
 
 on:
   push:
+    paths:
+      - "dashboard"
     branches: [ master, dev ]
   pull_request:
     branches: [ master, dev ]

@@ -2,6 +2,8 @@ name: Error-Pipeline
 
 on:
   push:
+    paths:
+      - "error_api"
     branches: [ main, dev ]
   pull_request:
     branches: [ main, dev ]

@@ -2,6 +2,8 @@ name: Event-Pipeline
 
 on:
   push:
+    paths:
+      - "event_api"
     branches: [ master, dev ]
   pull_request:
     branches: [ master, dev ]
