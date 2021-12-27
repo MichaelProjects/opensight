@@ -22,9 +22,9 @@ jobs:
         run: cargo build --release
         working-directory: core
 
-  setup_db:
-    runs-on: ubuntu-latest
-
+  testing:
+    needs: build
+    runs-on: ubuntu-20.04
     services:
       postgres:
         # Docker Hub image
@@ -39,10 +39,7 @@ jobs:
         ports:
           - 5432:5432
 
-  testing:
-    needs: build
-    runs-on: ubuntu-20.04
-
+          
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
