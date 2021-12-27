@@ -2,8 +2,6 @@ name: Analytics-Pipeline
 
 on:
   push:
-    paths:
-      - "analytics_api"
     branches: [ master, dev ]
   pull_request:
     branches: [ master, dev ]
