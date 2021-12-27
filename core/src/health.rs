@@ -1,6 +1,4 @@
-use crate::{db::DatabaseConnection};
-use diesel::{PgConnection, QueryResult, RunQueryDsl};
-use serde::{Deserialize, Serialize};
+use serde::{Serialize};
 
 #[derive(Debug, Serialize)]
 pub struct Health {
