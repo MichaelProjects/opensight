@@ -3,7 +3,7 @@ name: Core-Pipeline
 on:
   push:
     paths:
-      - "core"
+      - "/core"
     branches: [ master, dev ]
   pull_request:
     branches: [ master, dev ]
