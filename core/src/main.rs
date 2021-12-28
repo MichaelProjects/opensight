@@ -15,6 +15,7 @@ mod schema;
 mod application_dao;
 mod user;
 mod response;
+mod user_dao;
 
 use diesel::{PgConnection, Connection};
 use rocket::{figment::Figment, Rocket};

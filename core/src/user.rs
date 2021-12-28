@@ -1,3 +1,10 @@
+extern crate diesel;
+
+use std::error::Error;
+
+use crate::{db::DatabaseConnection, user_dao::{insert_user, get_user}};
+
+use super::schema::opensight_user;
 use chrono::{NaiveDateTime, Utc};
 use rocket::serde::json::Json;
 use serde::{Serialize, Deserialize};
@@ -17,9 +24,10 @@ pub struct UserData{
 }
 
 
-#[derive(Serialize)]
+#[derive(Serialize, Queryable, Insertable)]
+#[table_name = "opensight_user"]
 pub struct User{
-    user_id: String,
+    userid: String,
     group_id: String,
     username: String,
     email: String,
@@ -29,7 +37,7 @@ pub struct User{
 impl User{
     pub fn new(data: &Json<UserData>) -> User{
         User{
-            user_id: Uuid::new_v4().to_string(),
+            userid: Uuid::new_v4().to_string(),
             group_id: "".to_string(),
             username: data.username.clone(),
             email: data.email.clone(),
@@ -37,4 +45,15 @@ impl User{
             creation_time: Utc::now().naive_utc(),
         }
     }
+    pub async fn insert_user(user: User, conn: DatabaseConnection) -> Result<User, Box<dyn Error>> {
+        let user = conn.run(|c| insert_user(user, c)).await?;
+        Ok(user)
+    }
+    pub async fn get_user(username: String, conn: DatabaseConnection) -> Result<User, Box<dyn Error>> {
+        let user = conn.run(|c| get_user(username, c)).await?;
+        Ok(user)
+    }
 }
+
+
+
