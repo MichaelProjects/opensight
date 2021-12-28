@@ -1,30 +1,41 @@
-# Welcome
+# Website
 
-## What is Opensight
-Opensight is an Application Insight Platform, and should be a better alternative to other analytics and Application Insight Platform. You are able to host it On-Premis, or in the cloud managed by Opensight.
+This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
-We support features like: 
+### Installation
 
-- Performance Monitoring
-- Error analysis
-- Event-Tracking
-- Device and User analytics
+```
+$ yarn
+```
 
-## How does it work
-Opensight consists out of 2 parts, the Client and the Backend. The Backend is build in an microservice-architecture, the advantages of that is, if you dont want to use the whole Opensight-Stack you are free to choose which services you like, and dont need to pay for unused features.
+### Local Development
 
+```
+$ yarn start
+```
 
-| Services          | Version  | Ci  |
-|-|-|-|
-|[Core-Service](https://github.com/MichaelProjects/opensight/tree/master/core) | 0.1 | ![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/core.yml/badge.svg)
-|[Analytic-Service](https://github.com/MichaelProjects/opensight/tree/master/analytics_api) | 0.1      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/analytics.yml/badge.svg)
-|[Error-Service](https://github.com/MichaelProjects/opensight/tree/master/error_api)      | in construction      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/error.yml/badge.svg) |
-|[Event-Service](https://github.com/MichaelProjects/opensight/tree/master/event_api)      | in construction      |![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/event.yml/badge.svg)  |
-[Dashboard](https://github.com/MichaelProjects/opensight/tree/master/dashboard) | in construction | ![Pipeline](https://github.com/MichaelProjects/opensight/actions/workflows/dashboard.yml/badge.svg)
+This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
-## How to deploy
-instruction comming soon
+### Build
 
-## Want to contribute
+```
+$ yarn build
+```
 
-Please contact me under info@stackblog.io
+This command generates static content into the `build` directory and can be served using any static contents hosting service.
+
+### Deployment
+
+Using SSH:
+
+```
+$ USE_SSH=true yarn deploy
+```
+
+Not using SSH:
+
+```
+$ GIT_USER=<Your GitHub username> yarn deploy
+```
+
+If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
