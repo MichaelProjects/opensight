@@ -1,7 +1,6 @@
 import 'package:dashboard/model/application.dart';
 import 'package:dashboard/screens/overlay/components/app_details.dart';
 import 'package:dashboard/screens/overlay/components/data_sidebar.dart';
-import 'package:dashboard/screens/overlay/components/sidebar_container.dart';
 import 'package:flutter/material.dart';
 
 class Sidebar extends StatelessWidget {
@@ -19,7 +18,7 @@ class Sidebar extends StatelessWidget {
         width: 225,
         padding: EdgeInsets.all(10),
         child: Column(
-          children: [Appdetails(app), DataSidebar()],
+          children: [Appdetails(), DataSidebar()],
         ));
   }
 }

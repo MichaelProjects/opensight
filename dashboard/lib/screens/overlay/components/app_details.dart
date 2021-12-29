@@ -1,38 +1,23 @@
 import 'package:coolicons/coolicons.dart';
+import 'package:dashboard/controllers/dashboard/sidebar/app_controller.dart';
 import 'package:dashboard/model/application.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// The [Appdetails] widget is a sidebar element that displays the application information
 /// that where specified.
-class Appdetails extends StatelessWidget {
-  final Application app;
-  const Appdetails(this.app, {Key? key}) : super(key: key);
+class Appdetails extends StatefulWidget {
+  Appdetails({Key? key}) : super(key: key);
 
   @override
+  _AppdeatilsState createState() => _AppdeatilsState();
+}
+
+class _AppdeatilsState extends State<Appdetails> {
+  @override
   Widget build(BuildContext context) {
-    /// this widget contains the app icon an the plattform information
-    /// like Apple(Ios) or Goole(Android)
-    Widget visuals = Row(
-      children: [
-        Container(
-          width: 35,
-          height: 35,
-          decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: const BorderRadius.all(Radius.circular(60))),
-        ),
-        const SizedBox(width: 10),
-        app.isIos == true
-            ? Icon(
-                Coolicons.apple,
-                color: Colors.grey[700],
-              )
-            : Container(),
-        app.isIos == true
-            ? Icon(Coolicons.google, color: Colors.grey[700])
-            : Container(),
-      ],
-    );
+    ApplicationProvider appController =
+        Provider.of<ApplicationProvider>(context);
 
     return Container(
         margin: const EdgeInsets.all(10),
@@ -41,16 +26,65 @@ class Appdetails extends StatelessWidget {
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(5),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            visuals,
-            Text(
-              app.name,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(app.packageId, style: Theme.of(context).textTheme.subtitle1),
-          ],
-        ));
+        child: FutureBuilder(
+            future: appController.fetch_applications(),
+            builder: (context, AsyncSnapshot<Application> snap) {
+              switch (appController.appStatus) {
+                case AppStatus.Loading:
+                  {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                case AppStatus.Loaded:
+                  {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        visual(snap.data!),
+                        Text(
+                          snap.data!.name,
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                        Text(snap.data!.packageId,
+                            style: Theme.of(context).textTheme.subtitle1),
+                      ],
+                    );
+                  }
+                default:
+                  {
+                    {
+                      return Center(
+                        child: Text(
+                          'Error',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      );
+                    }
+                  }
+              }
+            }));
   }
+}
+
+Widget visual(Application app) {
+  return Row(
+    children: [
+      Container(
+        width: 35,
+        height: 35,
+        decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: const BorderRadius.all(Radius.circular(60))),
+      ),
+      const SizedBox(width: 10),
+      app.isIos == true
+          ? Icon(
+              Coolicons.apple,
+              color: Colors.grey[700],
+            )
+          : Container(),
+      app.isAndroid == true
+          ? Icon(Coolicons.google, color: Colors.grey[700])
+          : Container(),
+    ],
+  );
 }

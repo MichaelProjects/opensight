@@ -29,6 +29,7 @@ environment:
 dependencies:
   coolicons: ^1.0.0
   http: ^0.13.4
+  provider: ^5.0.0
   flutter:
     sdk: flutter
 

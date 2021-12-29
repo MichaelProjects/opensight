@@ -10,4 +10,12 @@ class Application {
     required this.isIos,
     required this.isAndroid,
   });
+  factory Application.fromJson(Map<String, dynamic> response) {
+    return Application(
+      name: response['name'],
+      packageId: response['packageId'],
+      isIos: response['isIos'],
+      isAndroid: response['isAndroid'],
+    );
+  }
 }

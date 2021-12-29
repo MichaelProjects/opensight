@@ -13,6 +13,6 @@ RUN useradd -u 8877 notroot
 
 RUN mkdir -p /var/log/opensight/
 RUN chmod -R 777 /var/log/opensight
-
+ENV RUST_LOG=debug
 USER notroot
 CMD ["./opensight_core"]
