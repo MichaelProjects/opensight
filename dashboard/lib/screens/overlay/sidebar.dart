@@ -1,4 +1,3 @@
-import 'package:dashboard/model/application.dart';
 import 'package:dashboard/screens/overlay/components/app_details.dart';
 import 'package:dashboard/screens/overlay/components/data_sidebar.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +7,6 @@ class Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var app = Application(
-        name: "Stackblog",
-        packageId: "io.stackblog",
-        isIos: true,
-        isAndroid: true);
-
     return Container(
         width: 225,
         padding: EdgeInsets.all(10),

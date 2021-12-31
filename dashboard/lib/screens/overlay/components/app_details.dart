@@ -1,6 +1,7 @@
 import 'package:coolicons/coolicons.dart';
 import 'package:dashboard/controllers/dashboard/sidebar/app_controller.dart';
 import 'package:dashboard/model/application.dart';
+import 'package:dashboard/utils/api/client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,6 @@ class _AppdeatilsState extends State<Appdetails> {
   Widget build(BuildContext context) {
     ApplicationProvider appController =
         Provider.of<ApplicationProvider>(context);
-
     return Container(
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
@@ -27,14 +27,14 @@ class _AppdeatilsState extends State<Appdetails> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: FutureBuilder(
-            future: appController.fetch_applications(),
+            future: appController.fetchApplications(),
             builder: (context, AsyncSnapshot<Application> snap) {
               switch (appController.appStatus) {
-                case AppStatus.Loading:
+                case AppStatus.loading:
                   {
                     return Center(child: CircularProgressIndicator());
                   }
-                case AppStatus.Loaded:
+                case AppStatus.loaded:
                   {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

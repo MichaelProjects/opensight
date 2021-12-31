@@ -9,11 +9,12 @@ Map buildResponse(bool error, String message, Map data) {
 
 class HttpClient {
   Duration standartTimeOut = const Duration(seconds: 8);
-  void initClient() {}
 
   Future<Map> get(Uri uri) async {
     //! get request wrapper, returns a map with the response details
-    var response = await http.get(uri).timeout(standartTimeOut);
+    print("sending");
+    http.Response response = await http.get(uri).timeout(standartTimeOut);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       return buildResponse(false, "", jsonDecode(response.body));
     }
