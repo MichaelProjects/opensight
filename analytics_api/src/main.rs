@@ -49,8 +49,8 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
         .attach(AnalyticsDB::fairing())
         .manage(conf)
         .mount(
-            "/v1/analytic",
-            routes![insert_entry, update_session],
+            "/analytic/v1",
+            routes![insert_entry, update_session, get_health],
         )
 }
 

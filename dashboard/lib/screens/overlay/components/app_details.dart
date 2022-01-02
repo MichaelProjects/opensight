@@ -21,7 +21,7 @@ class _AppdeatilsState extends State<Appdetails> {
         Provider.of<ApplicationProvider>(context);
     return Container(
         margin: const EdgeInsets.all(10),
-        padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+        padding: const EdgeInsets.only(left: 10, top: 10, bottom: 5),
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(5),

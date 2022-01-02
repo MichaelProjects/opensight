@@ -10,8 +10,8 @@ class Profile extends StatelessWidget {
         child: Row(
       children: [
         Container(
-            height: 54,
-            width: 54,
+            height: 40,
+            width: 40,
             child: CircleAvatar(
               radius: 60.0,
               backgroundColor: Colors.grey,

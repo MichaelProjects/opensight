@@ -8,10 +8,13 @@ class Sidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 225,
-        padding: EdgeInsets.all(10),
+        width: 210,
+        padding: EdgeInsets.only(top: 5),
         child: Column(
-          children: [Appdetails(), DataSidebar()],
+          children: [
+            Appdetails(),
+            DataSidebar(),
+          ],
         ));
   }
 }

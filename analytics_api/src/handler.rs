@@ -11,8 +11,8 @@ use rocket::State;
 use rocket::http::Status;
 use rocket::serde::json::Json;
 use serde_json::json;
-
 use crate::dao::Dao;
+
 
 #[get("/health")]
 pub(crate) async fn get_health(_conn: AnalyticsDB) -> Json<health::Health> {

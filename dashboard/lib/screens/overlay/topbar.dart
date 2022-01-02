@@ -20,7 +20,7 @@ class _TopBarState extends State<TopBar> {
             borderRadius: BorderRadius.all(Radius.circular(5)),
             color: Theme.of(context).primaryColor),
         width: size.width,
-        height: 80,
+        height: 70,
         child: Row(
           children: [
             LogoContainer(),

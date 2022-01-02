@@ -32,8 +32,8 @@ class _SidebarButtonState extends State<SidebarButton> {
                   : Colors.blue.withOpacity(0.4),
               borderRadius: BorderRadius.circular(5),
             ),
-            width: 200,
-            height: 50,
+            width: 190,
+            height: 40,
             child: Row(
               children: [
                 Icon(widget.icon),
