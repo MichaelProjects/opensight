@@ -1,6 +1,7 @@
 use super::schema::analytics;
 use crate::analytics::AnalyticEntry;
 use crate::dao::Dao;
+use crate::db::AnalyticsDB;
 use crate::schema::analytics::columns::{last_session, session_id};
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 use log::debug;
@@ -45,4 +46,10 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao {
             .expect("Entrys");
         return response;
     }
+}
+
+pub async fn get_all(app_id: &String, conn: AnalyticsDB) -> Vec<AnalyticEntry>  {
+    let response: QueryResult<Vec<AnalyticEntry>> = conn.run(|c| analytics::table
+        .load::<AnalyticEntry>(c)).await;
+    return response.expect("Entrys");
 }

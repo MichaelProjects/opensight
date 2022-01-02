@@ -1,7 +1,8 @@
 extern crate diesel;
 
 use super::schema::analytics;
-use crate::analytics_dao::AnalyticsDao;
+use crate::analytics_dao;
+use crate::{analytics_dao::AnalyticsDao, db::AnalyticsDB};
 use crate::dao::Dao;
 use chrono::NaiveDateTime;
 use diesel::PgConnection;
@@ -62,8 +63,8 @@ impl AnalyticEntry {
         true
     }
 }
-pub fn get_all_entries(conn: &mut PgConnection) -> Vec<AnalyticEntry> {
-    let dao = AnalyticsDao::new();
-    let entrys = dao.get_all(conn);
+
+pub async fn get_all_entries(app_id: &String, conn: AnalyticsDB) -> Vec<AnalyticEntry> {
+    let entrys = analytics_dao::get_all(app_id, conn).await;
     return entrys;
 }

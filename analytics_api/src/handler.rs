@@ -1,6 +1,6 @@
 /// As you can see, in this file are the non admin Rest-Endpoints.
 /// These Endpoints are used to collect/recieve data from the clients using the Opensight SDK's.
-use crate::analytics::{AnalyticData, AnalyticEntry, SessionUpdate};
+use crate::analytics::{AnalyticData, AnalyticEntry, SessionUpdate, self};
 use crate::analytics_dao::AnalyticsDao;
 use crate::application::Application;
 use crate::db::AnalyticsDB;
@@ -12,7 +12,6 @@ use rocket::http::Status;
 use rocket::serde::json::Json;
 use serde_json::json;
 use crate::dao::Dao;
-
 
 #[get("/health")]
 pub(crate) async fn get_health(_conn: AnalyticsDB) -> Json<health::Health> {
@@ -74,4 +73,12 @@ pub(crate) async fn update_session(
         })
         .await;
     Status::Accepted
+}
+
+#[get("/<application_id>/session")]
+pub(crate) async fn get_sessions(
+    conn: AnalyticsDB,
+    application_id: String) -> ApiResponse {
+    let sessions: Vec<AnalyticEntry> = analytics::get_all_entries(&application_id, conn).await;
+    ApiResponse::new(Status::Ok, json!({"sessions": sessions}))
 }

@@ -23,7 +23,7 @@ mod response;
 use crate::db::*;
 use crate::settings::Settings;
 use diesel::prelude::*;
-use handler::{get_health, insert_entry, update_session};
+use handler::{get_health, insert_entry, update_session, get_sessions};
 use rocket::figment::Figment;
 use rocket::Build;
 use rocket_sync_db_pools::rocket::Rocket;
@@ -50,7 +50,7 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
         .manage(conf)
         .mount(
             "/analytic/v1",
-            routes![insert_entry, update_session, get_health],
+            routes![insert_entry, update_session, get_health, get_sessions],
         )
 }
 
