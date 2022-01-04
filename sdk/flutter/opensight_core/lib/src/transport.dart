@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'persistence.dart';
 import 'conf.dart';
 import 'utils.dart';
 import 'package:http/http.dart' as http;
 
-class AnalyticsApiClient {
+class TransportClient {
   Future dispatchData(Map<String, dynamic> payload, Config config) async {
     compressData(payload);
     try {
@@ -16,9 +15,7 @@ class AnalyticsApiClient {
       };
       var response =
           await http.post(uri, body: jsonEncode(payload), headers: headers);
-      if (response.statusCode == 202) {
-        await PresistencesLayer().removeSession();
-      }
+      if (response.statusCode == 202) {}
       if (response.statusCode != 202) {
         throw Exception(
             "Could not connect to Analytics-Api, check your Config");

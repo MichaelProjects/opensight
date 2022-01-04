@@ -1,13 +1,3 @@
+library opensightsdk_core;
 
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-
-class OpensightCore {
-  static const MethodChannel _channel = MethodChannel('opensight_core');
-
-  static Future<String?> get platformVersion async {
-    final String? version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-}
+export 'package:opensight_core/src/app.dart' show Opensight;
