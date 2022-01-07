@@ -1,0 +1,29 @@
+name: sdk_flutter_analytics
+
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches: [ master, dev ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.8.1'
+      - name: get packages
+        run: flutter pub get
+        working-directory: sdk/flutter/opensight_analytics
+      - name: run tests
+        run: flutter test --coverage
+        working-directory: sdk/flutter/opensight_analytics
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./sdk/flutter/opensight_analytics/coverage/
+          flags: test_analytic_flutter
