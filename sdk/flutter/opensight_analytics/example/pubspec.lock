@@ -155,14 +155,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.6"
+    version: "0.1.0"
   opensight_core:
     dependency: transitive
     description:
       path: "../../opensight_core"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0"
   path:
     dependency: transitive
     description:

@@ -1,3 +1,8 @@
+## 0.1.0
+- removed all base code like: Transport, Utils, etc.
+- Added opensight_core_sdk for utils.
+- Updated README.md
+
 ## 0.0.6
 timestamps are now utc, added tracking intervall
 

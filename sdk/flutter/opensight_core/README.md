@@ -1,15 +1,17 @@
-# opensight_core
+# Opensight for Flutter
+The Opensight Core sdk is a simple utility libary that needs to be implement for every submodule "opensight" offers. If you want to get started with our services:
 
-A new flutter plugin project.
+## Services
+- Analytics: https://pub.dev/packages/opensight_analytics
+- Crash-Api: Comming soon
+- Event-Tracking: Comming soon
+
+and now your app is connected with the opensight service.
 
 ## Getting Started
+Documentation comming soon ->
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+To get started with Opensight please, follow the instructions on http://opensight.io/docs
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
+## issues or feedback
+Please file specific issues, bugs, or feature requests in our [issue tracker](https://github.com/MichaelProjects/opensightSDK/issues/new)

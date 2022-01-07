@@ -1,17 +1,18 @@
 import 'dart:convert';
-import 'conf.dart';
 import 'utils.dart';
 import 'package:http/http.dart' as http;
 
 class TransportClient {
-  Future dispatchData(Map<String, dynamic> payload, Config config) async {
+  final String _baseUrl;
+  final String token;
+  TransportClient(this._baseUrl, this.token);
+  Future dispatchData(Map<String, dynamic> payload, String path) async {
     compressData(payload);
     try {
-      Uri uri =
-          Uri.parse("${config.analyticsApi}/analytic/${config.appId}/session");
+      Uri uri = Uri.parse("${_baseUrl}${path}");
       Map<String, String> headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${config.token}"
+        "Authorization": "Bearer $token"
       };
       var response =
           await http.post(uri, body: jsonEncode(payload), headers: headers);
