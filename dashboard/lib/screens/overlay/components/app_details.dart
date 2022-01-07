@@ -1,14 +1,13 @@
 import 'package:coolicons/coolicons.dart';
 import 'package:dashboard/controllers/dashboard/sidebar/app_controller.dart';
 import 'package:dashboard/model/application.dart';
-import 'package:dashboard/utils/api/client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 /// The [Appdetails] widget is a sidebar element that displays the application information
 /// that where specified.
 class Appdetails extends StatefulWidget {
-  Appdetails({Key? key}) : super(key: key);
+  const Appdetails({Key? key}) : super(key: key);
 
   @override
   _AppdeatilsState createState() => _AppdeatilsState();
@@ -32,7 +31,7 @@ class _AppdeatilsState extends State<Appdetails> {
               switch (appController.appStatus) {
                 case AppStatus.loading:
                   {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                 case AppStatus.loaded:
                   {
@@ -52,7 +51,7 @@ class _AppdeatilsState extends State<Appdetails> {
                 default:
                   {
                     {
-                      return Center(
+                      return const Center(
                         child: Text(
                           'Error',
                           style: TextStyle(color: Colors.red),

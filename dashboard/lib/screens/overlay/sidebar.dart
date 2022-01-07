@@ -7,13 +7,17 @@ class Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
         width: 210,
-        padding: EdgeInsets.only(top: 5),
+        height: size.height - 70,
+        padding: const EdgeInsets.only(top: 5),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Appdetails(),
-            DataSidebar(),
+            const Appdetails(),
+            const DataSidebar(),
           ],
         ));
   }

@@ -17,17 +17,17 @@ class _TopBarState extends State<TopBar> {
     var size = MediaQuery.of(context).size;
     return Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
             color: Theme.of(context).primaryColor),
         width: size.width,
         height: 70,
         child: Row(
           children: [
-            LogoContainer(),
-            Timeline(),
-            Searchbar(),
+            const LogoContainer(),
+            const Timeline(),
+            const Searchbar(),
             Expanded(child: Container()),
-            Profile()
+            const Profile()
           ],
         ));
   }

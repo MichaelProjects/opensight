@@ -2,7 +2,7 @@ import 'package:coolicons/coolicons.dart';
 import 'package:flutter/material.dart';
 
 class Searchbar extends StatefulWidget {
-  Searchbar({Key? key}) : super(key: key);
+  const Searchbar({Key? key}) : super(key: key);
 
   @override
   _SearchbarState createState() => _SearchbarState();
@@ -11,7 +11,7 @@ class Searchbar extends StatefulWidget {
 class _SearchbarState extends State<Searchbar> {
   @override
   Widget build(BuildContext context) {
-    var textField = Container(
+    var textField = const SizedBox(
         height: 50,
         width: 250,
         child: TextField(
@@ -22,7 +22,7 @@ class _SearchbarState extends State<Searchbar> {
     return Container(
         width: 300,
         height: 60,
-        margin: EdgeInsets.all(10),
-        child: Row(children: [Icon(Coolicons.search), textField]));
+        margin: const EdgeInsets.all(10),
+        child: Row(children: [const Icon(Coolicons.search), textField]));
   }
 }

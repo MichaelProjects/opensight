@@ -4,8 +4,12 @@ class SidebarButton extends StatefulWidget {
   final String label;
   final IconData icon;
   final Function onPressed;
-  SidebarButton(
-      {required this.label, required this.icon, required this.onPressed});
+  const SidebarButton(
+      {Key? key,
+      required this.label,
+      required this.icon,
+      required this.onPressed})
+      : super(key: key);
 
   @override
   _SidebarButtonState createState() => _SidebarButtonState();
@@ -13,6 +17,7 @@ class SidebarButton extends StatefulWidget {
 
 class _SidebarButtonState extends State<SidebarButton> {
   bool hoverState = false;
+  @override
   Widget build(BuildContext context) {
     return InkWell(
         onHover: (value) {
@@ -24,8 +29,8 @@ class _SidebarButtonState extends State<SidebarButton> {
           widget.onPressed();
         },
         child: Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.only(left: 15),
+            margin: const EdgeInsets.all(5),
+            padding: const EdgeInsets.only(left: 15),
             decoration: BoxDecoration(
               color: hoverState == false
                   ? Theme.of(context).primaryColor.withOpacity(0)
@@ -37,7 +42,7 @@ class _SidebarButtonState extends State<SidebarButton> {
             child: Row(
               children: [
                 Icon(widget.icon),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(widget.label, style: Theme.of(context).textTheme.headline6)
               ],
             )));

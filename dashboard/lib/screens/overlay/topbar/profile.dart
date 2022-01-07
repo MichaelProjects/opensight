@@ -6,20 +6,19 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Row(
+    return Row(
       children: [
-        Container(
+        const SizedBox(
             height: 40,
             width: 40,
             child: CircleAvatar(
               radius: 60.0,
               backgroundColor: Colors.grey,
             )),
-        SizedBox(width: 15),
-        Text("Max Mustermann"),
-        IconButton(onPressed: () {}, icon: Icon(Coolicons.caret_down))
+        const SizedBox(width: 15),
+        const Text("Max Mustermann"),
+        IconButton(onPressed: () {}, icon: const Icon(Coolicons.caret_down))
       ],
-    ));
+    );
   }
 }

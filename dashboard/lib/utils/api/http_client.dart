@@ -12,9 +12,7 @@ class HttpClient {
 
   Future<Map> get(Uri uri) async {
     //! get request wrapper, returns a map with the response details
-    print("sending");
     http.Response response = await http.get(uri).timeout(standartTimeOut);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       return buildResponse(false, "", jsonDecode(response.body));
     }

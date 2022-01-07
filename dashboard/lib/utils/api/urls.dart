@@ -7,4 +7,7 @@ class Urls {
   static Uri login = Uri.parse('$host/core/v1/login');
 
   // V1 Analytics Endpoints
+  static Uri getAllAnalytics(String appId) {
+    return Uri.parse('$host/analytic/v1/$appId/session');
+  }
 }

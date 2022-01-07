@@ -30,6 +30,7 @@ dependencies:
   coolicons: ^1.0.0
   http: ^0.13.4
   provider: ^5.0.0
+  fl_chart: ^0.40.6
   flutter:
     sdk: flutter
 

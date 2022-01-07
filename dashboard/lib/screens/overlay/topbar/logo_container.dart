@@ -6,7 +6,7 @@ class LogoContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(left: 20),
+        margin: const EdgeInsets.only(left: 20),
         width: 175,
         height: 50,
         child: Image.asset("img/opensight.png"));

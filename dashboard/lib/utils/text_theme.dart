@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 TextTheme buildTextTheme(BuildContext context) {
-  return TextTheme(
+  return const TextTheme(
       headline5: TextStyle(
           fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1.0),
       headline6: TextStyle(

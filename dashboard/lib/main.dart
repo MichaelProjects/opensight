@@ -1,4 +1,6 @@
+import 'package:dashboard/controllers/dashboard/analytics_controller.dart';
 import 'package:dashboard/controllers/dashboard/sidebar/app_controller.dart';
+import 'package:dashboard/screens/dashboard/dashboard.dart';
 import 'package:dashboard/screens/overlay/topbar.dart';
 import 'package:dashboard/utils/dark_theme.dart';
 import 'package:dashboard/utils/light_theme.dart';
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (_) => ApplicationProvider(),
           ),
+          ChangeNotifierProvider(create: (_) => AnalyticController()),
         ],
         child: MaterialApp(
             title: 'Dashboard | Opensight',
@@ -29,11 +32,14 @@ class MyApp extends StatelessWidget {
             darkTheme: buildDarkThemeData(context),
             theme: buildLightThemeData(context),
             home: Scaffold(
-                body: Column(children: [
-              TopBar(),
-              Row(
-                children: [Sidebar()],
-              )
-            ]))));
+                body: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  const TopBar(),
+                  Row(
+                    children: const [Sidebar(), Dashboard()],
+                  )
+                ]))));
   }
 }
