@@ -1,5 +1,7 @@
 extern crate diesel;
 
+use std::error::Error;
+
 use super::schema::analytics;
 use crate::analytics_dao;
 use crate::{analytics_dao::AnalyticsDao, db::AnalyticsDB};
@@ -67,4 +69,9 @@ impl AnalyticEntry {
 pub async fn get_all_entries(app_id: &String, conn: AnalyticsDB) -> Vec<AnalyticEntry> {
     let entrys = analytics_dao::get_all(app_id, conn).await;
     return entrys;
+}
+
+pub async fn get_timeframe_entries(app_id: &String, conn: AnalyticsDB, start: NaiveDateTime, end: NaiveDateTime) -> Result<Vec<AnalyticEntry>, Box<dyn Error>> {
+    let result = analytics_dao::get_timeframe_entry(app_id, conn, start, end).await?;
+    Ok(result)
 }

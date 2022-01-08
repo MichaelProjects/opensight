@@ -3,8 +3,10 @@ use crate::analytics::AnalyticEntry;
 use crate::dao::Dao;
 use crate::db::AnalyticsDB;
 use crate::schema::analytics::columns::{last_session, session_id};
-use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
+use crate::schema::analytics::creation_time;
+use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl, BoolExpressionMethods};
 use log::debug;
+use chrono::{NaiveDateTime, Utc};
 
 pub struct AnalyticsDao {}
 impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao {
@@ -52,4 +54,12 @@ pub async fn get_all(app_id: &String, conn: AnalyticsDB) -> Vec<AnalyticEntry>  
     let response: QueryResult<Vec<AnalyticEntry>> = conn.run(|c| analytics::table
         .load::<AnalyticEntry>(c)).await;
     return response.expect("Entrys");
+}
+
+pub async fn get_timeframe_entry(app_id: &String, conn: AnalyticsDB, start: NaiveDateTime, end: NaiveDateTime) -> QueryResult<Vec<AnalyticEntry>>{
+    let response: QueryResult<Vec<AnalyticEntry>> = conn.run(move |c| 
+        analytics::table
+        .filter(creation_time.between(start, end))
+        .load::<AnalyticEntry>(c)).await;
+    return response
 }
