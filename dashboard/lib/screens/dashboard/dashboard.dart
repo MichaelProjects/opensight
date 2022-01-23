@@ -30,7 +30,9 @@ class _DashboardState extends State<Dashboard> {
                 future: _getData(),
                 builder: (context, snap) {
                   if (snap.hasData) {
-                    return SelectableText(snap.data.toString());
+                    return Column(
+                      children: [SelectableText(snap.data.toString())],
+                    );
                   } else {
                     return const SelectableText("Loading...");
                   }

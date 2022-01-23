@@ -1,12 +1,10 @@
 import 'package:dashboard/controllers/dashboard/analytics_controller.dart';
 import 'package:dashboard/controllers/dashboard/sidebar/app_controller.dart';
-import 'package:dashboard/screens/dashboard/dashboard.dart';
-import 'package:dashboard/screens/overlay/topbar.dart';
+import 'package:dashboard/screens/app_select/app_select.dart';
 import 'package:dashboard/utils/dark_theme.dart';
 import 'package:dashboard/utils/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'screens/overlay/sidebar.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,15 +29,8 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             darkTheme: buildDarkThemeData(context),
             theme: buildLightThemeData(context),
-            home: Scaffold(
-                body: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  const TopBar(),
-                  Row(
-                    children: const [Sidebar(), Dashboard()],
-                  )
-                ]))));
+            home: Scaffold(body: AppSelect()
+                //topOverlay.Overlay(child: Dashboard()
+                )));
   }
 }

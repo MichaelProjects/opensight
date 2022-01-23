@@ -16,6 +16,7 @@ class ApplicationProvider with ChangeNotifier {
     _appStatus = AppStatus.loaded;
     var app = Application.fromJson(response["data"][0]);
     _appId = app.appID;
+    print(app);
     return app;
   }
 }
