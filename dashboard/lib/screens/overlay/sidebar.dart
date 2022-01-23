@@ -1,4 +1,4 @@
-import 'package:dashboard/screens/overlay/components/app_details.dart';
+import 'package:dashboard/glob_components/app_details.dart';
 import 'package:dashboard/screens/overlay/components/data_sidebar.dart';
 import 'package:flutter/material.dart';
 

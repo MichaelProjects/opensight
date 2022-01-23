@@ -16,7 +16,9 @@ class _AppSelectorState extends State<AppSelector> {
         Provider.of<ApplicationProvider>(context);
     var data = MediaQuery.of(context).size;
     return Container(
-        height: 600,
+        padding: EdgeInsets.all(20),
+        height: 400,
+        width: 230,
         color: Colors.blue,
         child: Column(
           children: [
