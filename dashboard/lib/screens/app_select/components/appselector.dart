@@ -15,21 +15,22 @@ class _AppSelectorState extends State<AppSelector> {
     ApplicationProvider appController =
         Provider.of<ApplicationProvider>(context);
     var data = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        SizedBox(height: 20),
-        SelectableText("Your projects",
-            style: Theme.of(context).textTheme.headline6),
-        SizedBox(height: 20),
-        FutureBuilder(
-            future: appController.fetchApplications(),
-            builder: (context, snap) {
-              if (!snap.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
-              return Text(snap.data.toString());
-            })
-      ],
-    );
+    return Container(
+        height: 600,
+        color: Colors.blue,
+        child: Column(
+          children: [
+            SelectableText("Your projects",
+                style: Theme.of(context).textTheme.headline6),
+            FutureBuilder(
+                future: appController.fetchApplications(),
+                builder: (context, snap) {
+                  if (snap.connectionState != ConnectionState.done) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return Text(snap.data.toString());
+                })
+          ],
+        ));
   }
 }

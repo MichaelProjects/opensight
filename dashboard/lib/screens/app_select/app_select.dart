@@ -15,10 +15,24 @@ class AppSelect extends StatefulWidget {
 class _AppSelectState extends State<AppSelect> {
   @override
   Widget build(BuildContext context) {
+    var data = MediaQuery.of(context).size;
     return Scaffold(
         body: Container(
+            color: Colors.red,
             child: Column(
-      children: [const TopBar(), DecorationSpacer(), AppSelector()],
-    )));
+              children: [
+                const TopBar(),
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    DecorationSpacer(),
+                    Positioned(
+                        top: 50,
+                        left: (data.width / 100) * 48,
+                        child: AppSelector())
+                  ],
+                )
+              ],
+            )));
   }
 }
