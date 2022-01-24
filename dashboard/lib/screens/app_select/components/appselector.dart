@@ -1,10 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:dashboard/controllers/dashboard/sidebar/app_controller.dart';
+import 'package:dashboard/controllers/app_controller.dart';
+import 'package:dashboard/model/application.dart';
+import 'package:dashboard/screens/app_select/components/create_app.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AppSelector extends StatefulWidget {
+  List<Application> apps;
+  AppSelector(this.apps);
   @override
   _AppSelectorState createState() => _AppSelectorState();
 }
@@ -19,19 +23,11 @@ class _AppSelectorState extends State<AppSelector> {
         padding: EdgeInsets.all(20),
         height: 400,
         width: 230,
-        color: Colors.blue,
         child: Column(
           children: [
             SelectableText("Your projects",
                 style: Theme.of(context).textTheme.headline6),
-            FutureBuilder(
-                future: appController.fetchApplications(),
-                builder: (context, snap) {
-                  if (snap.connectionState != ConnectionState.done) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  return Text(snap.data.toString());
-                })
+            CreateApp(),
           ],
         ));
   }

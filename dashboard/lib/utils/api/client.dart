@@ -8,6 +8,12 @@ class ApiClient {
     return response["data"];
   }
 
+  Future createApplication(Map payload) async {
+    Map response = await HttpClient().post(Urls.createApplication, payload);
+    if (response["error"] != true) {}
+    return response["data"];
+  }
+
   Future getAnalticsEntrys(String appId) async {
     Map response = await HttpClient().get(Urls.getAllAnalytics(appId));
     return response;

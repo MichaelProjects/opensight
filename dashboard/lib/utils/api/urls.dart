@@ -5,6 +5,7 @@ class Urls {
   static Uri getAllApplications = Uri.parse('$host/core/v1/application');
   static Uri getApplication = Uri.parse('$host/core/v1/application');
   static Uri login = Uri.parse('$host/core/v1/login');
+  static Uri createApplication = Uri.parse('$host/core/v1/application');
 
   // V1 Analytics Endpoints
   static Uri getAllAnalytics(String appId) {

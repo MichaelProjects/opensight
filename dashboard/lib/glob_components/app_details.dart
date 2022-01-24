@@ -1,5 +1,5 @@
 import 'package:coolicons/coolicons.dart';
-import 'package:dashboard/controllers/dashboard/sidebar/app_controller.dart';
+import 'package:dashboard/controllers/app_controller.dart';
 import 'package:dashboard/model/application.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,13 +7,20 @@ import 'package:provider/provider.dart';
 /// The [Appdetails] widget is a sidebar element that displays the application information
 /// that where specified.
 class Appdetails extends StatefulWidget {
-  const Appdetails({Key? key}) : super(key: key);
+  final Application? app;
+  Appdetails({this.app});
 
   @override
   _AppdeatilsState createState() => _AppdeatilsState();
 }
 
 class _AppdeatilsState extends State<Appdetails> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     ApplicationProvider appController =
@@ -25,42 +32,40 @@ class _AppdeatilsState extends State<Appdetails> {
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(5),
         ),
-        child: FutureBuilder(
-            future: appController.fetchApplications(),
-            builder: (context, AsyncSnapshot<Application> snap) {
-              switch (appController.appStatus) {
-                case AppStatus.loading:
-                  {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                case AppStatus.loaded:
-                  {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        visual(snap.data!),
-                        Text(
-                          snap.data!.name,
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                        Text(snap.data!.packageId,
-                            style: Theme.of(context).textTheme.subtitle1),
-                      ],
-                    );
-                  }
-                default:
-                  {
-                    {
-                      return const Center(
-                        child: Text(
-                          'Error',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      );
-                    }
-                  }
+        child: Builder(builder: (context) {
+          switch (appController.appStatus) {
+            case AppStatus.loading:
+              {
+                return const Center(child: CircularProgressIndicator());
               }
-            }));
+            case AppStatus.loaded:
+              {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    visual(appController.selectedApp),
+                    Text(
+                      appController.selectedApp.name,
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    Text(appController.selectedApp.packageId,
+                        style: Theme.of(context).textTheme.subtitle1),
+                  ],
+                );
+              }
+            default:
+              {
+                {
+                  return const Center(
+                    child: Text(
+                      'Error',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  );
+                }
+              }
+          }
+        }));
   }
 }
 

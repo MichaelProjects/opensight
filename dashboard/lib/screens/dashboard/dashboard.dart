@@ -1,5 +1,5 @@
 import 'package:dashboard/controllers/dashboard/analytics_controller.dart';
-import 'package:dashboard/controllers/dashboard/sidebar/app_controller.dart';
+import 'package:dashboard/controllers/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,8 @@ class _DashboardState extends State<Dashboard> {
         Provider.of<ApplicationProvider>(context);
     Future _getData() async {
       await Future.delayed(const Duration(seconds: 2));
-      return await analyticsController.fetchEntrys(appController.appId);
+      return await analyticsController
+          .fetchEntrys(appController.selectedApp.appID);
     }
 
     return Expanded(
