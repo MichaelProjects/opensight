@@ -8,6 +8,8 @@ import 'package:dashboard/utils/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'controllers/create_app_controller.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
             create: (_) => ApplicationProvider(),
           ),
           ChangeNotifierProvider(create: (_) => AnalyticController()),
+          ChangeNotifierProvider(create: (_) => CreateAppController()),
         ],
         child: MaterialApp(
             title: 'Dashboard | Opensight',
