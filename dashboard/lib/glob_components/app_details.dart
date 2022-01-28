@@ -16,12 +16,6 @@ class Appdetails extends StatefulWidget {
 
 class _AppdeatilsState extends State<Appdetails> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     ApplicationProvider appController =
         Provider.of<ApplicationProvider>(context);
@@ -33,37 +27,56 @@ class _AppdeatilsState extends State<Appdetails> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: Builder(builder: (context) {
-          switch (appController.appStatus) {
-            case AppStatus.loading:
-              {
-                return const Center(child: CircularProgressIndicator());
-              }
-            case AppStatus.loaded:
-              {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    visual(appController.selectedApp),
-                    Text(
-                      appController.selectedApp.name,
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                    Text(appController.selectedApp.packageId,
-                        style: Theme.of(context).textTheme.subtitle1),
-                  ],
-                );
-              }
-            default:
-              {
+          /// Determines if it has an app as arugment or not
+
+          if (widget.app != null) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                visual(widget.app!),
+                Text(
+                  widget.app!.name,
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                Text(widget.app!.packageId,
+                    style: Theme.of(context).textTheme.subtitle1),
+              ],
+            );
+          }
+          // fetch data from backend if argument is null
+          else {
+            switch (appController.appStatus) {
+              case AppStatus.loading:
                 {
-                  return const Center(
-                    child: Text(
-                      'Error',
-                      style: TextStyle(color: Colors.red),
-                    ),
+                  return const Center(child: CircularProgressIndicator());
+                }
+              case AppStatus.loaded:
+                {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      visual(appController.selectedApp),
+                      Text(
+                        appController.selectedApp.name,
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      Text(appController.selectedApp.packageId,
+                          style: Theme.of(context).textTheme.subtitle1),
+                    ],
                   );
                 }
-              }
+              default:
+                {
+                  {
+                    return const Center(
+                      child: Text(
+                        'Error',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
+                }
+            }
           }
         }));
   }

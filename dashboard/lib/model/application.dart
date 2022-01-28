@@ -21,4 +21,13 @@ class Application {
       isAndroid: false,
     );
   }
+  factory Application.mock() {
+    return Application(
+      appID: '1',
+      name: 'Mock APP',
+      packageId: 'com.mock',
+      isIos: true,
+      isAndroid: false,
+    );
+  }
 }

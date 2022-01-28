@@ -23,8 +23,9 @@ pub(crate) async fn create_application(conn: DatabaseConnection, app_data: Json<
         }
     }
     let app = Application::new(&app_data.name, &app_data.os, &app_data.package_name);
-    match Application::insert(app, conn).await{
-        Ok(_) => ApiResponse::new(Status::Created, json!({"message": "App created"})),
+    
+    match Application::insert(app.clone(), conn).await{
+        Ok(_) => ApiResponse::new(Status::Created, json!({"data": app, "message": "App created"})),
         Err(_) => ApiResponse::new(Status::InternalServerError, json!({"message": "Error creating app"}))
     }
 }

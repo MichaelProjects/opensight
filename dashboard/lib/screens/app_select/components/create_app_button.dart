@@ -16,13 +16,12 @@ class _CreateAppState extends State<CreateApp> {
   Widget build(BuildContext context) {
     CreateAppController appCreateController =
         Provider.of<CreateAppController>(context);
+    Color widgetColor = Theme.of(context).primaryColor;
     return Container(
-        margin: const EdgeInsets.only(
-          top: 20,
-        ),
-        height: 100,
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.only(),
+        height: 103,
         width: 200,
-        padding: const EdgeInsets.only(top: 10, bottom: 5),
         decoration: BoxDecoration(
           boxShadow: [
             const BoxShadow(
@@ -31,7 +30,7 @@ class _CreateAppState extends State<CreateApp> {
                 offset: const Offset(0, 1),
                 color: Colors.grey)
           ],
-          color: Theme.of(context).primaryColor,
+          color: widgetColor,
           borderRadius: BorderRadius.circular(5),
         ),
         child: InkWell(
@@ -40,7 +39,13 @@ class _CreateAppState extends State<CreateApp> {
               createAppDialog(context);
             },
             onHover: (value) {
-              print(value);
+              setState(() {
+                if (value) {
+                  widgetColor = Theme.of(context).backgroundColor;
+                } else {
+                  widgetColor = Theme.of(context).primaryColor;
+                }
+              });
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

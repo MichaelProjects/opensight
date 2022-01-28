@@ -37,11 +37,10 @@ class _AppSelectState extends State<AppSelect> {
         Stack(
           clipBehavior: Clip.none,
           children: [
+            SizedBox(height: data.height - 70, width: data.width),
             DecorationSpacer(),
             Positioned(
-                top: 80,
-                left: (data.width / 100) * 43,
-                child: AppSelector(apps))
+                top: 80, left: (data.width / 100) * 43, child: AppSelector())
           ],
         )
       ],

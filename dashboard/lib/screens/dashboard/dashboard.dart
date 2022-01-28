@@ -2,6 +2,7 @@ import 'package:dashboard/controllers/dashboard/analytics_controller.dart';
 import 'package:dashboard/controllers/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:dashboard/screens/overlay/overlay.dart' as topOverlay;
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -24,19 +25,6 @@ class _DashboardState extends State<Dashboard> {
           .fetchEntrys(appController.selectedApp.appID);
     }
 
-    return Expanded(
-        child: SizedBox(
-            height: size.height - 70,
-            child: FutureBuilder(
-                future: _getData(),
-                builder: (context, snap) {
-                  if (snap.hasData) {
-                    return Column(
-                      children: [SelectableText(snap.data.toString())],
-                    );
-                  } else {
-                    return const SelectableText("Loading...");
-                  }
-                })));
+    return Scaffold(body: topOverlay.Overlay(child: Container()));
   }
 }

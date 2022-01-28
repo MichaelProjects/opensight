@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:http/http.dart' as http;
 
 Map buildResponse(bool error, String message, Map data) {
@@ -22,16 +20,12 @@ class HttpClient {
 
   Future<Map> post(Uri uri, Map body) async {
     //! post request wrapper, returns a map with the response details
-    var client = HttpClient();
-    HttpClientRequest request = await client.post(uri, body: body);
-    request.headers.contentType =
-        ContentType('application', 'json', charset: 'utf-8');
 
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+    };
     var response = await http
-        .post(
-          uri,
-          body: body,
-        )
+        .post(uri, body: jsonEncode(body), headers: headers)
         .timeout(standartTimeOut);
     if (response.statusCode == 200) {
       return buildResponse(false, "", jsonDecode(response.body));

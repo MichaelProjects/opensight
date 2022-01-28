@@ -14,14 +14,18 @@ class Overlay extends StatefulWidget {
 class OverlayState extends State<Overlay> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const TopBar(),
-          Row(
-            children: [const Sidebar(), widget.child],
-          )
-        ]);
+    var size = MediaQuery.of(context).size;
+    return SizedBox(
+        width: size.width,
+        height: size.height,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const TopBar(),
+              Row(
+                children: [const Sidebar(), widget.child],
+              )
+            ]));
   }
 }

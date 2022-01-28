@@ -20,7 +20,8 @@ class _PButtonState extends State<PButton> {
         height: 40,
         width: 152,
         decoration: BoxDecoration(
-            color: bcolor, borderRadius: BorderRadius.all(Radius.circular(5))),
+            color: bcolor,
+            borderRadius: const BorderRadius.all(Radius.circular(5))),
         child: InkWell(
             onTap: () {
               this.widget.onTap();
@@ -37,7 +38,7 @@ class _PButtonState extends State<PButton> {
             child: Center(
                 child: Text(
               widget.text,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold),

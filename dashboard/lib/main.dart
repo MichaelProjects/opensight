@@ -1,12 +1,11 @@
 import 'package:dashboard/controllers/dashboard/analytics_controller.dart';
 import 'package:dashboard/controllers/app_controller.dart';
-import 'package:dashboard/screens/app_select/app_select.dart';
-import 'package:dashboard/screens/overlay/overlay.dart' as topOverlay;
-import 'package:dashboard/screens/dashboard/dashboard.dart';
+import 'package:dashboard/controllers/global/nav_route.dart';
 import 'package:dashboard/utils/dark_theme.dart';
 import 'package:dashboard/utils/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:routemaster/routemaster.dart';
 
 import 'controllers/create_app_controller.dart';
 
@@ -29,12 +28,15 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => AnalyticController()),
           ChangeNotifierProvider(create: (_) => CreateAppController()),
         ],
-        child: MaterialApp(
-            title: 'Dashboard | Opensight',
-            debugShowCheckedModeBanner: false,
-            darkTheme: buildDarkThemeData(context),
-            theme: buildLightThemeData(context),
-            home: Scaffold(body: AppSelect())));
+        child: MaterialApp.router(
+          routerDelegate: RoutemasterDelegate(routesBuilder: (_) => routes),
+          // ignore: prefer_const_constructors
+          routeInformationParser: RoutemasterParser(),
+          title: 'Dashboard | Opensight',
+          debugShowCheckedModeBanner: false,
+          darkTheme: buildDarkThemeData(context),
+          theme: buildLightThemeData(context),
+        ));
     //topOverlay.Overlay(child: Dashboard())));
   }
 }

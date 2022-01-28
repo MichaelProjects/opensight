@@ -7,7 +7,7 @@ enum AppStatus { none, loading, loaded, error }
 class ApplicationProvider with ChangeNotifier {
   AppStatus _appStatus = AppStatus.none;
   List<Application> _apps = [];
-  late Application _selectedApp;
+  Application _selectedApp = Application.mock();
   AppStatus get appStatus => _appStatus;
   List<Application> get apps => _apps;
   Application get selectedApp => _selectedApp;
@@ -15,11 +15,17 @@ class ApplicationProvider with ChangeNotifier {
   Future fetchApplications() async {
     _appStatus = AppStatus.loading;
     var response = await ApiClient().getApplications();
-    _appStatus = AppStatus.loaded;
     List<Application> apps = [];
     for (var app in response["data"]) {
       apps.add(Application.fromJson(app));
     }
     _apps = apps;
+    _appStatus = AppStatus.loaded;
+    notifyListeners();
+  }
+
+  void setCurrentApp(Application app) {
+    _selectedApp = app;
+    notifyListeners();
   }
 }

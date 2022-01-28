@@ -28,8 +28,9 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   coolicons: ^1.0.0
-  http: ^0.13.4
+  http: ^0.13.3
   provider: ^5.0.0
+  routemaster: ^0.9.5
   fl_chart: ^0.40.6
   flutter:
     sdk: flutter

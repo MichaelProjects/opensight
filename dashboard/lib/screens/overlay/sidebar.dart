@@ -17,7 +17,7 @@ class Sidebar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Appdetails(),
-            DataSidebar(),
+            const DataSidebar(),
           ],
         ));
   }

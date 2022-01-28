@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+  postgresql:
+    image: postgres:13.2-alpine
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_USER: analyze_account
+      POSTGRES_PASSWORD: Glc95FLYbkgQwCy5KwUu
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      
+volumes:
+  db-data:
