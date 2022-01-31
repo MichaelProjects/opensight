@@ -16,8 +16,7 @@ class AppSelector extends StatefulWidget {
 class _AppSelectorState extends State<AppSelector> {
   @override
   Widget build(BuildContext context) {
-    ApplicationProvider appController =
-        Provider.of<ApplicationProvider>(context);
+    ApplicationModel appController = Provider.of<ApplicationModel>(context);
     var data = MediaQuery.of(context).size;
     return Container(
         padding: EdgeInsets.all(20),

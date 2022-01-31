@@ -17,8 +17,7 @@ class Appdetails extends StatefulWidget {
 class _AppdeatilsState extends State<Appdetails> {
   @override
   Widget build(BuildContext context) {
-    ApplicationProvider appController =
-        Provider.of<ApplicationProvider>(context);
+    ApplicationModel appController = Provider.of<ApplicationModel>(context);
     return Container(
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 5),

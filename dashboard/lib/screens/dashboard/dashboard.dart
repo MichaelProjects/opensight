@@ -19,8 +19,8 @@ class _DashboardState extends State<Dashboard> {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       AnalyticModel analyticsController =
           Provider.of<AnalyticModel>(context, listen: false);
-      ApplicationProvider appController =
-          Provider.of<ApplicationProvider>(context, listen: false);
+      ApplicationModel appController =
+          Provider.of<ApplicationModel>(context, listen: false);
       analyticsController.fetchEntrys(appController.selectedApp.appID);
     });
   }
@@ -34,7 +34,6 @@ class _DashboardState extends State<Dashboard> {
         child: Container(
             height: size.height - topbarHeight,
             width: size.width - sidebarWidth,
-            color: Colors.red,
             child: Builder(builder: (context) {
               switch (analyticsController.analyticsState) {
                 case AnalyticsState.loading:

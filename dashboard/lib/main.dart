@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (_) => ApplicationProvider(),
+            create: (_) => ApplicationModel(),
           ),
           ChangeNotifierProvider(create: (_) => AnalyticModel()),
           ChangeNotifierProvider(create: (_) => CreateAppController()),

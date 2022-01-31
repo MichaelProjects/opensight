@@ -22,8 +22,7 @@ class _AppSelectState extends State<AppSelect> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      var appProvider =
-          Provider.of<ApplicationProvider>(context, listen: false);
+      var appProvider = Provider.of<ApplicationModel>(context, listen: false);
       appProvider.fetchApplications();
     });
   }

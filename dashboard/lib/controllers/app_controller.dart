@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 enum AppStatus { none, loading, loaded, error }
 
-class ApplicationProvider with ChangeNotifier {
+class ApplicationModel with ChangeNotifier {
   AppStatus _appStatus = AppStatus.none;
   List<Application> _apps = [];
   Application _selectedApp = Application.mock();
