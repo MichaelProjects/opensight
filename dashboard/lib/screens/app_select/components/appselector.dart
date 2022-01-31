@@ -2,7 +2,6 @@
 
 import 'package:dashboard/controllers/app_controller.dart';
 import 'package:dashboard/glob_components/app_details.dart';
-import 'package:dashboard/model/application.dart';
 import 'package:dashboard/screens/app_select/components/create_app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

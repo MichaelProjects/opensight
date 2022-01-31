@@ -27,7 +27,7 @@ class HttpClient {
     var response = await http
         .post(uri, body: jsonEncode(body), headers: headers)
         .timeout(standartTimeOut);
-    if (response.statusCode == 200) {
+    if (response.statusCode < 299) {
       return buildResponse(false, "", jsonDecode(response.body));
     }
     return buildResponse(true, "", {});

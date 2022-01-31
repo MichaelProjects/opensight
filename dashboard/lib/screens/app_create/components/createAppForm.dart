@@ -131,6 +131,9 @@ class _CreateAppFormState extends State<CreateAppForm> {
                 }),
               ],
             ));
+      case CreateAppState.created:
+        return Text("Application created",
+            style: Theme.of(context).textTheme.subtitle1);
       default:
         return const Text("Error");
     }

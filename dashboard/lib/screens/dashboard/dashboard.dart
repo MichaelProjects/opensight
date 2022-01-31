@@ -1,5 +1,6 @@
-import 'package:dashboard/controllers/dashboard/analytics_controller.dart';
+import 'package:dashboard/controllers/dashboard/analytics_model.dart';
 import 'package:dashboard/controllers/app_controller.dart';
+import 'package:dashboard/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dashboard/screens/overlay/overlay.dart' as topOverlay;
@@ -13,18 +14,36 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      AnalyticModel analyticsController =
+          Provider.of<AnalyticModel>(context, listen: false);
+      ApplicationProvider appController =
+          Provider.of<ApplicationProvider>(context, listen: false);
+      analyticsController.fetchEntrys(appController.selectedApp.appID);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    AnalyticController analyticsController =
-        Provider.of<AnalyticController>(context);
-    ApplicationProvider appController =
-        Provider.of<ApplicationProvider>(context);
-    Future _getData() async {
-      await Future.delayed(const Duration(seconds: 2));
-      return await analyticsController
-          .fetchEntrys(appController.selectedApp.appID);
-    }
-
-    return Scaffold(body: topOverlay.Overlay(child: Container()));
+    AnalyticModel analyticsController = Provider.of<AnalyticModel>(context);
+    print(analyticsController.analyticsState);
+    return topOverlay.Overlay(
+        child: Container(
+            height: size.height - topbarHeight,
+            width: size.width - sidebarWidth,
+            color: Colors.red,
+            child: Builder(builder: (context) {
+              switch (analyticsController.analyticsState) {
+                case AnalyticsState.loading:
+                  return Center(child: CircularProgressIndicator());
+                case AnalyticsState.loaded:
+                  return Text(analyticsController.analyticData.toString());
+                default:
+                  return const Text("Error");
+              }
+            })));
   }
 }

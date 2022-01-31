@@ -5,6 +5,7 @@ import 'package:dashboard/model/application.dart';
 import 'package:dashboard/screens/app_select/components/appselector.dart';
 import 'package:dashboard/screens/app_select/components/decoration_spacer.dart';
 import 'package:dashboard/screens/overlay/topbar.dart';
+import 'package:dashboard/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,7 @@ class _AppSelectState extends State<AppSelect> {
         Stack(
           clipBehavior: Clip.none,
           children: [
-            SizedBox(height: data.height - 70, width: data.width),
+            SizedBox(height: data.height - topbarHeight, width: data.width),
             DecorationSpacer(),
             Positioned(
                 top: 80, left: (data.width / 100) * 43, child: AppSelector())

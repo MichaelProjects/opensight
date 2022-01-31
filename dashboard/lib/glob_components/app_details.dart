@@ -36,9 +36,11 @@ class _AppdeatilsState extends State<Appdetails> {
                 visual(widget.app!),
                 Text(
                   widget.app!.name,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 Text(widget.app!.packageId,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.subtitle1),
               ],
             );
@@ -58,9 +60,11 @@ class _AppdeatilsState extends State<Appdetails> {
                       visual(appController.selectedApp),
                       Text(
                         appController.selectedApp.name,
+                        overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       Text(appController.selectedApp.packageId,
+                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.subtitle1),
                     ],
                   );

@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 
 enum AnalyticsState { none, loading, loaded, error }
 
-class AnalyticController with ChangeNotifier {
+class AnalyticModel with ChangeNotifier {
+  Map _analyticData = {};
   AnalyticsState _analyticsState = AnalyticsState.none;
+  Map get analyticData => _analyticData;
   AnalyticsState get analyticsState => _analyticsState;
 
-  Future<Map> fetchEntrys(String appId) async {
+  Future fetchEntrys(String appId) async {
     _analyticsState = AnalyticsState.loading;
+    notifyListeners();
     var response = await ApiClient().getAnalticsEntrys(appId);
+    print(response);
+    _analyticData = response;
     _analyticsState = AnalyticsState.loaded;
-    return response;
+    notifyListeners();
   }
 }

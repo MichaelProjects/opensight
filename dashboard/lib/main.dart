@@ -1,4 +1,4 @@
-import 'package:dashboard/controllers/dashboard/analytics_controller.dart';
+import 'package:dashboard/controllers/dashboard/analytics_model.dart';
 import 'package:dashboard/controllers/app_controller.dart';
 import 'package:dashboard/controllers/global/nav_route.dart';
 import 'package:dashboard/utils/dark_theme.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (_) => ApplicationProvider(),
           ),
-          ChangeNotifierProvider(create: (_) => AnalyticController()),
+          ChangeNotifierProvider(create: (_) => AnalyticModel()),
           ChangeNotifierProvider(create: (_) => CreateAppController()),
         ],
         child: MaterialApp.router(

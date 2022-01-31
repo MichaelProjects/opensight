@@ -32,9 +32,9 @@ class CreateAppController with ChangeNotifier {
     print(payload);
     var response = await ApiClient().createApplication(payload);
     List<Application> apps = [];
-    for (var app in response["data"]) {
-      apps.add(Application.fromJson(app));
-    }
+    apps.add(Application.fromJson(response["data"]));
+    _state = CreateAppState.created;
+    notifyListeners();
   }
 
   /// setters for the controller variables
