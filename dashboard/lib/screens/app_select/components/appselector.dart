@@ -41,6 +41,7 @@ class _AppSelectorState extends State<AppSelector> {
                             appController
                                 .setCurrentApp(appController.apps[index]);
                             print(appController.selectedApp.name);
+                            print(appController.selectedApp.appID);
                             Routemaster.of(context).push('/dashboard/1');
                           },
                           child: Appdetails(

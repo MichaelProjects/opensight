@@ -50,15 +50,18 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao {
     }
 }
 
-pub async fn get_all(app_id: &String, conn: AnalyticsDB) -> Vec<AnalyticEntry>  {
+pub async fn get_all<'a>(app_id: String, conn: AnalyticsDB) -> Vec<AnalyticEntry>  {
     let response: QueryResult<Vec<AnalyticEntry>> = conn.run(|c| analytics::table
-        .load::<AnalyticEntry>(c)).await;
+        .filter(analytics::application_id.eq(app_id))
+        .load::<AnalyticEntry>(c))
+        .await;
     return response.expect("Entrys");
 }
 
-pub async fn get_timeframe_entry(app_id: &String, conn: AnalyticsDB, start: NaiveDateTime, end: NaiveDateTime) -> QueryResult<Vec<AnalyticEntry>>{
+pub async fn get_timeframe_entry(app_id: String, conn: AnalyticsDB, start: NaiveDateTime, end: NaiveDateTime) -> QueryResult<Vec<AnalyticEntry>>{
     let response: QueryResult<Vec<AnalyticEntry>> = conn.run(move |c| 
         analytics::table
+        .filter(analytics::application_id.eq(app_id))
         .filter(creation_time.between(start, end))
         .load::<AnalyticEntry>(c)).await;
     return response

@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 
 final routes = RouteMap(routes: {
-  '/': (context) => AuthGuard.canUserAccessPage()
+  '/': (routeData) => AuthGuard.canUserAccessPage()
       ? MaterialPage(child: AppSelect())
       : MaterialPage(
           child: Scaffold(
               body: Center(
                   child: Text('You are not authorized to access this page')))),
-  '/dashboard/:id': (context) => MaterialPage(child: Dashboard()),
+  '/dashboard/:id': (routeData) => AuthGuard.canUserAccessDashboard()
+      ? MaterialPage(child: Dashboard())
+      : Redirect(
+          "/",
+        )
 });

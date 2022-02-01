@@ -79,6 +79,6 @@ pub(crate) async fn update_session(
 pub(crate) async fn get_sessions(
     conn: AnalyticsDB,
     application_id: String) -> ApiResponse {
-    let sessions: Vec<AnalyticEntry> = analytics::get_all_entries(&application_id, conn).await;
+    let sessions: Vec<AnalyticEntry> = analytics::get_all_entries(application_id, conn).await;
     ApiResponse::new(Status::Ok, json!({"sessions": sessions}))
 }

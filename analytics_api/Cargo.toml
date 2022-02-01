@@ -1,6 +1,6 @@
 [package]
 name = "opensight_analytics_api"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["MichaelProjects <michael.lichtenecker@outlook.com>"]
 edition = "2018"
 

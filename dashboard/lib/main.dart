@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => CreateAppController()),
         ],
         child: MaterialApp.router(
-          routerDelegate: RoutemasterDelegate(routesBuilder: (_) => routes),
+          routerDelegate:
+              RoutemasterDelegate(routesBuilder: (context) => routes),
           // ignore: prefer_const_constructors
           routeInformationParser: RoutemasterParser(),
           title: 'Dashboard | Opensight',

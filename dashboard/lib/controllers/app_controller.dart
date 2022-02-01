@@ -1,5 +1,6 @@
 import 'package:dashboard/model/application.dart';
 import 'package:dashboard/utils/api/client.dart';
+import 'package:dashboard/utils/guard.dart';
 import 'package:flutter/material.dart';
 
 enum AppStatus { none, loading, loaded, error }
@@ -26,6 +27,7 @@ class ApplicationModel with ChangeNotifier {
 
   void setCurrentApp(Application app) {
     _selectedApp = app;
+    AuthGuard.isAppSelected = true;
     notifyListeners();
   }
 }
