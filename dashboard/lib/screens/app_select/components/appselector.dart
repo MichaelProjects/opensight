@@ -40,9 +40,8 @@ class _AppSelectorState extends State<AppSelector> {
                           onTap: () {
                             appController
                                 .setCurrentApp(appController.apps[index]);
-                            print(appController.selectedApp.name);
-                            print(appController.selectedApp.appID);
-                            Routemaster.of(context).push('/dashboard/1');
+                            Routemaster.of(context).push(
+                                '/dashboard/${appController.apps[index].appID}');
                           },
                           child: Appdetails(
                             app: appController.apps[index],
