@@ -1,4 +1,5 @@
 import 'package:dashboard/utils/api/client.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 enum AnalyticsState { none, loading, loaded, error }
@@ -17,5 +18,10 @@ class AnalyticModel with ChangeNotifier {
     _analyticData = response;
     _analyticsState = AnalyticsState.loaded;
     notifyListeners();
+  }
+
+  processUserGraph() {
+    List<FlSpot> data = [];
+    for (var entry in _analyticData["data"]) {}
   }
 }

@@ -1,5 +1,7 @@
 import 'package:dashboard/controllers/dashboard/analytics_model.dart';
 import 'package:dashboard/controllers/app_controller.dart';
+import 'package:dashboard/screens/dashboard/components/graphs/line_chart.dart';
+import 'package:dashboard/screens/dashboard/components/graphs/pi_chart.dart';
 import 'package:dashboard/utils/sizes.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -41,15 +43,16 @@ class _DashboardState extends State<Dashboard> {
                   return Center(child: CircularProgressIndicator());
                 case AnalyticsState.loaded:
                   return Builder(builder: (context) {
-                    return Container(
-                        height: 400,
-                        width: 400,
-                        child: LineChart(
-                          LineChartData(),
-                          swapAnimationDuration:
-                              Duration(milliseconds: 150), // Optional
-                          swapAnimationCurve: Curves.linear, // Opt
-                        ));
+                    return Scrollbar(
+                        child: ListView(children: [
+                      Card(
+                          child: Container(
+                              padding: EdgeInsets.all(10),
+                              height: 400,
+                              width: 100,
+                              child: SimpleLineChart.withSampleData())),
+                      Card(child: DonutPieChart.withSampleData()),
+                    ]));
                   });
                 default:
                   return const Text("Error");
