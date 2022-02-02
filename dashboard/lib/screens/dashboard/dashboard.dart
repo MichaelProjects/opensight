@@ -1,7 +1,5 @@
 import 'package:dashboard/controllers/dashboard/analytics_model.dart';
 import 'package:dashboard/controllers/app_controller.dart';
-import 'package:dashboard/screens/dashboard/components/graphs/line_chart.dart';
-import 'package:dashboard/screens/dashboard/components/graphs/pi_chart.dart';
 import 'package:dashboard/utils/sizes.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +26,48 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  Widget lineChart = LineChart(
+    LineChartData(
+      lineBarsData: [
+        LineChartBarData(
+          colors: const [Color(0xFFFF26B5), Color(0xFFFF5B5B)],
+          dotData: FlDotData(show: false),
+          belowBarData: BarAreaData(
+            show: true,
+            colors: const [Color(0x10FF26B5), Color(0x00FF26B5)],
+            gradientFrom: const Offset(0.5, 0),
+            gradientTo: const Offset(0.5, 1),
+          ),
+          spots: [
+            FlSpot(0, 24),
+            FlSpot(1, 24),
+            FlSpot(2, 40),
+            FlSpot(3, 84),
+            FlSpot(4, 100),
+            FlSpot(5, 80),
+            FlSpot(6, 64),
+            FlSpot(7, 86),
+            FlSpot(8, 108),
+            FlSpot(9, 105),
+            FlSpot(10, 105),
+            FlSpot(11, 124),
+          ],
+        )
+      ],
+      maxY: 140,
+      gridData: FlGridData(show: false),
+      borderData: FlBorderData(show: false),
+    ),
+  );
+
+  Widget pieChart = PieChart(
+    PieChartData(
+        // read about it in the PieChartData section
+        ),
+    swapAnimationDuration: Duration(milliseconds: 150), // Optional
+    swapAnimationCurve: Curves.linear, // Optional
+  );
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -42,17 +82,30 @@ class _DashboardState extends State<Dashboard> {
                 case AnalyticsState.loading:
                   return Center(child: CircularProgressIndicator());
                 case AnalyticsState.loaded:
-                  return Builder(builder: (context) {
-                    return Scrollbar(
-                        child: ListView(children: [
-                      Card(
-                          child: Container(
-                              padding: EdgeInsets.all(10),
-                              height: 400,
-                              width: 100,
-                              child: SimpleLineChart.withSampleData())),
-                      Card(child: DonutPieChart.withSampleData()),
-                    ]));
+                  return LayoutBuilder(builder: (context, constraints) {
+                    return GridView.count(
+                      crossAxisCount: constraints.maxWidth < 800 ? 1 : 2,
+                      childAspectRatio: 1.7,
+                      padding: const EdgeInsets.all(16),
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      children: [
+                        Card(
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 18, top: 18, bottom: 18),
+                                child: lineChart)),
+                        Card(
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 18, top: 18, bottom: 18),
+                                child: pieChart)),
+                        Card(),
+                        Card(),
+                        Card(),
+                        Card(),
+                      ],
+                    );
                   });
                 default:
                   return const Text("Error");
