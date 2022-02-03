@@ -12,14 +12,22 @@ class DataSidebar extends StatelessWidget {
         child: Column(
       children: [
         SidebarButton(
-            label: "Dashboard", icon: Coolicons.bar_chart, onPressed: () {}),
+            deactivated: false,
+            label: "Dashboard",
+            icon: Coolicons.bar_chart,
+            onPressed: () {}),
         SidebarButton(
-            label: "Events", icon: Coolicons.check_all_big, onPressed: () {}),
+            deactivated: true,
+            label: "Events",
+            icon: Coolicons.check_all_big,
+            onPressed: () {}),
         SidebarButton(
+            deactivated: true,
             label: "Crashes",
             icon: Coolicons.settings_future,
             onPressed: () {}),
         SidebarButton(
+            deactivated: false,
             label: "Explore",
             icon: Coolicons.bar_chart_circle,
             onPressed: () {}),

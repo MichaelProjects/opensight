@@ -60,14 +60,98 @@ class _DashboardState extends State<Dashboard> {
     ),
   );
 
+  Widget sessionLength = LineChart(
+    LineChartData(
+      lineBarsData: [
+        LineChartBarData(
+          colors: const [Color(0xFFFF26B5), Color(0xFFFF5B5B)],
+          dotData: FlDotData(show: false),
+          belowBarData: BarAreaData(
+            show: true,
+            colors: const [Color(0x10FF26B5), Color(0x00FF26B5)],
+            gradientFrom: const Offset(0.5, 0),
+            gradientTo: const Offset(0.5, 1),
+          ),
+          spots: [
+            FlSpot(0, 24),
+            FlSpot(1, 24),
+            FlSpot(2, 40),
+            FlSpot(3, 84),
+            FlSpot(4, 100),
+            FlSpot(5, 80),
+            FlSpot(6, 64),
+            FlSpot(7, 86),
+            FlSpot(8, 108),
+            FlSpot(9, 105),
+            FlSpot(10, 105),
+            FlSpot(11, 124),
+          ],
+        )
+      ],
+      maxY: 140,
+      gridData: FlGridData(show: false),
+      borderData: FlBorderData(show: false),
+    ),
+  );
+
+  Widget newUsers = LineChart(
+    LineChartData(
+      lineBarsData: [
+        LineChartBarData(
+          colors: const [Color(0xFFFF26B5), Color(0xFFFF5B5B)],
+          dotData: FlDotData(show: false),
+          belowBarData: BarAreaData(
+            show: true,
+            colors: const [Color(0x10FF26B5), Color(0x00FF26B5)],
+            gradientFrom: const Offset(0.5, 0),
+            gradientTo: const Offset(0.5, 1),
+          ),
+          spots: [
+            FlSpot(0, 24),
+            FlSpot(1, 24),
+            FlSpot(2, 40),
+            FlSpot(3, 84),
+            FlSpot(4, 100),
+            FlSpot(5, 80),
+            FlSpot(6, 64),
+            FlSpot(7, 86),
+            FlSpot(8, 108),
+            FlSpot(9, 105),
+            FlSpot(10, 105),
+            FlSpot(11, 124),
+          ],
+        )
+      ],
+      maxY: 140,
+      gridData: FlGridData(show: false),
+      borderData: FlBorderData(show: false),
+    ),
+  );
+
   Widget pieChart = PieChart(
-    PieChartData(
-        // read about it in the PieChartData section
-        ),
+    PieChartData(sections: [PieChartSectionData()]),
     swapAnimationDuration: Duration(milliseconds: 150), // Optional
     swapAnimationCurve: Curves.linear, // Optional
   );
 
+  Widget appVersions = BarChart(BarChartData(
+    barGroups: [
+      BarChartGroupData(x: 1, barRods: [
+        BarChartRodData(y: 100),
+      ])
+    ],
+    gridData: FlGridData(show: false),
+    borderData: FlBorderData(show: false),
+  ));
+  Widget screenSizes = BarChart(BarChartData(
+    barGroups: [
+      BarChartGroupData(x: 1, barRods: [
+        BarChartRodData(y: 100),
+      ])
+    ],
+    gridData: FlGridData(show: false),
+    borderData: FlBorderData(show: false),
+  ));
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -84,7 +168,11 @@ class _DashboardState extends State<Dashboard> {
                 case AnalyticsState.loaded:
                   return LayoutBuilder(builder: (context, constraints) {
                     return GridView.count(
-                      crossAxisCount: constraints.maxWidth < 800 ? 1 : 2,
+                      crossAxisCount: constraints.maxWidth > 1200
+                          ? 3
+                          : constraints.maxWidth < 800
+                              ? 1
+                              : 2,
                       childAspectRatio: 1.7,
                       padding: const EdgeInsets.all(16),
                       crossAxisSpacing: 16,
@@ -99,11 +187,27 @@ class _DashboardState extends State<Dashboard> {
                             child: Padding(
                                 padding: const EdgeInsets.only(
                                     right: 18, top: 18, bottom: 18),
+                                child: newUsers)),
+                        Card(
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 18, top: 18, bottom: 18),
+                                child: sessionLength)),
+                        Card(
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 18, top: 18, bottom: 18),
+                                child: appVersions)),
+                        Card(
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 18, top: 18, bottom: 18),
                                 child: pieChart)),
-                        Card(),
-                        Card(),
-                        Card(),
-                        Card(),
+                        Card(
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 18, top: 18, bottom: 18),
+                                child: screenSizes)),
                       ],
                     );
                   });
