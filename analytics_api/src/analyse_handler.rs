@@ -54,8 +54,7 @@ pub(crate) async fn get_analyse_data(
             }));
         }
     };
-    let processed_data: Vec<DayData> = analyse_user(entry_data);
-    ApiResponse::new(Status::Ok, json!({"data": processed_data}))
+    ApiResponse::new(Status::Ok, json!({"data": entry_data}))
 }
 
 
@@ -78,6 +77,7 @@ pub(crate) async fn get_analyse_user(
             }));
         }
     };
+    let processed_data: Vec<DayData> = analyse_user(entry_data);
+    ApiResponse::new(Status::Ok, json!({"data": processed_data}))
     
-    ApiResponse::new(Status::Ok, json!({"data": entry_data}))
 }

@@ -1,7 +1,5 @@
-use std::{collections::HashMap, ops::Add};
-
+use std::{ops::Add};
 use serde::Serialize;
-
 use crate::analytics::AnalyticEntry;
 
 #[derive(Debug, Clone, Serialize)]
@@ -17,17 +15,45 @@ pub fn analyse_user<'a>(entrys: Vec<AnalyticEntry>) -> Vec<DayData> {
         let time = entry.creation_time.to_string();
         let time = time.split("T").collect::<Vec<&str>>();
         let key= time[0];
-        let x = &before.clone();
-        match &mut before{
-            _ if key.eq(x.as_str()) => {
+        if key.ne(before.as_str()){
                 days.push(DayData{day: key.to_string(), counter: 1});
-                key.to_string();
+                before = key.to_string();
             }
-            _ => {
-                &mut days[&days.len()-1].counter.add(1);
-                &before;
+            else {
+                let a = days.last_mut().expect("Could not get last element from vec!").counter.add(1);
             }
         }
-    }
     days
+}
+
+#[test]
+fn test_analyse(){
+    use chrono::NaiveDateTime;
+    let parse_from_str = NaiveDateTime::parse_from_str;
+    let raw_data = vec![AnalyticEntry{
+        session_id: "1".to_string(),
+        application_id: "1".to_string(),
+        creation_time: parse_from_str("2022-02-01T19:26:37" , "%Y-%m-%dT%H:%M:%S").unwrap(),
+        os: "1".to_string(),
+        device_size: "1".to_string(),
+        new_user: true,
+        country: "1".to_string(),
+        last_session: 1,
+        device_type: "1".to_string(),
+        version: "1".to_string(),
+    },
+    AnalyticEntry{
+        session_id: "1".to_string(),
+        application_id: "1".to_string(),
+        creation_time: parse_from_str("2022-02-02T19:26:37" , "%Y-%m-%dT%H:%M:%S").unwrap(),
+        os: "1".to_string(),
+        device_size: "1".to_string(),
+        new_user: true,
+        country: "1".to_string(),
+        last_session: 1,
+        device_type: "1".to_string(),
+        version: "1".to_string(),
+    }];
+    let data = analyse_user(raw_data);
+    assert_eq!(data.len(), 2);
 }

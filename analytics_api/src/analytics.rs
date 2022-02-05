@@ -32,16 +32,16 @@ pub struct SessionUpdate {
 #[derive(Serialize, Deserialize, Clone, Debug, Queryable, AsChangeset, Insertable)]
 #[table_name = "analytics"]
 pub struct AnalyticEntry {
-    session_id: String,
-    application_id: String,
+    pub session_id: String,
+    pub application_id: String,
     pub creation_time: NaiveDateTime,
-    os: String,
-    device_size: String,
-    new_user: bool,
-    country: String,
-    last_session: i32,
-    device_type: String,
-    version: String, // here should come _ features: Vec<String>
+    pub os: String,
+    pub device_size: String,
+    pub new_user: bool,
+    pub country: String,
+    pub last_session: i32,
+    pub device_type: String,
+    pub version: String, // here should come _ features: Vec<String>
 }
 impl AnalyticEntry {
     pub fn new(data: AnalyticData, application_id: String) -> Self {

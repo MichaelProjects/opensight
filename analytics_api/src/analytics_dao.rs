@@ -3,7 +3,6 @@ use crate::analytics::AnalyticEntry;
 use crate::dao::Dao;
 use crate::db::AnalyticsDB;
 use crate::schema::analytics::columns::{last_session, session_id};
-use crate::schema::analytics::creation_time;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl, BoolExpressionMethods};
 use log::debug;
 use chrono::{NaiveDateTime, Utc};
