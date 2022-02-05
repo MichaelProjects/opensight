@@ -3,6 +3,7 @@ use rocket::State;
 use rocket::http::Status;
 use rocket::request::{Outcome, Request, FromRequest};
 use serde_json::json;
+use crate::analyse::{analyse_user, DayData};
 use crate::analytics;
 use crate::application::Application;
 use crate::db::AnalyticsDB;
@@ -53,7 +54,8 @@ pub(crate) async fn get_analyse_data(
             }));
         }
     };
-    ApiResponse::new(Status::Ok, json!({"data": entry_data}))
+    let processed_data: Vec<DayData> = analyse_user(entry_data);
+    ApiResponse::new(Status::Ok, json!({"data": processed_data}))
 }
 
 
