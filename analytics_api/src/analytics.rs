@@ -34,7 +34,7 @@ pub struct SessionUpdate {
 pub struct AnalyticEntry {
     session_id: String,
     application_id: String,
-    creation_time: NaiveDateTime,
+    pub creation_time: NaiveDateTime,
     os: String,
     device_size: String,
     new_user: bool,
@@ -73,5 +73,10 @@ pub async fn get_all_entries(app_id: String, conn: AnalyticsDB) -> Vec<AnalyticE
 
 pub async fn get_timeframe_entries(app_id: String, conn: AnalyticsDB, start: NaiveDateTime, end: NaiveDateTime) -> Result<Vec<AnalyticEntry>, Box<dyn Error>> {
     let result = analytics_dao::get_timeframe_entry(app_id, conn, start, end).await?;
+    Ok(result)
+}
+
+pub async fn get_newuser_in_timeframe(app_id: String, conn: AnalyticsDB, start: NaiveDateTime, end: NaiveDateTime) -> Result<Vec<AnalyticEntry>, Box<dyn Error>> {
+    let result = analytics_dao::get_newuser_in_timeframe(app_id, conn, start, end).await?;
     Ok(result)
 }

@@ -19,9 +19,4 @@ class AnalyticModel with ChangeNotifier {
     _analyticsState = AnalyticsState.loaded;
     notifyListeners();
   }
-
-  processUserGraph() {
-    List<FlSpot> data = [];
-    for (var entry in _analyticData["data"]) {}
-  }
 }

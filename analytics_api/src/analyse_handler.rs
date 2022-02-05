@@ -34,9 +34,8 @@ impl<'r> FromRequest<'r> for ApiKey<'r> {
 async fn vaildate_key(key: &str, app_id: &String){
 }
 
-
-#[get("/<application_id>/analyse/user?<start>&<end>")]
-pub(crate) async fn get_analyse_user(
+#[get("/<application_id>/analyse?<start>&<end>")]
+pub(crate) async fn get_analyse_data(
     conn: AnalyticsDB,
     application_id: String, 
     key: ApiKey<'_>, 
@@ -54,5 +53,29 @@ pub(crate) async fn get_analyse_user(
             }));
         }
     };
+    ApiResponse::new(Status::Ok, json!({"data": entry_data}))
+}
+
+
+#[get("/<application_id>/analyse/user?<start>&<end>")]
+pub(crate) async fn get_analyse_user(
+    conn: AnalyticsDB,
+    application_id: String, 
+    key: ApiKey<'_>, 
+    start: Option<i64>, 
+    end: Option<i64>) -> ApiResponse{
+    println!("{:?}", &key);
+    vaildate_key(key.0, &application_id).await;
+    let start = NaiveDateTime::from_timestamp(start.unwrap(), 0);
+    let end = NaiveDateTime::from_timestamp(end.unwrap(), 0);
+    let entry_data = match analytics::get_newuser_in_timeframe(application_id, conn, start, end).await{
+        Ok(entries) => entries,
+        Err(_) => {
+            return ApiResponse::new(Status::BadRequest, json!({
+                "error": "Could not get entries"
+            }));
+        }
+    };
+    
     ApiResponse::new(Status::Ok, json!({"data": entry_data}))
 }

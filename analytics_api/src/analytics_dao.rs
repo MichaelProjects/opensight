@@ -62,7 +62,17 @@ pub async fn get_timeframe_entry(app_id: String, conn: AnalyticsDB, start: Naive
     let response: QueryResult<Vec<AnalyticEntry>> = conn.run(move |c| 
         analytics::table
         .filter(analytics::application_id.eq(app_id))
-        .filter(creation_time.between(start, end))
+        .filter(analytics::creation_time.between(start, end))
         .load::<AnalyticEntry>(c)).await;
-    return response
+        return response
+}
+
+pub async fn get_newuser_in_timeframe(app_id: String, conn: AnalyticsDB, start: NaiveDateTime, end: NaiveDateTime) -> QueryResult<Vec<AnalyticEntry>>{
+    let response: QueryResult<Vec<AnalyticEntry>> = conn.run(move |c| 
+        analytics::table
+        .filter(analytics::application_id.eq(app_id))
+        .filter(analytics::creation_time.between(start, end))
+        .filter(analytics::new_user.eq(true))
+        .load::<AnalyticEntry>(c)).await;
+        return response
 }
