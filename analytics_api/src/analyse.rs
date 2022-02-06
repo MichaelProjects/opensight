@@ -8,7 +8,7 @@ pub struct DayData{
     pub counter: i64
 }
 
-pub fn analyse_user<'a>(entrys: Vec<AnalyticEntry>) -> Vec<DayData> {
+pub fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>) -> Vec<DayData> {
     let mut days: Vec<DayData> = vec![];
     let mut before: String = String::new();
     for entry in entrys.iter(){
@@ -54,6 +54,6 @@ fn test_analyse(){
         device_type: "1".to_string(),
         version: "1".to_string(),
     }];
-    let data = analyse_user(raw_data);
+    let data = sort_data_to_day(raw_data);
     assert_eq!(data.len(), 2);
 }

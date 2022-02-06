@@ -11,4 +11,14 @@ class Urls {
   static Uri getAllAnalytics(String appId) {
     return Uri.parse('$host/analytic/v1/$appId/session');
   }
+
+  static Uri getAnalyseNewUser(String appid, int startFrame, int endFrame) {
+    return Uri.parse(
+        '$host/analytic/v1/$appid/analyse/user/new?start=$startFrame&end=$endFrame');
+  }
+
+  static Uri getAnalyseUser(String appid, int startFrame, int endFrame) {
+    return Uri.parse(
+        '$host/analytic/v1/$appid/analyse/user?start=$startFrame&end=$endFrame');
+  }
 }

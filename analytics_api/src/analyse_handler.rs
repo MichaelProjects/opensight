@@ -3,7 +3,7 @@ use rocket::State;
 use rocket::http::Status;
 use rocket::request::{Outcome, Request, FromRequest};
 use serde_json::json;
-use crate::analyse::{analyse_user, DayData};
+use crate::analyse::{sort_data_to_day, DayData};
 use crate::analytics;
 use crate::application::Application;
 use crate::db::AnalyticsDB;
@@ -57,9 +57,32 @@ pub(crate) async fn get_analyse_data(
     ApiResponse::new(Status::Ok, json!({"data": entry_data}))
 }
 
-
 #[get("/<application_id>/analyse/user?<start>&<end>")]
 pub(crate) async fn get_analyse_user(
+    conn: AnalyticsDB,
+    application_id: String, 
+    key: ApiKey<'_>, 
+    start: Option<i64>, 
+    end: Option<i64>) -> ApiResponse{
+    vaildate_key(key.0, &application_id).await;
+    let start = NaiveDateTime::from_timestamp(start.unwrap(), 0);
+    let end = NaiveDateTime::from_timestamp(end.unwrap(), 0);
+    let entry_data = match analytics::get_timeframe_entries(application_id, conn, start, end).await{
+        Ok(entries) => entries,
+        Err(_) => {
+            return ApiResponse::new(Status::BadRequest, json!({
+                "error": "Could not get entries"
+            }));
+        }
+    };
+    let processed_data: Vec<DayData> = sort_data_to_day(entry_data);
+    ApiResponse::new(Status::Ok, json!({"data": processed_data}))
+    
+}
+
+
+#[get("/<application_id>/analyse/user/new?<start>&<end>")]
+pub(crate) async fn get_analyse_new_user(
     conn: AnalyticsDB,
     application_id: String, 
     key: ApiKey<'_>, 
@@ -77,7 +100,7 @@ pub(crate) async fn get_analyse_user(
             }));
         }
     };
-    let processed_data: Vec<DayData> = analyse_user(entry_data);
+    let processed_data: Vec<DayData> = sort_data_to_day(entry_data);
     ApiResponse::new(Status::Ok, json!({"data": processed_data}))
     
 }

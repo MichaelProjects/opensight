@@ -37,7 +37,7 @@ class _SidebarButtonState extends State<SidebarButton> {
             padding: const EdgeInsets.only(left: 15),
             decoration: BoxDecoration(
               color: widget.deactivated == true
-                  ? Colors.white
+                  ? Theme.of(context).primaryColor.withOpacity(0)
                   : hoverState == false
                       ? Theme.of(context).primaryColor.withOpacity(0)
                       : Colors.blue.withOpacity(0.4),
