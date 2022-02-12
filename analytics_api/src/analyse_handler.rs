@@ -67,6 +67,7 @@ pub(crate) async fn get_analyse_user(
     vaildate_key(key.0, &application_id).await;
     let start = NaiveDateTime::from_timestamp(start.unwrap(), 0);
     let end = NaiveDateTime::from_timestamp(end.unwrap(), 0);
+    println!("{:?}", &start);
     let entry_data = match analytics::get_timeframe_entries(application_id, conn, start, end).await{
         Ok(entries) => entries,
         Err(_) => {
@@ -75,6 +76,7 @@ pub(crate) async fn get_analyse_user(
             }));
         }
     };
+    println!("{:?}", &entry_data);
     let processed_data: Vec<DayData> = sort_data_to_day(entry_data);
     ApiResponse::new(Status::Ok, json!({"data": processed_data}))
     
