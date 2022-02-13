@@ -25,6 +25,14 @@ class ApplicationModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<Application> fetchApplication(String appId) async {
+    _appStatus = AppStatus.loading;
+    var response = await ApiClient().getApplication(appId);
+    Application app = Application.fromJson(response["data"]);
+    _appStatus = AppStatus.loaded;
+    return app;
+  }
+
   void setCurrentApp(Application app) {
     _selectedApp = app;
     AuthGuard.isAppSelected = true;

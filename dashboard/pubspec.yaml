@@ -32,6 +32,7 @@ dependencies:
   provider: ^5.0.0
   routemaster: ^0.9.5
   fl_chart: ^0.40.6
+  dio: ^4.0.4
   flutter:
     sdk: flutter
 

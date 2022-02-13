@@ -3,7 +3,11 @@ class Urls {
 
   // V1 Core Endpoints
   static Uri getAllApplications = Uri.parse('$host/core/v1/application');
-  static Uri getApplication = Uri.parse('$host/core/v1/application');
+
+  static Uri getApplication(String appId) {
+    return Uri.parse('$host/core/v1/application/$appId');
+  }
+
   static Uri login = Uri.parse('$host/core/v1/login');
   static Uri createApplication = Uri.parse('$host/core/v1/application');
 

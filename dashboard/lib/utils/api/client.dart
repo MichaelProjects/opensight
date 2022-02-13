@@ -2,8 +2,15 @@ import 'package:dashboard/utils/api/http_client.dart';
 import 'package:dashboard/utils/api/urls.dart';
 
 class ApiClient {
+  static Map<String, String> authHeader = {"Authorization": "Bearer 123123"};
   Future getApplications() async {
     Map response = await HttpClient().get(Urls.getAllApplications);
+    if (response["error"] != true) {}
+    return response["data"];
+  }
+
+  Future getApplication(String appId) async {
+    Map response = await HttpClient().get(Urls.getApplication(appId));
     if (response["error"] != true) {}
     return response["data"];
   }
@@ -22,19 +29,19 @@ class ApiClient {
 
   Future getUserHistory(String appId, int startFrame, int endFrame) async {
     Map response = await HttpClient()
-        .get(Urls.getAnalyseUser(appId, startFrame, endFrame));
+        .get(Urls.getAnalyseUser(appId, startFrame, endFrame), authHeader);
     return response;
   }
 
   Future getNewUsers(String appId, int startFrame, int endFrame) async {
     Map response = await HttpClient()
-        .get(Urls.getAnalyseNewUser(appId, startFrame, endFrame));
+        .get(Urls.getAnalyseNewUser(appId, startFrame, endFrame), authHeader);
     return response;
   }
 
   Future getDisplaySize(String appId, int startFrame, int endFrame) async {
-    Map response = await HttpClient()
-        .get(Urls.getAnalyseDisplaySize(appId, startFrame, endFrame));
+    Map response = await HttpClient().get(
+        Urls.getAnalyseDisplaySize(appId, startFrame, endFrame), authHeader);
     return response;
   }
 }

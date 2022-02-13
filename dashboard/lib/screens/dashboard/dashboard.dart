@@ -17,12 +17,16 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+    int start = 1633680415;
+    int end = 1644012430;
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       AnalyticModel analyticsController =
           Provider.of<AnalyticModel>(context, listen: false);
       ApplicationModel appController =
           Provider.of<ApplicationModel>(context, listen: false);
       analyticsController.fetchEntrys(appController.selectedApp.appID);
+      analyticsController.getUserHistory(
+          appController.selectedApp.appID, start, end);
     });
   }
 
@@ -164,7 +168,7 @@ class _DashboardState extends State<Dashboard> {
             child: Builder(builder: (context) {
               switch (analyticsController.analyticsState) {
                 case AnalyticsState.loading:
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 case AnalyticsState.loaded:
                   return LayoutBuilder(builder: (context, constraints) {
                     return GridView.count(
