@@ -22,10 +22,3 @@ pub async fn get_all(host: &String) -> Result<Vec<Application>, Box<dyn Error>> 
     let api_response: ApiResponse = response.json().await?;
     Ok(api_response.data)
 }
-
-
-#[tokio::test]
-async fn get_all_test(){
-    let url ="http://metrics.stackblog.io";
-    let result = get_all(&url.to_string()).await.unwrap();
-}

@@ -18,4 +18,23 @@ class ApiClient {
     Map response = await HttpClient().get(Urls.getAllAnalytics(appId));
     return response;
   }
+  // analytics endpoints
+
+  Future getUserHistory(String appId, int startFrame, int endFrame) async {
+    Map response = await HttpClient()
+        .get(Urls.getAnalyseUser(appId, startFrame, endFrame));
+    return response;
+  }
+
+  Future getNewUsers(String appId, int startFrame, int endFrame) async {
+    Map response = await HttpClient()
+        .get(Urls.getAnalyseNewUser(appId, startFrame, endFrame));
+    return response;
+  }
+
+  Future getDisplaySize(String appId, int startFrame, int endFrame) async {
+    Map response = await HttpClient()
+        .get(Urls.getAnalyseDisplaySize(appId, startFrame, endFrame));
+    return response;
+  }
 }

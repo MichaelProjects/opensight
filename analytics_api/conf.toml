@@ -6,4 +6,4 @@ address = "0.0.0.0"
 opensight_core = "https://app-dev.fynancial.de"
 
 [database]
-connection_string = "postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@app-dev.fynancial.de/postgres"
+connection_string = "postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@127.0.0.1/postgres"
