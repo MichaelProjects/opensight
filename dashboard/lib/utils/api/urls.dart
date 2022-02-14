@@ -30,4 +30,10 @@ class Urls {
     return Uri.parse(
         '$host/analytic/v1/$appid/analyse/display/size?start=$startFrame&end=$endFrame');
   }
+
+  static Uri getSessionLengthHistory(
+      String appid, int startFrame, int endFrame) {
+    return Uri.parse(
+        '$host/analytic/v1/$appid/analyse/user/session?start=$startFrame&end=$endFrame');
+  }
 }

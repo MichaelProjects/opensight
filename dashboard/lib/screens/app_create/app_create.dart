@@ -10,18 +10,18 @@ void createAppDialog(BuildContext context) {
     builder: (BuildContext context) {
       return AlertDialog(
           title: AnimatedContainer(
-              duration: Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 500),
               width: 350,
               height: 350,
               child: Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     SelectableText(
                       "Create application",
                       style: Theme.of(context).textTheme.headline5,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     CreateAppForm(),
                     CancleButton()
                   ],

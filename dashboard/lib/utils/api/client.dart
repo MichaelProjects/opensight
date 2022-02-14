@@ -3,6 +3,7 @@ import 'package:dashboard/utils/api/urls.dart';
 
 class ApiClient {
   static Map<String, String> authHeader = {"Authorization": "Bearer 123123"};
+
   Future getApplications() async {
     Map response = await HttpClient().get(Urls.getAllApplications);
     if (response["error"] != true) {}
@@ -42,6 +43,13 @@ class ApiClient {
   Future getDisplaySize(String appId, int startFrame, int endFrame) async {
     Map response = await HttpClient().get(
         Urls.getAnalyseDisplaySize(appId, startFrame, endFrame), authHeader);
+    return response;
+  }
+
+  Future getSessionLengthHistory(
+      String appId, int startFrame, int endFrame) async {
+    Map response = await HttpClient().get(
+        Urls.getSessionLengthHistory(appId, startFrame, endFrame), authHeader);
     return response;
   }
 }

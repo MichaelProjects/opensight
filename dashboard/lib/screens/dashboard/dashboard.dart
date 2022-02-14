@@ -31,10 +31,25 @@ class _DashboardState extends State<Dashboard> {
           appController.selectedApp.appID, start, end);
       analyticsController.getNewUserHistory(
           appController.selectedApp.appID, start, end);
-      analyticsController.getDisplaySizeMetrics(
+      analyticsController.getSessionLengthHistory(
           appController.selectedApp.appID, start, end);
     });
   }
+
+  var data = [
+    const FlSpot(0, 24),
+    const FlSpot(1, 24),
+    const FlSpot(2, 40),
+    const FlSpot(3, 84),
+    const FlSpot(4, 100),
+    const FlSpot(5, 80),
+    const FlSpot(6, 64),
+    const FlSpot(7, 86),
+    const FlSpot(8, 108),
+    const FlSpot(9, 105),
+    const FlSpot(10, 105),
+    const FlSpot(11, 124),
+  ];
 
   Widget sessionLength = LineChart(
     LineChartData(
@@ -49,18 +64,18 @@ class _DashboardState extends State<Dashboard> {
             gradientTo: const Offset(0.5, 1),
           ),
           spots: [
-            FlSpot(0, 24),
-            FlSpot(1, 24),
-            FlSpot(2, 40),
-            FlSpot(3, 84),
-            FlSpot(4, 100),
-            FlSpot(5, 80),
-            FlSpot(6, 64),
-            FlSpot(7, 86),
-            FlSpot(8, 108),
-            FlSpot(9, 105),
-            FlSpot(10, 105),
-            FlSpot(11, 124),
+            const FlSpot(0, 24),
+            const FlSpot(1, 24),
+            const FlSpot(2, 40),
+            const FlSpot(3, 84),
+            const FlSpot(4, 100),
+            const FlSpot(5, 80),
+            const FlSpot(6, 64),
+            const FlSpot(7, 86),
+            const FlSpot(8, 108),
+            const FlSpot(9, 105),
+            const FlSpot(10, 105),
+            const FlSpot(11, 124),
           ],
         )
       ],
@@ -83,18 +98,18 @@ class _DashboardState extends State<Dashboard> {
             gradientTo: const Offset(0.5, 1),
           ),
           spots: [
-            FlSpot(0, 24),
-            FlSpot(1, 24),
-            FlSpot(2, 40),
-            FlSpot(3, 84),
-            FlSpot(4, 100),
-            FlSpot(5, 80),
-            FlSpot(6, 64),
-            FlSpot(7, 86),
-            FlSpot(8, 108),
-            FlSpot(9, 105),
-            FlSpot(10, 105),
-            FlSpot(11, 124),
+            const FlSpot(0, 24),
+            const FlSpot(1, 24),
+            const FlSpot(2, 40),
+            const FlSpot(3, 84),
+            const FlSpot(4, 100),
+            const FlSpot(5, 80),
+            const FlSpot(6, 64),
+            const FlSpot(7, 86),
+            const FlSpot(8, 108),
+            const FlSpot(9, 105),
+            const FlSpot(10, 105),
+            const FlSpot(11, 124),
           ],
         )
       ],
@@ -106,7 +121,7 @@ class _DashboardState extends State<Dashboard> {
 
   Widget pieChart = PieChart(
     PieChartData(sections: [PieChartSectionData()]),
-    swapAnimationDuration: Duration(milliseconds: 150), // Optional
+    swapAnimationDuration: const Duration(milliseconds: 150), // Optional
     swapAnimationCurve: Curves.linear, // Optional
   );
 
@@ -132,7 +147,6 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     AnalyticModel analyticsController = Provider.of<AnalyticModel>(context);
-    print(analyticsController.analyticsState);
     return topOverlay.Overlay(
         child: SizedBox(
             height: size.height - topbarHeight,
@@ -156,17 +170,22 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         ChartWrapper(
                             title: "Active Users",
+                            loading:
+                                isLoading(analyticsController.userHistoryState),
                             child: LineChartCard(
-                                "Users", analyticsController.userHistoryData)),
+                                AnaylticsStorage.userHistoryData)),
                         ChartWrapper(
                             title: "New User",
+                            loading:
+                                isLoading(analyticsController.newUserState),
+                            child: LineChartCard(AnaylticsStorage.newUserData)),
+                        ChartWrapper(
+                            title: "Session Length",
+                            loading: isLoading(
+                                analyticsController.sessionHistoryState),
                             child: LineChartCard(
-                                "abc", analyticsController.userHistoryData)),
-                        Card(
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 18, top: 18, bottom: 18),
-                                child: sessionLength)),
+                              data,
+                            )),
                         Card(
                             child: Padding(
                                 padding: const EdgeInsets.only(
@@ -190,4 +209,11 @@ class _DashboardState extends State<Dashboard> {
               }
             })));
   }
+}
+
+bool isLoading(AnalyticsState state) {
+  if (state != AnalyticsState.loaded) {
+    return true;
+  }
+  return false;
 }
