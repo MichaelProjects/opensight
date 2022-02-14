@@ -26,7 +26,7 @@ use crate::db::*;
 use crate::settings::Settings;
 use diesel::prelude::*;
 use handler::{get_health, insert_entry, update_session, get_sessions};
-use analyse_handler::{get_analyse_new_user, get_analyse_data, get_analyse_user, get_device_display};
+use analyse_handler::{get_analyse_new_user, get_analyse_data, get_analyse_user, get_analyse_session_length, get_device_display};
 use rocket::figment::Figment;
 use rocket::Build;
 use rocket_sync_db_pools::rocket::Rocket;
@@ -53,7 +53,7 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
         .manage(conf)
         .mount(
             "/analytic/v1",
-            routes![insert_entry, update_session, get_health, get_sessions, get_analyse_new_user, get_analyse_data, get_analyse_user, get_device_display],
+            routes![insert_entry, update_session, get_health, get_sessions, get_analyse_new_user, get_analyse_data, get_analyse_user, get_analyse_session_length, get_device_display],
         )
 }
 

@@ -1,3 +1,5 @@
+use std::ops::Index;
+
 use crate::analytics::AnalyticEntry;
 use serde::Serialize;
 
@@ -47,11 +49,43 @@ pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>) -> Vec<DayData> {
     }
     days
 }
+fn get_day_from_timestamp(timestamp_string: String) -> String{
+    let time = timestamp_string.split(" ").collect::<Vec<&str>>();
+    time[0].to_string()
+}
+
+pub async fn calc_average_session_length(entrys: Vec<AnalyticEntry>) -> Vec<DayData>  {
+    println!("{:?}",entrys);
+    let mut days: Vec<DayData> = vec![];
+    let mut total:i32 = 0;
+    if entrys.len() == 0 {
+        return vec![];
+    }
+    let mut before: String = get_day_from_timestamp(entrys.index(0).creation_time.to_string());
+    let mut entry_count = 0;
+    for entry in entrys.iter() {
+        let key = get_day_from_timestamp(entry.creation_time.to_string());
+        if key.ne(before.as_str()) {
+            days.push(DayData {
+                day: key.clone(),
+                counter: (total / entry_count as i32) as i64,
+            });
+            before = key;
+            total = 0;
+            total += entry.last_session
+        } else {
+            total += entry.last_session;
+        }
+        println!("{}", total);
+        entry_count+=1
+    }
+    days
+}
 
 mod tests {
     use rocket::tokio;
     use chrono::naive::NaiveDateTime;
-    use crate::analyse::{AnalyticEntry, sort_data_to_day, display_sizes};
+    use crate::analyse::{AnalyticEntry, sort_data_to_day, display_sizes, calc_average_session_length};
     fn get_data() -> Vec<AnalyticEntry> {
         let raw_data = vec![
             AnalyticEntry {
@@ -62,7 +96,7 @@ mod tests {
                 device_size: "1.0".to_string(),
                 new_user: true,
                 country: "1".to_string(),
-                last_session: 1,
+                last_session: 1000,
                 device_type: "1".to_string(),
                 version: "1".to_string(),
             },
@@ -74,7 +108,7 @@ mod tests {
                 device_size: "1".to_string(),
                 new_user: true,
                 country: "1".to_string(),
-                last_session: 1,
+                last_session: 50,
                 device_type: "1".to_string(),
                 version: "1".to_string(),
             },
@@ -94,6 +128,12 @@ mod tests {
     async fn test_device_size_func(){
         let data = get_data();
         let result = display_sizes(data).await;
+        println!("{:?}", result);
+    }
+    #[tokio::test]
+    async fn test_calc_average_session_length(){
+        let data = get_data();
+        let result = calc_average_session_length(data).await;
         println!("{:?}", result);
     }
 }

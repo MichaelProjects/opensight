@@ -3,7 +3,7 @@ use rocket::State;
 use rocket::http::Status;
 use rocket::request::{Outcome, Request, FromRequest};
 use serde_json::json;
-use crate::analyse::{sort_data_to_day, display_sizes, DayData};
+use crate::analyse::{sort_data_to_day, display_sizes, calc_average_session_length, DayData};
 use crate::analytics;
 use crate::application::Application;
 use crate::db::AnalyticsDB;
@@ -81,6 +81,29 @@ pub(crate) async fn get_analyse_user(
     
 }
 
+#[get("/<application_id>/analyse/user/session?<start>&<end>")]
+pub(crate) async fn get_analyse_session_length(
+    conn: AnalyticsDB,
+    application_id: String, 
+    key: ApiKey<'_>, 
+    start: Option<i64>, 
+    end: Option<i64>) -> ApiResponse{
+    println!("{:?}", &key);
+    vaildate_key(key.0, &application_id).await;
+    let start = NaiveDateTime::from_timestamp(start.unwrap(), 0);
+    let end = NaiveDateTime::from_timestamp(end.unwrap(), 0);
+    let entry_data = match analytics::get_newuser_in_timeframe(application_id, conn, start, end).await{
+        Ok(entries) => entries,
+        Err(_) => {
+            return ApiResponse::new(Status::BadRequest, json!({
+                "error": "Could not get entries"
+            }));
+        }
+    };
+    let processed_data: Vec<DayData> = calc_average_session_length(entry_data).await;
+    ApiResponse::new(Status::Ok, json!({"data": processed_data}))
+    
+}
 
 #[get("/<application_id>/analyse/user/new?<start>&<end>")]
 pub(crate) async fn get_analyse_new_user(
@@ -105,6 +128,7 @@ pub(crate) async fn get_analyse_new_user(
     ApiResponse::new(Status::Ok, json!({"data": processed_data}))
     
 }
+
 
 #[get("/<application_id>/analyse/device/display?<start>&<end>")]
 pub(crate) async fn get_device_display(

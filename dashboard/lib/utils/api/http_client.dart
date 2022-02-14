@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/browser_client.dart';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
 
 Map buildResponse(bool error, String message, Map data) {
   //! Builds an internal response object, this is a structed way to pass data
@@ -14,7 +13,8 @@ class HttpClient {
 
   Future<Map> get(Uri uri, [Map<String, String>? headers]) async {
     //! get request wrapper, returns a map with the response details
-    http.Response response = await http.get(uri).timeout(standartTimeOut);
+    http.Response response = await http.get(uri,
+        headers: {"Authorization": "Bearer 122"}).timeout(standartTimeOut);
     if (response.statusCode == 200) {
       return buildResponse(false, "", jsonDecode(response.body));
     }
