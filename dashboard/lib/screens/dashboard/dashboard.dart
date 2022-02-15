@@ -36,21 +36,6 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  var data = [
-    const FlSpot(0, 24),
-    const FlSpot(1, 24),
-    const FlSpot(2, 40),
-    const FlSpot(3, 84),
-    const FlSpot(4, 100),
-    const FlSpot(5, 80),
-    const FlSpot(6, 64),
-    const FlSpot(7, 86),
-    const FlSpot(8, 108),
-    const FlSpot(9, 105),
-    const FlSpot(10, 105),
-    const FlSpot(11, 124),
-  ];
-
   Widget sessionLength = LineChart(
     LineChartData(
       lineBarsData: [
@@ -170,37 +155,40 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         ChartWrapper(
                             title: "Active Users",
+                            data: analyticsController.userHistoryData,
                             loading:
                                 isLoading(analyticsController.userHistoryState),
                             child: LineChartCard(
-                                AnaylticsStorage.userHistoryData)),
+                              analyticsController.userHistoryData,
+                            )),
                         ChartWrapper(
                             title: "New User",
-                            loading:
-                                isLoading(analyticsController.newUserState),
-                            child: LineChartCard(AnaylticsStorage.newUserData)),
-                        ChartWrapper(
-                            title: "Session Length",
+                            data: analyticsController.sessionLengthHistoryData,
                             loading: isLoading(
                                 analyticsController.sessionHistoryState),
                             child: LineChartCard(
-                              data,
+                              analyticsController.sessionLengthHistoryData,
                             )),
-                        Card(
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 18, top: 18, bottom: 18),
-                                child: appVersions)),
-                        Card(
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 18, top: 18, bottom: 18),
-                                child: pieChart)),
-                        Card(
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 18, top: 18, bottom: 18),
-                                child: screenSizes)),
+                        // ChartWrapper(
+                        //     title: "Session Length",
+                        //     loading: isLoading(
+                        //         analyticsController.sessionHistoryState),
+                        //     child: LineChartCard()),
+                        // Card(
+                        //     child: Padding(
+                        //         padding: const EdgeInsets.only(
+                        //             right: 18, top: 18, bottom: 18),
+                        //         child: appVersions)),
+                        // Card(
+                        //     child: Padding(
+                        //         padding: const EdgeInsets.only(
+                        //             right: 18, top: 18, bottom: 18),
+                        //         child: pieChart)),
+                        // Card(
+                        //     child: Padding(
+                        //         padding: const EdgeInsets.only(
+                        //             right: 18, top: 18, bottom: 18),
+                        //         child: screenSizes)),
                       ],
                     );
                   });

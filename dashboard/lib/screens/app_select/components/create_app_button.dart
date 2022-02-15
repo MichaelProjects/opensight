@@ -23,13 +23,6 @@ class _CreateAppState extends State<CreateApp> {
         height: 103,
         width: 200,
         decoration: BoxDecoration(
-          boxShadow: [
-            const BoxShadow(
-                spreadRadius: 0.8,
-                blurRadius: 3,
-                offset: const Offset(0, 1),
-                color: Colors.grey)
-          ],
           color: widgetColor,
           borderRadius: BorderRadius.circular(5),
         ),

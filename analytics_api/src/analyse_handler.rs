@@ -92,7 +92,7 @@ pub(crate) async fn get_analyse_session_length(
     vaildate_key(key.0, &application_id).await;
     let start = NaiveDateTime::from_timestamp(start.unwrap(), 0);
     let end = NaiveDateTime::from_timestamp(end.unwrap(), 0);
-    let entry_data = match analytics::get_newuser_in_timeframe(application_id, conn, start, end).await{
+    let entry_data = match analytics::get_timeframe_entries(application_id, conn, start, end).await{
         Ok(entries) => entries,
         Err(_) => {
             return ApiResponse::new(Status::BadRequest, json!({

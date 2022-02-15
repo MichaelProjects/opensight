@@ -12,7 +12,7 @@ class _ExploreState extends State<Explore> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       height: size.height - topbarHeight,
       width: size.width - sidebarWidth,
     );

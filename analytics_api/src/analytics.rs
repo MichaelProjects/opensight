@@ -19,7 +19,7 @@ pub struct AnalyticData {
     pub device_size: String,
     pub new_user: bool,
     pub country: String,
-    pub last_session: i32,
+    pub session_length: i32,
     pub device_type: String,
     pub version: String,
 }
@@ -39,7 +39,7 @@ pub struct AnalyticEntry {
     pub device_size: String,
     pub new_user: bool,
     pub country: String,
-    pub last_session: i32,
+    pub session_length: i32,
     pub device_type: String,
     pub version: String, // here should come _ features: Vec<String>
 }
@@ -53,7 +53,7 @@ impl AnalyticEntry {
             device_size: data.device_size,
             new_user: data.new_user,
             country: data.country,
-            last_session: data.last_session,
+            session_length: data.session_length,
             device_type: data.device_type,
             version: data.version,
         }

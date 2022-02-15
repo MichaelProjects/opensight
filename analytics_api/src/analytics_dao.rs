@@ -2,7 +2,7 @@ use super::schema::analytics;
 use crate::analytics::AnalyticEntry;
 use crate::dao::Dao;
 use crate::db::AnalyticsDB;
-use crate::schema::analytics::columns::{last_session, session_id};
+use crate::schema::analytics::columns::{session_length, session_id};
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl, BoolExpressionMethods};
 use log::debug;
 use chrono::{NaiveDateTime, Utc};
@@ -32,7 +32,7 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao {
     /// using the [session_id] and returns the result of that operation.
     fn update_entry(&self, id: &str, update: i32, conn: &mut PgConnection) {
         let _result = diesel::update(analytics::table.filter(session_id.eq(id)))
-            .set(last_session.eq(update))
+            .set(session_length.eq(update))
             .get_result::<AnalyticEntry>(conn)
             .expect("");
     }

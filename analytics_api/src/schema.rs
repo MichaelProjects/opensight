@@ -7,7 +7,7 @@ table! {
         device_size -> Text,
         new_user -> Bool,
         country -> Text,
-        last_session -> Int4,
+        session_length -> Int4,
         device_type -> Text,
         version -> Text,
     }

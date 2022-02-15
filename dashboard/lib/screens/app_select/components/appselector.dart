@@ -35,17 +35,19 @@ class _AppSelectorState extends State<AppSelector> {
                   child: ListView.builder(
                     itemCount: appController.apps.length,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                          onHover: (value) {},
-                          onTap: () {
-                            appController
-                                .setCurrentApp(appController.apps[index]);
-                            Routemaster.of(context).push(
-                                '/dashboard/${appController.apps[index].appID}');
-                          },
-                          child: Appdetails(
-                            app: appController.apps[index],
-                          ));
+                      return Container(
+                          height: 110,
+                          child: InkWell(
+                              onHover: (value) {},
+                              onTap: () {
+                                appController
+                                    .setCurrentApp(appController.apps[index]);
+                                Routemaster.of(context).push(
+                                    '/dashboard/${appController.apps[index].appID}');
+                              },
+                              child: Appdetails(
+                                app: appController.apps[index],
+                              )));
                     },
                   ),
                 );

@@ -72,9 +72,9 @@ pub async fn calc_average_session_length(entrys: Vec<AnalyticEntry>) -> Vec<DayD
             });
             before = key;
             total = 0;
-            total += entry.last_session
+            total += entry.session_length
         } else {
-            total += entry.last_session;
+            total += entry.session_length;
         }
         println!("{}", total);
         entry_count+=1
@@ -96,7 +96,7 @@ mod tests {
                 device_size: "1.0".to_string(),
                 new_user: true,
                 country: "1".to_string(),
-                last_session: 1000,
+                session_length: 1000,
                 device_type: "1".to_string(),
                 version: "1".to_string(),
             },
@@ -108,7 +108,7 @@ mod tests {
                 device_size: "1".to_string(),
                 new_user: true,
                 country: "1".to_string(),
-                last_session: 50,
+                session_length: 50,
                 device_type: "1".to_string(),
                 version: "1".to_string(),
             },
