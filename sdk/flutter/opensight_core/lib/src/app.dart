@@ -10,7 +10,7 @@ class OpensightCore {
     required this.transport,
   });
 
-  /// [OpensightAnalytics] is the public api for this plugin, it is simple to implement just call [OpensightSDK.initApp] and the function takes your config.
+  /// [OpensightCore] is the public api for this plugin, it is simple to implement just call [OpensightCore.initApp] and the function takes your config.
   ///
   /// example:
   ///

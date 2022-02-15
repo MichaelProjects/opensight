@@ -1,19 +1,11 @@
-CREATE TABLE if not exists opensight_user
+CREATE TABLE if not exists users
 (
- userid        text NOT NULL,
+ userid        text primary key,
  group_id      text NOT NULL,
  username      text NOT NULL,
  email         text NOT NULL,
  password      text NOT NULL,
- creation_time timestamp NOT NULL,
- CONSTRAINT PK_user PRIMARY KEY ( userid, group_id ),
- CONSTRAINT FK_178 FOREIGN KEY ( group_id ) REFERENCES user_group ( group_id )
+ creation_time timestamp NOT NULL
 );
-
-CREATE INDEX FK_180 ON opensight_user
-(
- group_id
-);
-
 
 

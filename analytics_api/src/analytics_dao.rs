@@ -2,8 +2,8 @@ use super::schema::analytics;
 use crate::analytics::AnalyticEntry;
 use crate::dao::Dao;
 use crate::db::AnalyticsDB;
-use crate::schema::analytics::columns::{session_length, session_id};
-use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl, BoolExpressionMethods};
+use crate::schema::analytics::columns::{session_id};
+use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 use log::debug;
 use chrono::{NaiveDateTime, Utc};
 
@@ -28,15 +28,6 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao {
             .expect("could not find entry");
     }
 
-    /// [update_entry] function in analytics dao is used to update the [session_length]
-    /// using the [session_id] and returns the result of that operation.
-    fn update_entry(&self, id: &str, update: i32, conn: &mut PgConnection) {
-        let _result = diesel::update(analytics::table.filter(session_id.eq(id)))
-            .set(session_length.eq(update))
-            .get_result::<AnalyticEntry>(conn)
-            .expect("");
-    }
-
     fn get_entry(&self, _id: &str, _conn: &mut PgConnection) -> AnalyticEntry {
         todo!()
     }
@@ -47,6 +38,17 @@ impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao {
             .expect("Entrys");
         return response;
     }
+
+    fn update_entry(&self, id: &str, update: i32, conn: &mut PgConnection) {
+        todo!()
+    }
+}
+
+pub fn insert_entry(data: AnalyticEntry, conn: &mut PgConnection) -> QueryResult<AnalyticEntry> {
+    let response: QueryResult<AnalyticEntry> = diesel::insert_into(analytics::table)
+        .values(&data)
+        .get_result(conn);
+    return response
 }
 
 pub async fn get_all<'a>(app_id: String, conn: AnalyticsDB) -> Vec<AnalyticEntry>  {

@@ -55,7 +55,6 @@ class Collection {
       "device_size": deviceSize,
       "new_user": newUser,
       "country": country,
-      "last_session": lastSession,
       "device_type": deviceType,
       "version": version
     };

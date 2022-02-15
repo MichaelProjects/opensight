@@ -13,8 +13,11 @@ class OpensightAnalytics {
   Future initApp(Map configData) async {
     OpensightCore app = OpensightCore.initApp(configData);
     Collection data = await Collection.collect();
-    await app.transport.dispatchData(
+    Map response = await app.transport.dispatchData(
         data.prepareToSend(), "/analytic/v1/${app.appDetails.appId}/session");
-    tracking();
+    if (response != {}) {
+      Session.id = response["session_id"];
+    }
+    tracking(app);
   }
 }

@@ -1,16 +1,29 @@
 import 'dart:isolate';
 
+import 'package:opensight_core/opensight_core.dart';
+
 import 'persistence.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
 
-int trackIntervall = 5;
+int trackIntervall = 15;
 
 class Session {
   /// [Session] is used to count teh session length and later add more features to it.
+  static String id = "";
   int length = 0;
 
   void increaseLength() {
     length += trackIntervall;
+  }
+
+  void sendUpdate(OpensightCore app, int length) {
+    Map<String, dynamic> payload = {
+      "session_id": Session.id,
+      "length": length,
+    };
+    print(payload);
+    app.transport
+        .updateData(payload, "/analytic/v1/${app.appDetails.appId}/session");
   }
 
   int store() {
@@ -20,11 +33,11 @@ class Session {
 
 /// the [trackIntervall] in which distance the data will be written to the disk or storage
 startTracking(SendPort sendPort) async {
-  var session = Session();
+  Session session = Session();
   while (true) {
     await Future.delayed(Duration(seconds: trackIntervall));
     session.increaseLength();
-    await PresistencesLayer().storeSession(session);
+    sendPort.send({"event": "UPDATE_SESSION", "data": session.length});
   }
 }
 
@@ -36,7 +49,12 @@ Future sendReceive(SendPort port, msg) {
 
 /// if [tracking] is called, the function will create an isolate and
 /// start an endless loop to write down the past time
-tracking() async {
+tracking(OpensightCore app) async {
   ReceivePort receivePort = ReceivePort();
+  receivePort.listen((message) {
+    if (message["event"] == "UPDATE_SESSION") {
+      Session().sendUpdate(app, message["data"]);
+    }
+  });
   await FlutterIsolate.spawn(startTracking, receivePort.sendPort);
 }

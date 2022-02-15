@@ -1,17 +1,18 @@
 /// As you can see, in this file are the non admin Rest-Endpoints.
 /// These Endpoints are used to collect/recieve data from the clients using the Opensight SDK's.
-use crate::analytics::{AnalyticData, AnalyticEntry, SessionUpdate, self};
+use crate::analytics::{self, AnalyticData, AnalyticEntry};
 use crate::analytics_dao::AnalyticsDao;
 use crate::application::Application;
+use crate::dao::Dao;
 use crate::db::AnalyticsDB;
 use crate::health;
 use crate::response::ApiResponse;
+use crate::session_dao::{self, SessionIn};
 use crate::settings::Settings;
-use rocket::State;
 use rocket::http::Status;
 use rocket::serde::json::Json;
+use rocket::State;
 use serde_json::json;
-use crate::dao::Dao;
 
 #[get("/health")]
 pub(crate) async fn get_health(_conn: AnalyticsDB) -> Json<health::Health> {
@@ -26,11 +27,12 @@ pub(crate) async fn insert_entry(
     analytics: Json<AnalyticData>,
 ) -> ApiResponse {
     let mut found = false;
-    let apps = match Application::get_all(&settings).await{
+    let apps = match Application::get_all(&settings).await {
         Ok(app) => app,
         Err(err) => {
             println!("{}", err);
-            return  ApiResponse::new(Status::InternalServerError, json!({}))}
+            return ApiResponse::new(Status::InternalServerError, json!({}));
+        }
     };
     for x in apps.iter() {
         if x.application_id == application_id {
@@ -38,19 +40,22 @@ pub(crate) async fn insert_entry(
         }
     }
     if !found {
-        return ApiResponse::new(Status::NotFound, json!({"":""}));
+        return ApiResponse::new(Status::NotFound, json!({"error":"Application not found"}));
     }
     let analytic_entry = AnalyticEntry::new(analytics.into_inner(), application_id);
-    let _result = conn.run(|c| analytic_entry.insert_entry(c)).await;
-    ApiResponse::new(Status::Ok, json!({"":""}))
+    let session = session_dao::Session::from_analytic_entry(&analytic_entry);
+    match analytics::insert_entry(analytic_entry, session, conn).await {
+        Ok(response) => ApiResponse::new(Status::Ok, response),
+        Err(err) => ApiResponse::new( Status::InternalServerError, json!({"error":"An error occured"})),
+    }
 }
 
-#[patch("/<application_id>/session", data = "<session_update>")]
+#[patch("/<application_id>/session", data = "<new_data>")]
 pub(crate) async fn update_session(
     conn: AnalyticsDB,
     application_id: String,
     settings: &State<Settings>,
-    session_update: Json<SessionUpdate>,
+    new_data: Json<SessionIn>,
 ) -> Status {
     let mut found = false;
     let apps: Vec<Application> = Application::get_all(settings).await.unwrap();
@@ -62,23 +67,14 @@ pub(crate) async fn update_session(
     if !found {
         return Status::NotFound;
     }
-    let dao = AnalyticsDao::new();
-    let _result = conn
-        .run(move |c| {
-            dao.update_entry(
-                session_update.session_id.as_str().clone(),
-                session_update.session_length.clone(),
-                c,
-            )
-        })
-        .await;
-    Status::Accepted
+    match session_dao::update_session(new_data.session_id.clone() ,new_data.length.clone(), conn).await{
+        Ok(_) => Status::Ok,
+        Err(_) => Status::InternalServerError,
+    }
 }
 
 #[get("/<application_id>/session")]
-pub(crate) async fn get_sessions(
-    conn: AnalyticsDB,
-    application_id: String) -> ApiResponse {
+pub(crate) async fn get_sessions(conn: AnalyticsDB, application_id: String) -> ApiResponse {
     let sessions: Vec<AnalyticEntry> = analytics::get_all_entries(application_id, conn).await;
-    ApiResponse::new(Status::Ok, json!({"sessions": sessions}))
+    ApiResponse::new(Status::Ok, json!({ "sessions": sessions }))
 }

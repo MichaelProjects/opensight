@@ -7,7 +7,6 @@ table! {
         device_size -> Text,
         new_user -> Bool,
         country -> Text,
-        session_length -> Int4,
         device_type -> Text,
         version -> Text,
     }
@@ -36,6 +35,15 @@ table! {
 }
 
 table! {
+    sessions (id) {
+        id -> Text,
+        application_id -> Text,
+        length -> Int4,
+        start_time -> Timestamp,
+    }
+}
+
+table! {
     user_group (group_id) {
         group_id -> Text,
         name -> Text,
@@ -48,5 +56,6 @@ allow_tables_to_appear_in_same_query!(
     analytics,
     applications,
     opensight_user,
+    sessions,
     user_group,
 );

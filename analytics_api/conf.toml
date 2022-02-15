@@ -3,7 +3,7 @@ debug = true
 log_file = ""
 port = 28018
 address = "0.0.0.0"
-opensight_core = "https://app-dev.fynancial.de"
+opensight_core = "http://localhost:28019"
 
 [database]
-connection_string = "postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@app-dev.fynancial.de/postgres"
+connection_string = "postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@localhost/postgres"

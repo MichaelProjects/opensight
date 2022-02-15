@@ -21,6 +21,7 @@ mod settings;
 mod response;
 mod analyse_handler;
 mod analyse;
+mod session_dao;
 
 use crate::db::*;
 use crate::settings::Settings;

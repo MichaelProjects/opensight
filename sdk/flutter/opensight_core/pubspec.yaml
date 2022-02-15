@@ -1,6 +1,6 @@
 name: opensight_core
 description: Simply get to know your Users, without compromising their privacy. Opensight Core SDK implementation in Flutter.
-version: 0.1.0
+version: 0.1.3
 homepage: https://opensight.io
 repository: https://github.com/MichaelProjects/opensightSDK
 issue_tracker: https://github.com/MichaelProjects/opensightSDK/issues

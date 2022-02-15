@@ -14,7 +14,7 @@ dependencies:
   uuid: ^3.0.4
   flutter_isolate: ^2.0.0
   shared_preferences: ^2.0.7
-  opensight_core: ^0.1.0
+  opensight_core: ^0.1.3
   flutter:
     sdk: flutter
 dev_dependencies:

@@ -3,12 +3,14 @@ extern crate diesel;
 use std::error::Error;
 
 use super::schema::analytics;
-use crate::analytics_dao;
+use crate::session_dao::Session;
+use crate::{analytics_dao, session_dao};
 use crate::{analytics_dao::AnalyticsDao, db::AnalyticsDB};
 use crate::dao::Dao;
 use chrono::NaiveDateTime;
 use diesel::PgConnection;
 use serde::{Deserialize, Serialize};
+use serde_json::{Value, json};
 use uuid::Uuid;
 
 #[derive(Deserialize)]
@@ -19,14 +21,8 @@ pub struct AnalyticData {
     pub device_size: String,
     pub new_user: bool,
     pub country: String,
-    pub session_length: i32,
     pub device_type: String,
     pub version: String,
-}
-#[derive(Deserialize, Debug)]
-pub struct SessionUpdate {
-    pub session_id: String,
-    pub session_length: i32,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Queryable, AsChangeset, Insertable)]
@@ -39,7 +35,6 @@ pub struct AnalyticEntry {
     pub device_size: String,
     pub new_user: bool,
     pub country: String,
-    pub session_length: i32,
     pub device_type: String,
     pub version: String, // here should come _ features: Vec<String>
 }
@@ -53,17 +48,16 @@ impl AnalyticEntry {
             device_size: data.device_size,
             new_user: data.new_user,
             country: data.country,
-            session_length: data.session_length,
             device_type: data.device_type,
             version: data.version,
         }
     }
-    pub fn insert_entry(self, conn: &mut PgConnection) -> bool {
-        let dao = AnalyticsDao::new();
-        dao.insert_entry(self, conn);
-        let _successful = true;
-        true
-    }
+}
+
+pub async fn insert_entry(data: AnalyticEntry , session_data: Session, conn: AnalyticsDB) -> Result<Value, Box<dyn Error>> {
+    let result =  conn.run(|c| analytics_dao::insert_entry(data, c)).await?;
+    let response = conn.run(|c| session_dao::create_session(session_data, c)).await?;
+    Ok(json!({"session_id": response.id}))
 }
 
 pub async fn get_all_entries(app_id: String, conn: AnalyticsDB) -> Vec<AnalyticEntry> {
@@ -80,3 +74,4 @@ pub async fn get_newuser_in_timeframe(app_id: String, conn: AnalyticsDB, start: 
     let result = analytics_dao::get_newuser_in_timeframe(app_id, conn, start, end).await?;
     Ok(result)
 }
+
