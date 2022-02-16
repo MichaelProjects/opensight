@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/opensight_analytics.iml" filepath="$PROJECT_DIR$/opensight_analytics.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android/opensight_analytics_android.iml" filepath="$PROJECT_DIR$/android/opensight_analytics_android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example/android/opensight_analytics_example_android.iml" filepath="$PROJECT_DIR$/example/android/opensight_analytics_example_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/opensight_analytics.iml" filepath="$PROJECT_DIR$/.idea/opensight_analytics.iml" />
     </modules>
   </component>
 </project>

@@ -28,11 +28,26 @@ public class SwiftOpensightAnalyticsPlugin: NSObject, FlutterPlugin {
             break
         case "getDeviceType":
             result(getDeviceType())
+        case "isAppInBackground":
+            result(isAppInBackground())
         default:
             result("Not Implemented")
         }
     }
     
+}
+public enum State : Int {
+   case active
+   case inactive
+   case background
+}
+public func isAppInBackground() -> Bool {
+    
+    let state = UIApplication.shared.applicationState
+if state == .background {
+   return true
+}
+return false
 }
 
 public func getLangCode() -> String {

@@ -1,6 +1,8 @@
 package io.opensight.analytics.opensight_analytics
 
 import android.app.Activity
+import android.app.ActivityManager
+import android.app.ActivityManager.RunningAppProcessInfo
 import androidx.annotation.NonNull
 import android.content.Context
 import android.util.DisplayMetrics
@@ -74,6 +76,10 @@ class OpensightAnalyticsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware 
         val deviceType: String = getPhoneDeviceName()
         result.success(deviceType)
       }
+      "isAppInBackground" -> {
+        val background: Boolean = getApplicationState()
+        return result.success(background)
+      }
       else -> {
         result.notImplemented()
       }
@@ -123,4 +129,13 @@ public fun getAppVersion(context: Context):String {
 fun getPhoneDeviceName():String {
   val model = Build.MODEL // returns model name
   return model;
+}
+
+
+
+fun getApplicationState(): Boolean {
+  val myProcess = RunningAppProcessInfo()
+  ActivityManager.getMyMemoryState(myProcess)
+  val isInBackground: Boolean = myProcess.importance !== RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+  return isInBackground
 }

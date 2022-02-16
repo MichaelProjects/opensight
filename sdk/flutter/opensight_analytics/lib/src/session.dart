@@ -1,11 +1,12 @@
 import 'dart:isolate';
 
+import 'package:opensight_analytics/src/nativlayer.dart';
 import 'package:opensight_core/opensight_core.dart';
 
 import 'persistence.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
 
-int trackIntervall = 15;
+int trackIntervall = 2;
 
 class Session {
   /// [Session] is used to count teh session length and later add more features to it.
@@ -51,10 +52,13 @@ Future sendReceive(SendPort port, msg) {
 /// start an endless loop to write down the past time
 tracking(OpensightCore app) async {
   ReceivePort receivePort = ReceivePort();
-  receivePort.listen((message) {
+  receivePort.listen((message) async {
     if (message["event"] == "UPDATE_SESSION") {
-      Session().sendUpdate(app, message["data"]);
+      print("Disptach update to server");
+      var result = await NativeLayer.isApplicationActive();
+      print(result);
+      //Session().sendUpdate(app, message["data"]);
     }
   });
-  await FlutterIsolate.spawn(startTracking, receivePort.sendPort);
+  FlutterIsolate.spawn(startTracking, receivePort.sendPort);
 }

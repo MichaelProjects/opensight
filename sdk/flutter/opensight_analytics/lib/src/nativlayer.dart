@@ -77,4 +77,15 @@ class NativeLayer {
     }
     return displaySize;
   }
+
+  static Future<bool> isApplicationActive() async {
+    bool isAppActive = true;
+    try {
+      final bool result = await platform.invokeMethod("isAppInBackground");
+      isAppActive = result;
+    } catch (e) {
+      developer.log(e.toString());
+    }
+    return isAppActive;
+  }
 }
