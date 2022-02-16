@@ -38,7 +38,7 @@ startTracking(SendPort sendPort) async {
   Session session = Session();
   while (true) {
     await Future.delayed(Duration(seconds: trackIntervall));
-    session.increaseLength();
+
     sendPort.send({"event": "UPDATE_SESSION", "data": session.length});
   }
 }
