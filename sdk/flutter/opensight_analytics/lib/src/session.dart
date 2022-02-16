@@ -11,6 +11,7 @@ int trackIntervall = 2;
 class Session {
   /// [Session] is used to count teh session length and later add more features to it.
   static String id = "";
+  DateTime startTime = DateTime.now();
   int length = 0;
 
   void increaseLength() {
