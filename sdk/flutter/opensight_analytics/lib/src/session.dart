@@ -2,34 +2,24 @@ import 'dart:isolate';
 
 import 'package:opensight_analytics/src/nativlayer.dart';
 import 'package:opensight_core/opensight_core.dart';
-
-import 'persistence.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
 
 int trackIntervall = 2;
+
+enum SessionState { none, send, resumed }
 
 class Session {
   /// [Session] is used to count teh session length and later add more features to it.
   static String id = "";
   DateTime startTime = DateTime.now();
-  int length = 0;
-
-  void increaseLength() {
-    length += trackIntervall;
-  }
 
   void sendUpdate(OpensightCore app, int length) {
     Map<String, dynamic> payload = {
       "session_id": Session.id,
       "length": length,
     };
-    print(payload);
     app.transport
         .updateData(payload, "/analytic/v1/${app.appDetails.appId}/session");
-  }
-
-  int store() {
-    return length;
   }
 }
 
@@ -38,8 +28,15 @@ startTracking(SendPort sendPort) async {
   Session session = Session();
   while (true) {
     await Future.delayed(Duration(seconds: trackIntervall));
-
-    sendPort.send({"event": "UPDATE_SESSION", "data": session.length});
+    bool result = await NativeLayer.isAppInBackground();
+    print(result);
+    if (result == true) {
+      sendPort.send({
+        "event": "SEND_UPDATE",
+        "start": session.startTime,
+        "end": DateTime.now()
+      });
+    }
   }
 }
 
@@ -54,12 +51,13 @@ Future sendReceive(SendPort port, msg) {
 tracking(OpensightCore app) async {
   ReceivePort receivePort = ReceivePort();
   receivePort.listen((message) async {
-    if (message["event"] == "UPDATE_SESSION") {
-      print("Disptach update to server");
-      var result = await NativeLayer.isApplicationActive();
-      print(result);
+    if (message["event"] == "SEND_UPDATE") {
+      DateTime start = message["start"];
+      DateTime end = message["end"];
+      int length = end.difference(start).inSeconds;
+      print(length);
       //Session().sendUpdate(app, message["data"]);
     }
   });
-  FlutterIsolate.spawn(startTracking, receivePort.sendPort);
+  await FlutterIsolate.spawn(startTracking, receivePort.sendPort);
 }

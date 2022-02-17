@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'session.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+//todo verify user is logged in first time today.
+//todo use app name in the storeKey, so if multiple apps are using opensight there is no data overwirte
+//todo resume session, if there was a 5 min pause.
+//todo clear way to store the session data.
 
 class PresistencesLayer {
   final String storeKey = "io.opensight/";
@@ -21,15 +28,26 @@ class PresistencesLayer {
     pref.setBool(storeKey + "isNewUser", isNew);
   }
 
-  Future<void> storeSession(Session session) async {
+  /// example payload:
+  /// {
+  ///   "session_id": id,
+  ///   "session_start": start,
+  ///   "session_pause": pause,
+  /// }
+  Future<void> storeSession(Map<String, dynamic> session) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    int encodedData = session.store();
-    pref.setInt(storeKey + "sessionData", encodedData);
+    pref.setString(storeKey + "sessionData", jsonEncode(session));
   }
 
-  Future<int?> loadSessions() async {
+  Future<bool?> isFirstSessionToday() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    int? data = pref.getInt(storeKey + "sessionData");
+    bool? result = pref.getBool(storeKey + "isFirstSessionToday");
+    return result;
+  }
+
+  Future<String?> loadSessions() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? data = pref.getString(storeKey + "sessionData");
     return data;
   }
 

@@ -6,7 +6,7 @@ PODS:
     - Flutter
   - opensight_core (0.0.1):
     - Flutter
-  - shared_preferences (0.0.1):
+  - shared_preferences_ios (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -14,7 +14,7 @@ DEPENDENCIES:
   - flutter_isolate (from `.symlinks/plugins/flutter_isolate/ios`)
   - opensight_analytics (from `.symlinks/plugins/opensight_analytics/ios`)
   - opensight_core (from `.symlinks/plugins/opensight_core/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
@@ -25,15 +25,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/opensight_analytics/ios"
   opensight_core:
     :path: ".symlinks/plugins/opensight_core/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_isolate: 0edf5081826d071adf21759d1eb10ff5c24503b5
   opensight_analytics: e8ccddeef2c8a5bdb309a684aa5374d8177edcc4
   opensight_core: e9b2d70088ad48616d84f9bf85ba4b01ec93c0a3
-  shared_preferences: 5033afbb22d372e15aff8ff766df9021b845f273
+  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
