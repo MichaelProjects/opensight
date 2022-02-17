@@ -25,15 +25,29 @@ class ExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: Scaffold(body: Home()));
+    return MaterialApp(home: Home());
   }
 }
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  Home({Key? key}) : super(key: key);
 
   @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int counter = 0;
+  @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("Opensight Demo App"));
+    return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              counter++;
+            });
+          },
+        ),
+        body: Column(children: [Center(child: CircularProgressIndicator()),Center(child: Text("Counter: $counter"))]));
   }
 }

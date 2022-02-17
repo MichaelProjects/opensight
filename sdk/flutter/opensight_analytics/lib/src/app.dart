@@ -11,13 +11,14 @@ class OpensightAnalytics {
   /// Map config_data = {add your config data here}
   /// Opensight_Analytics.initApp(config_data)
   Future initApp(Map configData) async {
+    String sessionId = "";
     OpensightCore app = OpensightCore.initApp(configData);
     Collection data = await Collection.collect();
     Map response = await app.transport.dispatchData(
         data.prepareToSend(), "/analytic/v1/${app.appDetails.appId}/session");
     if (response != {}) {
-      Session.id = response["session_id"];
+      sessionId = response["session_id"];
     }
-    tracking(app);
+    tracking(app, sessionId);
   }
 }

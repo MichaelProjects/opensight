@@ -38,6 +38,7 @@ table! {
     sessions (id) {
         id -> Text,
         application_id -> Text,
+        first_today -> Bool,
         length -> Int4,
         start_time -> Timestamp,
     }
@@ -50,6 +51,17 @@ table! {
     }
 }
 
+table! {
+    users (userid) {
+        userid -> Text,
+        group_id -> Text,
+        username -> Text,
+        email -> Text,
+        password -> Text,
+        creation_time -> Timestamp,
+    }
+}
+
 joinable!(opensight_user -> user_group (group_id));
 
 allow_tables_to_appear_in_same_query!(
@@ -58,4 +70,5 @@ allow_tables_to_appear_in_same_query!(
     opensight_user,
     sessions,
     user_group,
+    users,
 );

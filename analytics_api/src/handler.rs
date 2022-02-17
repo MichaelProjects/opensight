@@ -67,7 +67,7 @@ pub(crate) async fn update_session(
     if !found {
         return Status::NotFound;
     }
-    match session_dao::update_session(new_data.session_id.clone() ,new_data.length.clone(), conn).await{
+    match session_dao::update_session(new_data.session_id.clone() ,new_data.length.clone(), conn, new_data.is_first_today.clone()).await{
         Ok(_) => Status::Ok,
         Err(_) => Status::InternalServerError,
     }

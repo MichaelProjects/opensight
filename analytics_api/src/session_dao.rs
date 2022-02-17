@@ -12,6 +12,7 @@ use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl, BoolExpress
 pub struct SessionIn{
     pub session_id: String,
     pub length: i32,
+    pub is_first_today: bool,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Queryable, AsChangeset, Insertable)]
@@ -19,14 +20,16 @@ pub struct Session {
     pub id: String,
     application_id: String,
     length: i32,
+    first_today: bool,
     start_time: NaiveDateTime,
 }
 impl Session {
-    pub fn new(session_id: String, application_id: String, length: i32, start_time: NaiveDateTime)-> Self {
+    pub fn new(session_id: String, application_id: String, length: i32, start_time: NaiveDateTime, first_today: bool)-> Self {
         Session {
             id: session_id,
             application_id,
             length,
+            first_today,
             start_time
         }
     }
@@ -35,6 +38,7 @@ impl Session {
             id: entry.session_id.clone(),
             application_id: entry.application_id.clone(),
             length: 0,
+            first_today: false,
             start_time: entry.creation_time,
         }
     }
@@ -58,10 +62,10 @@ pub async fn get_session(session_id: String, conn: AnalyticsDB){
         .load::<Session>(c)).await;
 }
 
-pub async fn update_session(id: String, new_length: i32, conn: AnalyticsDB)-> QueryResult<Session>{
+pub async fn update_session(id: String, new_length: i32, conn: AnalyticsDB, first_today: bool)-> QueryResult<Session>{
     let response = conn.run(move |c|
     diesel::update(sessions::table.filter(sessions::id.eq(id)))
-    .set(sessions::length.eq(new_length))
+    .set((sessions::length.eq(new_length), sessions::first_today.eq(first_today)))
     .get_result::<Session>(c)).await;
     return response
 }

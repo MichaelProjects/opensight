@@ -1,21 +1,23 @@
-import 'dart:isolate';
-
 import 'package:opensight_analytics/src/nativlayer.dart';
+import 'package:opensight_analytics/src/persistence.dart';
 import 'package:opensight_core/opensight_core.dart';
-import 'package:flutter_isolate/flutter_isolate.dart';
 
 int trackIntervall = 2;
 
-enum SessionState { none, send, resumed }
+enum SessionState { started, background, resumed }
 
 class Session {
   /// [Session] is used to count teh session length and later add more features to it.
-  static String id = "";
+  String id = "";
+  SessionState state = SessionState.started;
+  // if the app gets resumed the session length from before is stored here to update the session on the server(analytic api) later if the app gets minimized.
+  int resumedLength = 0;
   DateTime startTime = DateTime.now();
+  bool isFirstToday = false;
 
-  void sendUpdate(OpensightCore app, int length) {
+  void sendUpdate(OpensightCore app, int length, String sessionId) {
     Map<String, dynamic> payload = {
-      "session_id": Session.id,
+      "session_id": sessionId,
       "length": length,
     };
     app.transport
@@ -23,41 +25,61 @@ class Session {
   }
 }
 
-/// the [trackIntervall] in which distance the data will be written to the disk or storage
-startTracking(SendPort sendPort) async {
+/// if [tracking] is called, the function will start to track the session length
+/// if the app gets minimized the session length will be stored in [Session.resumedLength]
+/// and will be sent to the server unsing [Session.sendUpdate] call.
+void tracking(OpensightCore app, String sessionId) async {
   Session session = Session();
+  DateTime? lastLogin = await PresistencesLayer().getLastLoginDate();
+  if (lastLogin != null) {
+    session.isFirstToday = checkDate(lastLogin);
+  }
   while (true) {
     await Future.delayed(Duration(seconds: trackIntervall));
     bool result = await NativeLayer.isAppInBackground();
-    print(result);
-    if (result == true) {
-      sendPort.send({
-        "event": "SEND_UPDATE",
-        "start": session.startTime,
-        "end": DateTime.now()
-      });
+    if (result && session.state == SessionState.started) {
+      session.state = SessionState.background;
+      int sessionLength =
+          DateTime.now().difference(session.startTime).inSeconds;
+      session.sendUpdate(app, sessionLength, sessionId);
+    }
+    if (result && session.state == SessionState.resumed) {
+      session.state = SessionState.background;
+      int sessionLength =
+          DateTime.now().difference(session.startTime).inSeconds +
+              session.resumedLength;
+      session.sendUpdate(app, sessionLength, sessionId);
+    }
+    if (!result && session.state == SessionState.background) {
+      DateTime now = DateTime.now();
+
+      // todo this check can be enabled if the create session endpoint is ready
+      //if (now.difference(session.startTime).inSeconds <= 300) {
+
+      int sessionLength =
+          DateTime.now().difference(session.startTime).inSeconds;
+      session.resumedLength = sessionLength;
+      session.startTime = DateTime.now();
+      session.state = SessionState.resumed;
+
+      //} else {
+      // todo for this function is a seperate session create endpoint needed, this should be implemented in the core module in the future.
+      // print("session ended");
+      // int sessionLength =
+      //     DateTime.now().difference(session.startTime).inSeconds;
+      // session.sendUpdate(app, sessionLength, sessionId);
+      // session.state = SessionState.started;
+      //}
     }
   }
 }
 
-Future sendReceive(SendPort port, msg) {
-  ReceivePort response = ReceivePort();
-  port.send([msg, response.sendPort]);
-  return response.first;
-}
-
-/// if [tracking] is called, the function will create an isolate and
-/// start an endless loop to write down the past time
-tracking(OpensightCore app) async {
-  ReceivePort receivePort = ReceivePort();
-  receivePort.listen((message) async {
-    if (message["event"] == "SEND_UPDATE") {
-      DateTime start = message["start"];
-      DateTime end = message["end"];
-      int length = end.difference(start).inSeconds;
-      print(length);
-      //Session().sendUpdate(app, message["data"]);
-    }
-  });
-  await FlutterIsolate.spawn(startTracking, receivePort.sendPort);
+bool checkDate(DateTime toCheck) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final aDate = DateTime(toCheck.year, toCheck.month, toCheck.day);
+  if (aDate == today) {
+    return true;
+  }
+  return false;
 }

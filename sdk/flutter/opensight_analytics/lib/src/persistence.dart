@@ -39,10 +39,20 @@ class PresistencesLayer {
     pref.setString(storeKey + "sessionData", jsonEncode(session));
   }
 
-  Future<bool?> isFirstSessionToday() async {
+  // stores the current Datetime as string
+  Future<void> storeLastLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    bool? result = pref.getBool(storeKey + "isFirstSessionToday");
-    return result;
+    pref.setString(storeKey + "lastLogin", DateTime.now().toString());
+  }
+
+  // gets the last "first today" login.
+  Future<DateTime?> getLastLoginDate() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var lastLogin = pref.getString(storeKey + "lastLogin");
+    if (lastLogin == null) {
+      return null;
+    }
+    return DateTime.parse(lastLogin);
   }
 
   Future<String?> loadSessions() async {

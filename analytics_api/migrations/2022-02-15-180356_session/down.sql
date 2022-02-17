@@ -1,1 +1,1 @@
-DROP TABLE if exists analytics;
+DROP TABLE if exists sessions;

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'persistence.dart';
 import 'nativlayer.dart';
 
@@ -8,7 +10,6 @@ class Collection {
   String deviceSize;
   bool newUser;
   String country;
-  int lastSession;
   String deviceType;
   String version;
 
@@ -17,7 +18,6 @@ class Collection {
       required this.deviceSize,
       required this.newUser,
       required this.country,
-      required this.lastSession,
       required this.deviceType,
       required this.version});
 
@@ -32,7 +32,6 @@ class Collection {
         deviceSize: await NativeLayer.determineDisplaysize(),
         newUser: newUser,
         country: await NativeLayer.determineLangCode(),
-        lastSession: await loadSessionData(),
         deviceType: await NativeLayer.determineDeviceType(),
         version: await NativeLayer.determineAppVersion());
   }
@@ -62,11 +61,11 @@ class Collection {
   }
 }
 
-Future<int> loadSessionData() async {
-  int? data = await PresistencesLayer().loadSessions();
+Future<Map> loadSessionData() async {
+  String? data = await PresistencesLayer().loadSessions();
   if (data != null) {
-    return data;
+    return jsonDecode(data);
   } else {
-    return 0;
+    return {};
   }
 }
