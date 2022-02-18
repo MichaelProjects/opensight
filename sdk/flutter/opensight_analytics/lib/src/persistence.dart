@@ -42,7 +42,7 @@ class PresistencesLayer {
   // stores the current Datetime as string
   Future<void> storeLastLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString(storeKey + "lastLogin", DateTime.now().toString());
+    pref.setString(storeKey + "lastLogin", DateTime.now().toUtc().toString());
   }
 
   // gets the last "first today" login.

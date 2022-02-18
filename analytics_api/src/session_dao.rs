@@ -19,9 +19,9 @@ pub struct SessionIn{
 pub struct Session {
     pub id: String,
     application_id: String,
-    length: i32,
+    pub length: i32,
     is_first_login_today: bool,
-    start_time: NaiveDateTime,
+    pub start_time: NaiveDateTime,
 }
 impl Session {
     pub fn new(session_id: String, application_id: String, length: i32, start_time: NaiveDateTime, is_first_login_today: bool)-> Self {
@@ -67,5 +67,24 @@ pub async fn update_session(id: String, new_length: i32, conn: AnalyticsDB, firs
     diesel::update(sessions::table.filter(sessions::id.eq(id)))
     .set((sessions::length.eq(new_length), sessions::is_first_login_today.eq(first_today)))
     .get_result::<Session>(c)).await;
+    return response
+}
+
+pub async fn get_sessions_in_timeframe(app_id: String, start_time: NaiveDateTime, end_time: NaiveDateTime, conn: AnalyticsDB)-> QueryResult<Vec<Session>> {
+    println!("{}", start_time);
+    println!("{}", end_time);
+    let response = conn.run(move |c| 
+        sessions::table.filter(sessions::application_id.eq(app_id))
+    .filter(sessions::start_time.between(start_time, end_time))
+    .load::<Session>(c)).await;
+    return response;
+}
+
+pub async fn get_session_count_in_timeframe(app_id: String, start_time: NaiveDateTime, end_time: NaiveDateTime, conn: AnalyticsDB)-> QueryResult<Vec<Session>> {
+    let response = conn.run(move |c| 
+        sessions::table.filter(sessions::application_id.eq(app_id))
+        .filter(sessions::start_time.between(start_time, end_time))
+        .filter(sessions::is_first_login_today.eq(true))
+        .load::<Session>(c)).await;
     return response
 }

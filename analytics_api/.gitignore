@@ -3,3 +3,6 @@ Cargo.lock
 conf/
 .idea/
 testing.sh
+app_conf.json
+__pycache__/
+deploy.yml

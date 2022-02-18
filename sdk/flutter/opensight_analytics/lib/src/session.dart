@@ -12,7 +12,7 @@ class Session {
   SessionState state = SessionState.started;
   // if the app gets resumed the session length from before is stored here to update the session on the server(analytic api) later if the app gets minimized.
   int resumedLength = 0;
-  DateTime startTime = DateTime.now();
+  DateTime startTime = DateTime.now().toUtc();
   bool isFirstToday = false;
 
   void sendUpdate(OpensightCore app, int length, String sessionId) {
@@ -42,33 +42,33 @@ void tracking(OpensightCore app, String sessionId) async {
     if (result && session.state == SessionState.started) {
       session.state = SessionState.background;
       int sessionLength =
-          DateTime.now().difference(session.startTime).inSeconds;
+          DateTime.now().toUtc().difference(session.startTime).inSeconds;
       session.sendUpdate(app, sessionLength, sessionId);
     }
     if (result && session.state == SessionState.resumed) {
       session.state = SessionState.background;
       int sessionLength =
-          DateTime.now().difference(session.startTime).inSeconds +
+          DateTime.now().toUtc().difference(session.startTime).inSeconds +
               session.resumedLength;
       session.sendUpdate(app, sessionLength, sessionId);
     }
     if (!result && session.state == SessionState.background) {
-      DateTime now = DateTime.now();
+      DateTime now = DateTime.now().toUtc();
 
       // todo this check can be enabled if the create session endpoint is ready
       //if (now.difference(session.startTime).inSeconds <= 300) {
 
       int sessionLength =
-          DateTime.now().difference(session.startTime).inSeconds;
+          DateTime.now().toUtc().difference(session.startTime).inSeconds;
       session.resumedLength = sessionLength;
-      session.startTime = DateTime.now();
+      session.startTime = DateTime.now().toUtc();
       session.state = SessionState.resumed;
 
       //} else {
       // todo for this function is a seperate session create endpoint needed, this should be implemented in the core module in the future.
       // print("session ended");
       // int sessionLength =
-      //     DateTime.now().difference(session.startTime).inSeconds;
+      //     DateTime.now().toUtc().difference(session.startTime).inSeconds;
       // session.sendUpdate(app, sessionLength, sessionId);
       // session.state = SessionState.started;
       //}
@@ -77,7 +77,7 @@ void tracking(OpensightCore app, String sessionId) async {
 }
 
 bool checkDate(DateTime toCheck) {
-  final now = DateTime.now();
+  final now = DateTime.now().toUtc();
   final today = DateTime(now.year, now.month, now.day);
   final aDate = DateTime(toCheck.year, toCheck.month, toCheck.day);
   if (aDate == today) {

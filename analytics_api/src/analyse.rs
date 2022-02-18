@@ -1,6 +1,6 @@
 use std::ops::Index;
 
-use crate::analytics::AnalyticEntry;
+use crate::{analytics::AnalyticEntry, session_dao::Session};
 use serde::Serialize;
 
 #[derive(Debug, Clone, Serialize)]
@@ -9,6 +9,8 @@ pub struct DayData {
     pub counter: i64,
 }
 
+
+// todo need to be fixed, there is currently an issue
 pub async fn display_sizes(entrys: Vec<AnalyticEntry>) -> Vec<i64> {
     let mut average_screen_size_height = 0;
     let mut average_screen_size_width = 0;
@@ -31,6 +33,7 @@ pub async fn display_sizes(entrys: Vec<AnalyticEntry>) -> Vec<i64> {
 pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>) -> Vec<DayData> {
     let mut days: Vec<DayData> = vec![];
     let mut before: String = String::new();
+
     for entry in entrys.iter() {
         let time = entry.creation_time.to_string();
         let time = time.split(" ").collect::<Vec<&str>>();
@@ -49,13 +52,92 @@ pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>) -> Vec<DayData> {
     }
     days
 }
+
+pub async fn sort_user_to_day<'a>(entrys: Vec<Session>) -> Vec<DayData> {
+    let mut days: Vec<DayData> = vec![];
+    let mut before: String = String::new();
+    
+    for entry in entrys.iter() {
+        let time = entry.start_time.to_string();
+        let time = time.split(" ").collect::<Vec<&str>>();
+        let key = time[0];
+        if key.ne(before.as_str()) {
+            days.push(DayData {
+                day: key.to_string(),
+                counter: 1,
+            });
+            before = key.to_string();
+        } else {
+            days.last_mut()
+                .expect("Could not get last element from vec!")
+                .counter += 1;
+        }
+    }
+    days
+}
+
 fn get_day_from_timestamp(timestamp_string: String) -> String{
     let time = timestamp_string.split(" ").collect::<Vec<&str>>();
     time[0].to_string()
 }
 
-pub async fn calc_average_session_length(data: Vec<AnalyticEntry>) -> Vec<DayData>{
-    return vec![];
+pub async fn calc_average_session_length(data: Vec<Session>) -> Vec<DayData>{
+    let mut days: Vec<DayData> = vec![];
+    let mut before: String = String::new();
+    let mut session_counter = 0;
+    println!("{:?}", &data.len());
+    for session in data.iter(){
+        let day = get_day_from_timestamp(session.start_time.to_string());
+        if day.ne(before.as_str()) {
+            if !days.is_empty(){
+            // before adding a new day, divide the session counter by the session length overall
+            let a = days.last_mut().expect("Could not get last element from vec!");
+            a.counter = a.counter / session_counter;
+            // reset counter
+            session_counter = 0;
+            }
+            before = day.to_string();
+            days.push(DayData {
+                day,
+                counter: session.length as i64});
+        }else{
+            // gets the last day and adds the session length.
+            days.last_mut()
+                .expect("Could not get last element from vec!")
+                .counter += session.length as i64;
+            session_counter += 1;
+        }
+    }
+
+    // quick fix, if only one day or the last day in in data, the session length wont get divided, and returns a false value
+    if !days.is_empty(){
+        // before adding a new day, divide the session counter by the session length overall
+        let a = days.last_mut().expect("Could not get last element from vec!");
+        a.counter = a.counter / session_counter;
+        }
+    days
+}
+
+pub async fn version_analysis(data: Vec<AnalyticEntry>) -> Vec<DayData>{
+    let mut result: Vec<DayData> = vec![];
+    let mut versions = Vec::new();
+    for entry in data.iter(){
+        if !versions.contains(&entry.version){
+            versions.push(entry.version.clone());
+            result.push(DayData{
+                day: entry.version.clone(),
+                counter: 1,
+            });
+        }
+        else{
+            for i in 0..result.len(){
+                if result[i].day == entry.version{
+                    result[i].counter += 1;
+                }
+            }
+        }
+    }
+    result
 }
 
 mod tests {
@@ -107,7 +189,7 @@ mod tests {
     #[tokio::test]
     async fn test_calc_average_session_length(){
         let data = get_data();
-        let result = calc_average_session_length(data).await;
-        println!("{:?}", result);
+        //let result = calc_average_session_length(data).await;
+        //println!("{:?}", result);
     }
 }
