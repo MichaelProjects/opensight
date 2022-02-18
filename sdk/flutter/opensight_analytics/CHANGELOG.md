@@ -1,3 +1,7 @@
+## 0.2.0
+- fixed trackign issues
+- implemented new session tracking
+- updated to new opensight_core
 ## 0.1.0
 - removed all base code like: Transport, Utils, etc.
 - Added opensight_core_sdk for utils.
