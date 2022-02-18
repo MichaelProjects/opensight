@@ -31,11 +31,13 @@ class Session {
 void tracking(OpensightCore app, String sessionId) async {
   Session session = Session();
   DateTime? lastLogin = await PresistencesLayer().getLastLoginDate();
+  // check last login time, if the user has logged in the first time today.
   if (lastLogin != null) {
     session.isFirstToday = checkDate(lastLogin);
   }
   while (true) {
     await Future.delayed(Duration(seconds: trackIntervall));
+    // check if app is in background
     bool result = await NativeLayer.isAppInBackground();
     if (result && session.state == SessionState.started) {
       session.state = SessionState.background;
