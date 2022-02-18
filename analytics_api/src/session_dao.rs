@@ -20,16 +20,16 @@ pub struct Session {
     pub id: String,
     application_id: String,
     length: i32,
-    first_today: bool,
+    is_first_login_today: bool,
     start_time: NaiveDateTime,
 }
 impl Session {
-    pub fn new(session_id: String, application_id: String, length: i32, start_time: NaiveDateTime, first_today: bool)-> Self {
+    pub fn new(session_id: String, application_id: String, length: i32, start_time: NaiveDateTime, is_first_login_today: bool)-> Self {
         Session {
             id: session_id,
             application_id,
             length,
-            first_today,
+            is_first_login_today,
             start_time
         }
     }
@@ -38,7 +38,7 @@ impl Session {
             id: entry.session_id.clone(),
             application_id: entry.application_id.clone(),
             length: 0,
-            first_today: false,
+            is_first_login_today: false,
             start_time: entry.creation_time,
         }
     }
@@ -65,7 +65,7 @@ pub async fn get_session(session_id: String, conn: AnalyticsDB){
 pub async fn update_session(id: String, new_length: i32, conn: AnalyticsDB, first_today: bool)-> QueryResult<Session>{
     let response = conn.run(move |c|
     diesel::update(sessions::table.filter(sessions::id.eq(id)))
-    .set((sessions::length.eq(new_length), sessions::first_today.eq(first_today)))
+    .set((sessions::length.eq(new_length), sessions::is_first_login_today.eq(first_today)))
     .get_result::<Session>(c)).await;
     return response
 }
