@@ -63,14 +63,14 @@ class SampleData:
 
     def update_session_length(self):
         first_session_today = True if random.randint(0, 1) == 0 else False
-        uri = f"http://{SERVER}/analytic/v1/{APPID}/session"
+        uri = f"{SERVER}/analytic/v1/{APPID}/session"
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {TOKEN}"}
         data = {"session_id": self.session_id, "length": random.randint(5, 1000), "is_first_today": first_session_today}
         response = requests.patch(uri, data=json.dumps(data), headers=headers)
             
 
     def send_data(self):
-        uri = f"http://{SERVER}/analytic/v1/{APPID}/session"
+        uri = f"{SERVER}/analytic/v1/{APPID}/session"
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {TOKEN}"}
         response = requests.post(uri, headers=headers, data=json.dumps(self.__dict__()))
         if response.status_code == 200:

@@ -20,7 +20,7 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     int start = 1633680415;
-    int end = 1644012430;
+    int end = 1646301852;
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       AnalyticModel analyticsController =
           Provider.of<AnalyticModel>(context, listen: false);

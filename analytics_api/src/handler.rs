@@ -30,7 +30,7 @@ pub(crate) async fn insert_entry(
     let apps = match Application::get_all(&settings).await {
         Ok(app) => app,
         Err(err) => {
-            println!("{}", err);
+            log::error!("{:?}",err);
             return ApiResponse::new(Status::InternalServerError, json!({}));
         }
     };
@@ -46,7 +46,9 @@ pub(crate) async fn insert_entry(
     let session = session_dao::Session::from_analytic_entry(&analytic_entry);
     match analytics::insert_entry(analytic_entry, session, conn).await {
         Ok(response) => ApiResponse::new(Status::Ok, response),
-        Err(err) => ApiResponse::new( Status::InternalServerError, json!({"error":"An error occured"})),
+        Err(err) => {
+            log::error!("{:?}",err);
+            ApiResponse::new( Status::InternalServerError, json!({"error":"An error occured"}))},
     }
 }
 
@@ -69,7 +71,10 @@ pub(crate) async fn update_session(
     }
     match session_dao::update_session(new_data.session_id.clone() ,new_data.length.clone(), conn, new_data.is_first_today.clone()).await{
         Ok(_) => Status::Ok,
-        Err(_) => Status::InternalServerError,
+        Err(err) => {
+            log::error!("{:?}",err);
+            Status::InternalServerError
+        }
     }
 }
 

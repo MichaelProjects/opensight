@@ -94,7 +94,8 @@ pub(crate) async fn get_analyse_session_length(
     let end = NaiveDateTime::from_timestamp(end.unwrap(), 0);
     let entry_data = match session_dao::get_sessions_in_timeframe(application_id, start, end, conn).await{
         Ok(entries) => entries,
-        Err(_) => {
+        Err(err) => {
+            log::error!("{:?}", err);
             return ApiResponse::new(Status::BadRequest, json!({
                 "error": "Could not get entries"
             }));
@@ -118,7 +119,8 @@ pub(crate) async fn get_analyse_new_user(
     let end = NaiveDateTime::from_timestamp(end.unwrap(), 0);
     let entry_data = match analytics::get_newuser_in_timeframe(application_id, conn, start, end).await{
         Ok(entries) => entries,
-        Err(_) => {
+        Err(err) => {
+            log::error!("{:?}", err);
             return ApiResponse::new(Status::BadRequest, json!({
                 "error": "Could not get entries"
             }));
@@ -141,7 +143,8 @@ pub(crate) async fn get_version_info(
     let end = NaiveDateTime::from_timestamp(end.unwrap(), 0);
     let entry_data = match analytics::get_timeframe_entries(application_id, conn, start, end).await{
         Ok(entries) => entries,
-        Err(_) => {
+        Err(err) => {
+            log::error!("{:?}", err);
             return ApiResponse::new(Status::BadRequest, json!({
                 "error": "Could not get entries"
             }));
@@ -164,7 +167,8 @@ pub(crate) async fn get_device_display(
     println!("{:?}", &start);
     let entry_data = match analytics::get_timeframe_entries(application_id, conn, start, end).await{
         Ok(entries) => entries,
-        Err(_) => {
+        Err(err) => {
+            log::error!("{:?}", err);
             return ApiResponse::new(Status::BadRequest, json!({
                 "error": "Could not get entries"
             }));
