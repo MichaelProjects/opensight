@@ -31,9 +31,19 @@ class Urls {
         '$host/analytic/v1/$appid/analyse/display/size?start=$startFrame&end=$endFrame');
   }
 
+  static Uri getSessionCount(String appid, int startFrame, int endFrame) {
+    return Uri.parse(
+        '$host/analytic/v1/$appid/session/count?start=$startFrame&end=$endFrame');
+  }
+
   static Uri getSessionLengthHistory(
       String appid, int startFrame, int endFrame) {
     return Uri.parse(
         '$host/analytic/v1/$appid/analyse/user/session?start=$startFrame&end=$endFrame');
+  }
+
+  static Uri getAppVersion(String appid, int startFrame, int endFrame) {
+    return Uri.parse(
+        '$host/analytic/v1/$appid/analyse/app/version?start=$startFrame&end=$endFrame');
   }
 }

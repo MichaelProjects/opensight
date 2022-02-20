@@ -21,7 +21,7 @@ pub async fn display_sizes(entrys: Vec<AnalyticEntry>) -> Vec<i64> {
 
         average_screen_size_width = average_screen_size_width + splitted[0].parse::<f64>().expect("could not parse value") as i64;
         average_screen_size_height =
-            average_screen_size_height + splitted[1].parse::<f64>().unwrap() as i64;
+            average_screen_size_height + splitted[0].parse::<f64>().unwrap() as i64;
         counter += 1;
     }
     vec![
@@ -151,7 +151,7 @@ mod tests {
                 application_id: "1".to_string(),
                 creation_time: NaiveDateTime::parse_from_str("2022-02-01T19:26:37", "%Y-%m-%dT%H:%M:%S").unwrap(),
                 os: "1".to_string(),
-                device_size: "1.0".to_string(),
+                device_size: "100x100".to_string(),
                 new_user: true,
                 country: "1".to_string(),
                 device_type: "1".to_string(),
@@ -162,7 +162,7 @@ mod tests {
                 application_id: "1".to_string(),
                 creation_time: NaiveDateTime::parse_from_str("2022-02-02T19:26:37", "%Y-%m-%dT%H:%M:%S").unwrap(),
                 os: "1".to_string(),
-                device_size: "1".to_string(),
+                device_size: "100x200".to_string(),
                 new_user: true,
                 country: "1".to_string(),
                 device_type: "1".to_string(),

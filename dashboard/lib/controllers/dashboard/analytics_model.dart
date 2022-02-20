@@ -10,24 +10,32 @@ class AnalyticModel with ChangeNotifier {
   List<FlSpot> _newUserData = [];
   String _displaySizeData = "";
   List<FlSpot> _sessionLengthHistoryData = [];
+  List<PieChartSectionData> _appVersionData = [];
+  List<FlSpot> _sessionCountData = [];
 
   AnalyticsState _analyticsState = AnalyticsState.none;
   AnalyticsState _userHistoryState = AnalyticsState.none;
   AnalyticsState _newUserState = AnalyticsState.none;
   AnalyticsState _displaySizeState = AnalyticsState.none;
   AnalyticsState _sessionLengthHistoryState = AnalyticsState.none;
+  AnalyticsState _appVersionState = AnalyticsState.none;
+  AnalyticsState _sessionCountState = AnalyticsState.none;
 
   Map get analyticData => _analyticData;
   List<FlSpot> get userHistoryData => _userHistoryData;
   List<FlSpot> get newUserData => _newUserData;
   String get displaySizeData => _displaySizeData;
   List<FlSpot> get sessionLengthHistoryData => _sessionLengthHistoryData;
+  List<PieChartSectionData> get appVersionData => _appVersionData;
+  List<FlSpot> get sessionCountData => _sessionCountData;
 
   AnalyticsState get analyticsState => _analyticsState;
   AnalyticsState get userHistoryState => _userHistoryState;
   AnalyticsState get newUserState => _newUserState;
   AnalyticsState get displaySizeState => _displaySizeState;
   AnalyticsState get sessionHistoryState => _sessionLengthHistoryState;
+  AnalyticsState get appVersionState => _appVersionState;
+  AnalyticsState get sessionCountState => _sessionCountState;
 
   Future fetchEntrys(String appId) async {
     _analyticsState = AnalyticsState.loading;
@@ -65,9 +73,26 @@ class AnalyticModel with ChangeNotifier {
         data.add(dataPoint);
       }
     }
-    print("new user data: $data");
     _newUserData = data;
     _newUserState = AnalyticsState.loaded;
+    notifyListeners();
+  }
+
+  Future getSessionCount(String appId, int start, int end) async {
+    _sessionCountState = AnalyticsState.loading;
+    notifyListeners();
+    var response = await ApiClient().getDisplaySize(appId, start, end);
+    List<FlSpot> data = [];
+    if (response["error"] == false) {
+      for (var day in response["data"]["data"]) {
+        double formatDay = double.parse(day["day"].toString().split("-").last);
+        var dataPoint = FlSpot(formatDay, day["counter"]);
+        data.add(dataPoint);
+      }
+    }
+    _sessionCountData = data;
+
+    _sessionCountState = AnalyticsState.loaded;
     notifyListeners();
   }
 
@@ -92,9 +117,37 @@ class AnalyticModel with ChangeNotifier {
         data.add(dataPoint);
       }
     }
-    print("session length: $data");
     _sessionLengthHistoryData = data;
     _sessionLengthHistoryState = AnalyticsState.loaded;
     notifyListeners();
   }
+
+  Future getAppVersion(String appId, int start, int end) async {
+    _appVersionState = AnalyticsState.loading;
+    notifyListeners();
+
+    var response = await ApiClient().getAppVersion(appId, start, end);
+    List<PieChartSectionData> data = [];
+    if (response["error"] == false) {
+      int counter = 0;
+      for (Map day in response["data"]["data"]) {
+        counter += day["counter"] as int;
+      }
+      for (Map day in response["data"]["data"]) {
+        double precentage = calculatePercentage(counter, day["counter"]);
+        data.add(PieChartSectionData(
+          value: precentage,
+          title: day["day"],
+        ));
+      }
+      _appVersionData = data;
+      _appVersionState = AnalyticsState.loaded;
+      notifyListeners();
+    }
+  }
+}
+
+double calculatePercentage(int total, int value) {
+  double percentage = (value / total) * 100;
+  return percentage;
 }

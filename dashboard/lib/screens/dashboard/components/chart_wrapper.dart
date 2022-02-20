@@ -1,16 +1,12 @@
+import 'package:dashboard/controllers/dashboard/analytics_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class ChartWrapper extends StatelessWidget {
   Widget child;
-  List<FlSpot> data;
   String title;
-  bool loading;
-  ChartWrapper(
-      {required this.child,
-      required this.title,
-      required this.data,
-      required this.loading});
+  AnalyticsState state;
+  ChartWrapper({required this.child, required this.title, required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +20,7 @@ class ChartWrapper extends StatelessWidget {
           ),
           Builder(
             builder: (BuildContext context) {
-              if (data.isEmpty) {
+              if (AnalyticsState.loaded != state) {
                 return Container(
                   child: const Center(child: CircularProgressIndicator()),
                   padding: const EdgeInsets.only(

@@ -22,9 +22,11 @@ mod response;
 mod analyse_handler;
 mod analyse;
 mod session_dao;
+mod cors;
 
 use crate::db::*;
 use crate::settings::Settings;
+use cors::CORS;
 use diesel::prelude::*;
 use handler::{get_health, insert_entry, update_session, get_sessions};
 use analyse_handler::{get_analyse_new_user, get_analyse_data, get_analyse_user, get_analyse_session_length, get_device_display, get_version_info};
@@ -51,6 +53,7 @@ pub fn insert_conf_values(conf: &Settings) -> Figment {
 pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
     rocket::custom(insert_conf_values(&conf))
         .attach(AnalyticsDB::fairing())
+        .attach(CORS)
         .manage(conf)
         .mount(
             "/analytic/v1",

@@ -16,7 +16,9 @@ mod application_dao;
 mod user;
 mod response;
 mod user_dao;
+mod cors;
 
+use cors::CORS;
 use diesel::{PgConnection, Connection};
 use rocket::{figment::Figment, Rocket};
 use crate::settings::Settings;
@@ -43,6 +45,7 @@ pub fn insert_conf_values(conf: &Settings) -> Figment {
 pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
     rocket::custom(insert_conf_values(&conf))
         .attach(DatabaseConnection::fairing())    
+        .attach(CORS)
         .manage(conf)
         .mount(
             "/core/v1",

@@ -46,10 +46,22 @@ class ApiClient {
     return response;
   }
 
+  Future getSessionCount(String appId, int startFrame, int endFrame) async {
+    Map response = await HttpClient()
+        .get(Urls.getSessionCount(appId, startFrame, endFrame), authHeader);
+    return response;
+  }
+
   Future getSessionLengthHistory(
       String appId, int startFrame, int endFrame) async {
     Map response = await HttpClient().get(
         Urls.getSessionLengthHistory(appId, startFrame, endFrame), authHeader);
+    return response;
+  }
+
+  Future getAppVersion(String appId, int startFrame, int endFrame) async {
+    Map response = await HttpClient()
+        .get(Urls.getAppVersion(appId, startFrame, endFrame), authHeader);
     return response;
   }
 }
