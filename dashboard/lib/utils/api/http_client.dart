@@ -11,8 +11,9 @@ class HttpClient {
 
   Future<Map> get(Uri uri, [Map<String, String>? headers]) async {
     //! get request wrapper, returns a map with the response details
-    http.Response response = await http.get(uri,
-        headers: {"Authorization": "Bearer 122"}).timeout(standartTimeOut);
+    http.Response response = await http.get(uri, headers: {
+      "Authorization": "Bearer 122",
+    }).timeout(standartTimeOut);
     if (response.statusCode == 200) {
       return buildResponse(false, "", jsonDecode(response.body));
     }

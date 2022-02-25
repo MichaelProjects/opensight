@@ -17,11 +17,10 @@ class _LineChartCardState extends State<LineChartCard> {
       if (x.y > biggest) {
         biggest = x.y;
       }
-      if (x.x < smallest) {
+      if (x.x < smallest || smallest == 0) {
         smallest = x.x;
       }
     }
-    print(smallest);
 
     LineChartBarData _lineBarData(List<FlSpot> chartData) {
       return LineChartBarData(
@@ -41,7 +40,7 @@ class _LineChartCardState extends State<LineChartCard> {
       return LineChartData(
           lineBarsData: [_lineBarData(lalh)],
           maxY: biggest,
-          minX: 19,
+          minX: smallest,
           gridData: FlGridData(show: false),
           borderData: FlBorderData(show: false));
     }
