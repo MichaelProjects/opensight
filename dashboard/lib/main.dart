@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:routemaster/routemaster.dart';
 
 import 'controllers/create_app_controller.dart';
+import 'controllers/timeline_controller.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(create: (_) => AnalyticModel()),
           ChangeNotifierProvider(create: (_) => CreateAppController()),
+          ChangeNotifierProvider(create: (_) => TimelineController()),
         ],
         child: MaterialApp.router(
           routerDelegate:

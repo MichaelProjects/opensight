@@ -45,7 +45,6 @@ impl Session {
 }
 
 
-
 pub fn create_session(data: Session, conn: &mut PgConnection) -> QueryResult<Session>{
     let response: QueryResult<Session> =
         diesel::insert_into(sessions::table)

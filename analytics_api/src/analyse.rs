@@ -1,5 +1,3 @@
-use std::ops::Index;
-
 use crate::{analytics::AnalyticEntry, session_dao::Session};
 use serde::Serialize;
 

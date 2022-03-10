@@ -1,9 +1,9 @@
 use crate::settings::Settings;
-use log::{LevelFilter, SetLoggerError};
+use log::{LevelFilter};
 use log4rs::append::file::FileAppender;
 use log4rs::config::{Appender, Root};
 use log4rs::encode::pattern::PatternEncoder;
-use log4rs::{Config, Handle};
+use log4rs::{Config};
 
 pub fn init_logger(conf: &Settings){
     let mut logging_level = LevelFilter::Error;

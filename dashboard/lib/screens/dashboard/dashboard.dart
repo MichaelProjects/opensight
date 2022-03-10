@@ -1,8 +1,10 @@
 import 'package:dashboard/controllers/dashboard/analytics_model.dart';
 import 'package:dashboard/controllers/app_controller.dart';
+import 'package:dashboard/controllers/timeline_controller.dart';
 import 'package:dashboard/screens/dashboard/components/chart_wrapper.dart';
 import 'package:dashboard/screens/dashboard/components/lineChart.dart';
 import 'package:dashboard/screens/dashboard/components/pie_chart.dart';
+import 'package:dashboard/screens/overlay/topbar/timeline.dart';
 import 'package:dashboard/utils/sizes.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -26,28 +28,26 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    int start = 1633680415;
-    int end = DateTime.now().toUtc().millisecondsSinceEpoch;
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       AnalyticModel analyticsController =
           Provider.of<AnalyticModel>(context, listen: false);
       ApplicationModel appController =
           Provider.of<ApplicationModel>(context, listen: false);
-      analyticsController.getUserHistory(
-          appController.selectedApp.appID, start, end);
-      analyticsController.getNewUserHistory(
-          appController.selectedApp.appID, start, end);
+      TimelineController timelineController =
+          Provider.of<TimelineController>(context, listen: false);
+      analyticsController.getUserHistory(appController.selectedApp.appID,
+          timelineController.startTime, timelineController.endTime);
+      analyticsController.getNewUserHistory(appController.selectedApp.appID,
+          timelineController.startTime, timelineController.endTime);
       analyticsController.getSessionLengthHistory(
-          appController.selectedApp.appID, start, end);
-      analyticsController.getAppVersion(
-          appController.selectedApp.appID, start, end);
+          appController.selectedApp.appID,
+          timelineController.startTime,
+          timelineController.endTime);
+      analyticsController.getAppVersion(appController.selectedApp.appID,
+          timelineController.startTime, timelineController.endTime);
     });
   }
 
-  List<FlSpot> lulData = [
-    FlSpot(19, 24),
-    FlSpot(20, 24),
-  ];
   // todo fl_chart is stuck if there is only one element in the list
   Widget pieChart = PieChart(
     PieChartData(sections: [PieChartSectionData()]),
