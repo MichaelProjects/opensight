@@ -9,6 +9,7 @@ use crate::application::Application;
 use crate::db::AnalyticsDB;
 use crate::response::ApiResponse;
 use crate::settings::Settings;
+use crate::time_helper::calc_days_in_timeframe;
 
 #[derive(Debug)]
 pub struct ApiKey<'r>(&'r str);
@@ -67,6 +68,9 @@ pub(crate) async fn get_analyse_user(
     vaildate_key(key.0, &application_id).await;
     let start = NaiveDateTime::from_timestamp(start.unwrap() / 1000, 0);
     let end = NaiveDateTime::from_timestamp(end.unwrap() / 1000, 0);
+
+    // calculate days in timeframe
+    let timeframe_days = calc_days_in_timeframe(&start, &end);
     println!("{:?}", &end);
     let entry_data = match session_dao::get_session_count_in_timeframe(application_id, start, end, conn).await{
         Ok(entries) => entries,
@@ -76,7 +80,7 @@ pub(crate) async fn get_analyse_user(
             }));
         }
     };
-    let processed_data: Vec<DayData> = sort_user_to_day(entry_data).await;
+    let processed_data: Vec<DayData> = sort_user_to_day(entry_data, timeframe_days).await;
     ApiResponse::new(Status::Ok, json!({"data": processed_data}))
     
 }
@@ -92,6 +96,9 @@ pub(crate) async fn get_analyse_session_length(
     vaildate_key(key.0, &application_id).await;
     let start = NaiveDateTime::from_timestamp(start.unwrap() / 1000, 0);
     let end = NaiveDateTime::from_timestamp(end.unwrap() / 1000, 0);
+    
+    let timeframe_days = calc_days_in_timeframe(&start, &end);
+
     let entry_data = match session_dao::get_sessions_in_timeframe(application_id, start, end, conn).await{
         Ok(entries) => entries,
         Err(err) => {
@@ -101,7 +108,7 @@ pub(crate) async fn get_analyse_session_length(
             }));
         }
     };
-    let processed_data: Vec<DayData> = calc_average_session_length(entry_data).await;
+    let processed_data: Vec<DayData> = calc_average_session_length(entry_data, timeframe_days).await;
     ApiResponse::new(Status::Ok, json!({"data": processed_data}))
     
 }
@@ -117,6 +124,9 @@ pub(crate) async fn get_analyse_new_user(
     vaildate_key(key.0, &application_id).await;
     let start = NaiveDateTime::from_timestamp(start.unwrap() / 1000, 0);
     let end = NaiveDateTime::from_timestamp(end.unwrap() / 1000, 0);
+
+    let timeframe_days = calc_days_in_timeframe(&start, &end);
+
     let entry_data = match analytics::get_newuser_in_timeframe(application_id, conn, start, end).await{
         Ok(entries) => entries,
         Err(err) => {
@@ -126,7 +136,7 @@ pub(crate) async fn get_analyse_new_user(
             }));
         }
     };
-    let processed_data: Vec<DayData> = sort_data_to_day(entry_data).await;
+    let processed_data: Vec<DayData> = sort_data_to_day(entry_data, timeframe_days).await;
     ApiResponse::new(Status::Ok, json!({"data": processed_data}))
     
 }
@@ -139,9 +149,11 @@ pub(crate) async fn get_version_info(
     start: Option<i64>, 
     end: Option<i64>) -> ApiResponse{
     vaildate_key(key.0, &application_id).await;
-    // todo need to remove 3 digits from the timestamp
     let start = NaiveDateTime::from_timestamp(start.unwrap() / 1000, 0);
     let end = NaiveDateTime::from_timestamp(end.unwrap() / 1000, 0);
+
+    let timeframe_days = calc_days_in_timeframe(&start, &end);
+
     let entry_data = match analytics::get_timeframe_entries(application_id, conn, start, end).await{
         Ok(entries) => entries,
         Err(err) => {
@@ -151,7 +163,7 @@ pub(crate) async fn get_version_info(
             }));
         }
     };
-    let processed_data: Vec<DayData> = version_analysis(entry_data).await;
+    let processed_data: Vec<DayData> = version_analysis(entry_data, timeframe_days).await;
     ApiResponse::new(Status::Ok, json!({"data": processed_data}))    
 }
 
@@ -165,7 +177,7 @@ pub(crate) async fn get_device_display(
     vaildate_key(key.0, &application_id).await;
     let start = NaiveDateTime::from_timestamp(start.unwrap() / 1000, 0);
     let end = NaiveDateTime::from_timestamp(end.unwrap() / 1000, 0);
-    println!("{:?}", &start);
+
     let entry_data = match analytics::get_timeframe_entries(application_id, conn, start, end).await{
         Ok(entries) => entries,
         Err(err) => {

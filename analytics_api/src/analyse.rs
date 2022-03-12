@@ -28,7 +28,11 @@ pub async fn display_sizes(entrys: Vec<AnalyticEntry>) -> Vec<i64> {
     ]
 }
 
-pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>) -> Vec<DayData> {
+//todo create a function that merges the days_vec list and stores the current day data, if finished it should append it.
+//todo if there is no data for the day the default value should be 0 for the day
+
+
+pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>, days_vec: Vec<String>) -> Vec<DayData> {
     let mut days: Vec<DayData> = vec![];
     let mut before: String = String::new();
 
@@ -51,7 +55,7 @@ pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>) -> Vec<DayData> {
     days
 }
 
-pub async fn sort_user_to_day<'a>(entrys: Vec<Session>) -> Vec<DayData> {
+pub async fn sort_user_to_day<'a>(entrys: Vec<Session>, days: Vec<String>) -> Vec<DayData> {
     let mut days: Vec<DayData> = vec![];
     let mut before: String = String::new();
     
@@ -79,7 +83,7 @@ fn get_day_from_timestamp(timestamp_string: String) -> String{
     time[0].to_string()
 }
 
-pub async fn calc_average_session_length(data: Vec<Session>) -> Vec<DayData>{
+pub async fn calc_average_session_length(data: Vec<Session>, days: Vec<String>) -> Vec<DayData>{
     let mut days: Vec<DayData> = vec![];
     let mut before: String = String::new();
     let mut session_counter = 0;
@@ -116,7 +120,7 @@ pub async fn calc_average_session_length(data: Vec<Session>) -> Vec<DayData>{
     days
 }
 
-pub async fn version_analysis(data: Vec<AnalyticEntry>) -> Vec<DayData>{
+pub async fn version_analysis(data: Vec<AnalyticEntry>, days: Vec<String>) -> Vec<DayData>{
     let mut result: Vec<DayData> = vec![];
     let mut versions = Vec::new();
     for entry in data.iter(){
@@ -140,8 +144,13 @@ pub async fn version_analysis(data: Vec<AnalyticEntry>) -> Vec<DayData>{
 
 mod tests {
     use rocket::tokio;
-    use chrono::naive::NaiveDateTime;
+    use chrono::naive::{NaiveDateTime, NaiveDate};
     use crate::analyse::{AnalyticEntry, sort_data_to_day, display_sizes, calc_average_session_length};
+
+    fn get_test_dates() -> Vec<String> {
+        vec![NaiveDate::from_isoywd(2022, 12, chrono::Weekday::Mon).to_string(), NaiveDate::from_isoywd(2022, 12, chrono::Weekday::Tue).to_string(), NaiveDate::from_isoywd(2022, 12, chrono::Weekday::Wed).to_string()]
+    }
+
     fn get_data() -> Vec<AnalyticEntry> {
         let raw_data = vec![
             AnalyticEntry {
@@ -174,8 +183,7 @@ mod tests {
     async fn test_analyse() {
         use chrono::NaiveDateTime;
         let parse_from_str = NaiveDateTime::parse_from_str;
-        
-        let data = sort_data_to_day(get_data()).await;
+        let data = sort_data_to_day(get_data(), get_test_dates()).await;
         assert_eq!(data.len(), 2);
     }
     #[tokio::test]
@@ -186,8 +194,8 @@ mod tests {
     }
     #[tokio::test]
     async fn test_calc_average_session_length(){
-        let data = get_data();
-        //let result = calc_average_session_length(data).await;
-        //println!("{:?}", result);
+        // let data = get_data();
+        // let result = calc_average_session_length(data, get_test_dates()).await;
+        // println!("{:?}", result);
     }
 }
