@@ -6,6 +6,11 @@ pub struct DayData {
     pub day: String,
     pub counter: i64,
 }
+impl DayData{
+    pub fn new(day:  String, counter: i64) -> DayData{
+        DayData{day, counter}
+    }
+}
 
 
 // todo need to be fixed, there is currently an issue
@@ -31,27 +36,45 @@ pub async fn display_sizes(entrys: Vec<AnalyticEntry>) -> Vec<i64> {
 //todo create a function that merges the days_vec list and stores the current day data, if finished it should append it.
 //todo if there is no data for the day the default value should be 0 for the day
 
-
 pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>, days_vec: Vec<String>) -> Vec<DayData> {
     let mut days: Vec<DayData> = vec![];
-    let mut before: String = String::new();
 
-    for entry in entrys.iter() {
-        let time = entry.creation_time.to_string();
-        let time = time.split(" ").collect::<Vec<&str>>();
-        let key = time[0];
-        if key.ne(before.as_str()) {
-            days.push(DayData {
-                day: key.to_string(),
-                counter: 1,
-            });
-            before = key.to_string();
-        } else {
-            days.last_mut()
+    for day in days_vec.into_iter(){
+        let mut key = day.clone();
+        let mut counter = 0;
+        println!("{:?}", &day);
+        days.push(DayData::new(day.to_owned(), 0));
+        for entry in entrys.iter(){
+            let time = entry.creation_time.to_string();
+            let time = time.split(" ").collect::<Vec<&str>>();
+            println!("{:?}", &time);
+            if time[0].ne(key.as_str()) {
+                days.last_mut()
                 .expect("Could not get last element from vec!")
-                .counter += 1;
+                .counter = counter;
+                counter = 0;
+                break
+            }
+            counter+=1;
         }
     }
+
+    // for entry in entrys.iter() {
+    //     let time = entry.creation_time.to_string();
+    //     let time = time.split(" ").collect::<Vec<&str>>();
+    //     let key = time[0];
+    //     if key.ne(before.as_str()) {
+    //         days.push(DayData {
+    //             day: key.to_string(),
+    //             counter: 1,
+    //         });
+    //         before = key.to_string();
+    //     } else {
+    //         days.last_mut()
+    //             .expect("Could not get last element from vec!")
+    //             .counter += 1;
+    //     }
+    // }
     days
 }
 
@@ -148,7 +171,7 @@ mod tests {
     use crate::analyse::{AnalyticEntry, sort_data_to_day, display_sizes, calc_average_session_length};
 
     fn get_test_dates() -> Vec<String> {
-        vec![NaiveDate::from_isoywd(2022, 12, chrono::Weekday::Mon).to_string(), NaiveDate::from_isoywd(2022, 12, chrono::Weekday::Tue).to_string(), NaiveDate::from_isoywd(2022, 12, chrono::Weekday::Wed).to_string()]
+        vec![NaiveDate::from_isoywd(2022, 2, chrono::Weekday::Tue).to_string(), NaiveDate::from_isoywd(2022, 2, chrono::Weekday::Tue).to_string(), NaiveDate::from_isoywd(2022, 12, chrono::Weekday::Wed).to_string()]
     }
 
     fn get_data() -> Vec<AnalyticEntry> {

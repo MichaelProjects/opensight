@@ -1,8 +1,10 @@
 use chrono::{NaiveDateTime, Utc, NaiveTime, NaiveDate};
 
 pub fn calc_days_in_timeframe(start: &NaiveDateTime, end: &NaiveDateTime) -> Vec<String>{
+    println!("{}", start);
     let day = start.date();
     let mut days = vec![];
+    println!("{}", &day);
     for x in day.iter_days(){
         let y = x.and_time(NaiveTime::from_num_seconds_from_midnight(0, 0));
         if &y < end{

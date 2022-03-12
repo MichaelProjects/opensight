@@ -124,8 +124,8 @@ pub(crate) async fn get_analyse_new_user(
     vaildate_key(key.0, &application_id).await;
     let start = NaiveDateTime::from_timestamp(start.unwrap() / 1000, 0);
     let end = NaiveDateTime::from_timestamp(end.unwrap() / 1000, 0);
-
     let timeframe_days = calc_days_in_timeframe(&start, &end);
+    println!("{:?}", &timeframe_days);
 
     let entry_data = match analytics::get_newuser_in_timeframe(application_id, conn, start, end).await{
         Ok(entries) => entries,
