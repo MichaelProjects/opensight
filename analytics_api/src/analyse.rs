@@ -38,10 +38,9 @@ pub async fn display_sizes(entrys: Vec<AnalyticEntry>) -> Vec<i64> {
 
 pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>, days_vec: Vec<String>) -> Vec<DayData> {
     let mut days: Vec<DayData> = vec![];
-
-    for day in days_vec.into_iter(){
+    let mut counter = 0;
+    for day in days_vec.iter(){
         let mut key = day.clone();
-        let mut counter = 0;
         println!("{:?}", &day);
         days.push(DayData::new(day.to_owned(), 0));
         for entry in entrys.iter(){
@@ -49,15 +48,21 @@ pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>, days_vec: Vec<Stri
             let time = time.split(" ").collect::<Vec<&str>>();
             println!("{:?}", &time);
             if time[0].ne(key.as_str()) {
+                println!("Stopping");
+                println!("{:?}", &key);
                 days.last_mut()
                 .expect("Could not get last element from vec!")
                 .counter = counter;
+                //todo slice vec only continue with the not processed ones
                 counter = 0;
                 break
             }
             counter+=1;
         }
     }
+    days.last_mut()
+                .expect("Could not get last element from vec!")
+                .counter = counter;
 
     // for entry in entrys.iter() {
     //     let time = entry.creation_time.to_string();
@@ -75,6 +80,7 @@ pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>, days_vec: Vec<Stri
     //             .counter += 1;
     //     }
     // }
+    println!("{:?}",&days);
     days
 }
 
@@ -171,7 +177,9 @@ mod tests {
     use crate::analyse::{AnalyticEntry, sort_data_to_day, display_sizes, calc_average_session_length};
 
     fn get_test_dates() -> Vec<String> {
-        vec![NaiveDate::from_isoywd(2022, 2, chrono::Weekday::Tue).to_string(), NaiveDate::from_isoywd(2022, 2, chrono::Weekday::Tue).to_string(), NaiveDate::from_isoywd(2022, 12, chrono::Weekday::Wed).to_string()]
+        let a = vec![NaiveDateTime::from_timestamp(1646953200000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1647093749737 / 1000, 0).date().to_string()];
+        println!("{:?}", &a);
+        a
     }
 
     fn get_data() -> Vec<AnalyticEntry> {
@@ -179,7 +187,7 @@ mod tests {
             AnalyticEntry {
                 session_id: "1".to_string(),
                 application_id: "1".to_string(),
-                creation_time: NaiveDateTime::parse_from_str("2022-02-01T19:26:37", "%Y-%m-%dT%H:%M:%S").unwrap(),
+                creation_time: NaiveDateTime::parse_from_str("2022-03-12T10:33:28", "%Y-%m-%dT%H:%M:%S").unwrap(),
                 os: "1".to_string(),
                 device_size: "100x100".to_string(),
                 new_user: true,
@@ -190,7 +198,7 @@ mod tests {
             AnalyticEntry {
                 session_id: "1".to_string(),
                 application_id: "1".to_string(),
-                creation_time: NaiveDateTime::parse_from_str("2022-02-02T19:26:37", "%Y-%m-%dT%H:%M:%S").unwrap(),
+                creation_time: NaiveDateTime::parse_from_str("2022-03-12T10:33:28", "%Y-%m-%dT%H:%M:%S").unwrap(),
                 os: "1".to_string(),
                 device_size: "100x200".to_string(),
                 new_user: true,
@@ -204,10 +212,11 @@ mod tests {
     
     #[tokio::test]
     async fn test_analyse() {
+        //todo test edge cases like what appends if only one entry is there or 3 or 2?
         use chrono::NaiveDateTime;
         let parse_from_str = NaiveDateTime::parse_from_str;
         let data = sort_data_to_day(get_data(), get_test_dates()).await;
-        assert_eq!(data.len(), 2);
+        assert_eq!(data.len(), 3);
     }
     #[tokio::test]
     async fn test_device_size_func(){
