@@ -35,16 +35,16 @@ class _DashboardState extends State<Dashboard> {
           Provider.of<ApplicationModel>(context, listen: false);
       TimelineController timelineController =
           Provider.of<TimelineController>(context, listen: false);
-      // analyticsController.getUserHistory(appController.selectedApp.appID,
-      //     timelineController.startTime, timelineController.endTime);
+      analyticsController.getUserHistory(appController.selectedApp.appID,
+          timelineController.startTime, timelineController.endTime);
       analyticsController.getNewUserHistory(appController.selectedApp.appID,
           timelineController.startTime, timelineController.endTime);
-      // analyticsController.getSessionLengthHistory(
-      //     appController.selectedApp.appID,
-      //     timelineController.startTime,
-      //     timelineController.endTime);
-      // analyticsController.getAppVersion(appController.selectedApp.appID,
-      //     timelineController.startTime, timelineController.endTime);
+      analyticsController.getSessionLengthHistory(
+          appController.selectedApp.appID,
+          timelineController.startTime,
+          timelineController.endTime);
+      analyticsController.getAppVersion(appController.selectedApp.appID,
+          timelineController.startTime, timelineController.endTime);
     });
   }
 

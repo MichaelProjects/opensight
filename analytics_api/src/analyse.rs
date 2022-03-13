@@ -38,94 +38,125 @@ pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>, days_vec: Vec<Stri
     let mut days: Vec<DayData> = vec![];
     let mut counter = 0;
     let mut entry_iter = entrys.iter();
+    
+    // if a new value gets called with entry_iter.next() it gets removed, if the key is not the same as the next day it will be store here.
+    let mut before_vaule = String::new();
+    
     for day in days_vec.iter(){
         let mut key = day.clone();
         days.push(DayData::new(day.to_owned(), 0));
         loop{
+
+            // if current key is the same as before_value
+            if before_vaule.ne(&String::new()){
+                if key.eq(&before_vaule){
+                    counter +=1;
+                    before_vaule = String::new();
+                }else{
+                    break
+                }
+            }
+
             let mut entry = entry_iter.next();
+            // if iterator has next value
             if entry.is_none(){
+                // if the last day has data but isnt able to reach the end, the before it end it takes the count and replace the last day count in days vector.
+                if counter.ne(&0){
+                    days.last_mut()
+                                 .expect("Could not get last element from vec!")
+                                 .counter = counter;
+                }
                 break
             }
-            println!("{:?}", entry);
+
+            log::debug!("{:?}", entry);
             let entry = entry.expect("");
+            
+            // time splitting to key to determine if current entry date is the sam of the current day
             let time = entry.creation_time.to_string();
             let time = time.split(" ").collect::<Vec<&str>>();
-            println!("{:?}", time[0]);
+            log::debug!("{:?}", time[0]);
+            
+            
+            // if the current day is not the same replace the counter value of the current day with the current counter and set global counter to 0 
             if time[0].ne(key.as_str()) {
-                println!("Other key");
+                log::debug!("Other key");
                 days.last_mut()
                 .expect("Could not get last element from vec!")
                 .counter = counter;
                 //todo slice vec only continue with the not processed ones
+                before_vaule = time[0].to_string();
                 counter = 0;
-                continue
+                break
             }
-            println!("INCREASE");
+
+            log::debug!("INCREASE");
             counter+=1;
-            println!("{}", counter);
+            log::debug!("{}", counter);
         }
-
-        // for entry in entrys.iter() {
-        //     let time = entry.creation_time.to_string();
-        //     let time = time.split(" ").collect::<Vec<&str>>();
-        //     println!("{:?}", time[0]);
-        //     if time[0].ne(key.as_str()) {
-        //         println!("Other key");
-        //         days.last_mut()
-        //         .expect("Could not get last element from vec!")
-        //         .counter = counter;
-        //         //todo slice vec only continue with the not processed ones
-        //         counter = 0;
-        //         break
-        //     }
-        //     println!("INCREASE");
-        //     counter+=1;
-        //     println!("{}", counter);
-        // }
     }
-    // days.last_mut()
-    //             .expect("Could not get last element from vec!")
-    //             .counter = counter;
-
-
-
-    // for entry in entrys.iter() {
-    //     let time = entry.creation_time.to_string();
-    //     let time = time.split(" ").collect::<Vec<&str>>();
-    //     let key = time[0];
-    //     if key.ne(before.as_str()) {
-    //         days.push(DayData {
-    //             day: key.to_string(),
-    //             counter: 1,
-    //         });
-    //         before = key.to_string();
-    //     } else {
-    //         days.last_mut()
-    //             .expect("Could not get last element from vec!")
-    //             .counter += 1;
-    //     }
-    // }
     days
 }
 
-pub async fn sort_user_to_day<'a>(entrys: Vec<Session>, days: Vec<String>) -> Vec<DayData> {
+pub async fn sort_user_to_day<'a>(entrys: Vec<Session>, days_vec: Vec<String>) -> Vec<DayData> {
     let mut days: Vec<DayData> = vec![];
-    let mut before: String = String::new();
+    let mut counter = 0;
+    let mut entry_iter = entrys.iter();
     
-    for entry in entrys.iter() {
-        let time = entry.start_time.to_string();
-        let time = time.split(" ").collect::<Vec<&str>>();
-        let key = time[0];
-        if key.ne(before.as_str()) {
-            days.push(DayData {
-                day: key.to_string(),
-                counter: 1,
-            });
-            before = key.to_string();
-        } else {
-            days.last_mut()
+    // if a new value gets called with entry_iter.next() it gets removed, if the key is not the same as the next day it will be store here.
+    let mut before_vaule = String::new();
+    
+    for day in days_vec.iter(){
+        let mut key = day.clone();
+        days.push(DayData::new(day.to_owned(), 0));
+        loop{
+
+            // if current key is the same as before_value
+            if before_vaule.ne(&String::new()){
+                if key.eq(&before_vaule){
+                    counter +=1;
+                    before_vaule = String::new();
+                }else{
+                    break
+                }
+            }
+
+            let mut  entry = entry_iter.next();
+            // if iterator has next value
+            if entry.is_none(){
+                // if the last day has data but isnt able to reach the end, the before it end it takes the count and replace the last day count in days vector.
+                if counter.ne(&0){
+                    days.last_mut()
+                                 .expect("Could not get last element from vec!")
+                                 .counter = counter;
+                }
+                break
+            }
+
+            log::debug!("{:?}", entry);
+            let entry = entry.expect("");
+            
+            // time splitting to key to determine if current entry date is the sam of the current day
+            let time = entry.start_time.to_string();
+            let time = time.split(" ").collect::<Vec<&str>>();
+            log::debug!("{:?}", time[0]);
+            
+            
+            // if the current day is not the same replace the counter value of the current day with the current counter and set global counter to 0 
+            if time[0].ne(key.as_str()) {
+                log::debug!("Other key");
+                days.last_mut()
                 .expect("Could not get last element from vec!")
-                .counter += 1;
+                .counter = counter;
+                //todo slice vec only continue with the not processed ones
+                before_vaule = time[0].to_string();
+                counter = 0;
+                break
+            }
+
+            log::debug!("INCREASE");
+            counter+=1;
+            log::debug!("{}", counter);
         }
     }
     days
@@ -136,44 +167,122 @@ fn get_day_from_timestamp(timestamp_string: String) -> String{
     time[0].to_string()
 }
 
-pub async fn calc_average_session_length(data: Vec<Session>, days: Vec<String>) -> Vec<DayData>{
+
+
+pub async fn calc_average_session_length(entrys: Vec<Session>, days_vec: Vec<String>) -> Vec<DayData>{
     let mut days: Vec<DayData> = vec![];
-    let mut before: String = String::new();
-    let mut session_counter = 0;
-    println!("{:?}", &data.len());
-    for session in data.iter(){
-        let day = get_day_from_timestamp(session.start_time.to_string());
-        if day.ne(before.as_str()) {
-            if !days.is_empty(){
-            // before adding a new day, divide the session counter by the session length overall
-            let a = days.last_mut().expect("Could not get last element from vec!");
-            a.counter = a.counter / session_counter;
-            // reset counter
-            session_counter = 0;
+    let mut entry_iter = entrys.iter();
+    
+    // if a new value gets called with entry_iter.next() it gets removed, if the key is not the same as the next day it will be store here.
+    let mut before_vaule = String::new();
+    let mut before_session_length: i64 = 0;
+    
+    for day in days_vec.iter(){
+        let mut key = day.clone();
+        let mut sum_session_length = 0;
+        let mut counter = 0;
+        days.push(DayData::new(day.to_owned(), 0));
+        loop{
+
+            // if current key is the same as before_value
+            if before_vaule.ne(&String::new()){
+                if key.eq(&before_vaule){
+                    counter +=1;
+                    sum_session_length += before_session_length;
+                    before_session_length = 0;
+                    before_vaule = String::new();
+                }else{
+                    break
+                }
             }
-            before = day.to_string();
-            days.push(DayData {
-                day,
-                counter: session.length as i64});
-        }else{
-            // gets the last day and adds the session length.
-            days.last_mut()
+
+            let mut entry = entry_iter.next();
+            // if iterator has next value
+            if entry.is_none(){
+                // if the last day has data but isnt able to reach the end, the before it end it takes the count and replace the last day count in days vector.
+                if counter.ne(&0){
+                    days.last_mut()
+                                 .expect("Could not get last element from vec!")
+                                 .counter = sum_session_length / counter;
+                }
+                break
+            }
+
+            log::debug!("{:?}", entry);
+            let entry = entry.expect("");
+            
+            // time splitting to key to determine if current entry date is the sam of the current day
+            let time = entry.start_time.to_string();
+            let time = time.split(" ").collect::<Vec<&str>>();
+            log::debug!("{:?}", time[0]);
+            
+            
+            // if the current day is not the same replace the counter value of the current day with the current counter and set global counter to 0 
+            if time[0].ne(key.as_str()) {
+
+                log::debug!("Other key");
+                println!("sum: {:?} count: {:?}", sum_session_length, counter);
+                if counter.eq(&0){
+                    days.last_mut()
                 .expect("Could not get last element from vec!")
-                .counter += session.length as i64;
-            session_counter += 1;
+                .counter = 0;
+                }else{
+                    days.last_mut()
+                .expect("Could not get last element from vec!")
+                .counter = sum_session_length / counter;
+                }
+                before_vaule = time[0].to_string();
+                before_session_length = entry.length as i64;
+                counter = 0;
+                sum_session_length = 0;
+                break
+            }
+
+            log::debug!("INCREASE");
+            sum_session_length += entry.length as i64;
+            counter += 1;
+            log::debug!("{}", counter);
         }
     }
-
-    // quick fix, if only one day or the last day in in data, the session length wont get divided, and returns a false value
-    if !days.is_empty(){
-        // before adding a new day, divide the session counter by the session length overall
-        let a = days.last_mut().expect("Could not get last element from vec!");
-        a.counter = a.counter / session_counter;
-        }
     days
 }
+//     let mut days: Vec<DayData> = vec![];
+//     let mut before: String = String::new();
+//     let mut session_counter = 0;
+//     println!("{:?}", &data.len());
+//     for session in data.iter(){
+//         let day = get_day_from_timestamp(session.start_time.to_string());
+//         if day.ne(before.as_str()) {
+//             if !days.is_empty(){
+//             // before adding a new day, divide the session counter by the session length overall
+//             let a = days.last_mut().expect("Could not get last element from vec!");
+//             a.counter = a.counter / session_counter;
+//             // reset counter
+//             session_counter = 0;
+//             }
+//             before = day.to_string();
+//             days.push(DayData {
+//                 day,
+//                 counter: session.length as i64});
+//         }else{
+//             // gets the last day and adds the session length.
+//             days.last_mut()
+//                 .expect("Could not get last element from vec!")
+//                 .counter += session.length as i64;
+//             session_counter += 1;
+//         }
+//     }
 
-pub async fn version_analysis(data: Vec<AnalyticEntry>, days: Vec<String>) -> Vec<DayData>{
+//     // quick fix, if only one day or the last day in in data, the session length wont get divided, and returns a false value
+//     if !days.is_empty(){
+//         // before adding a new day, divide the session counter by the session length overall
+//         let a = days.last_mut().expect("Could not get last element from vec!");
+//         a.counter = a.counter / session_counter;
+//         }
+//     days
+// }
+
+pub async fn version_analysis(data: Vec<AnalyticEntry>) -> Vec<DayData>{
     let mut result: Vec<DayData> = vec![];
     let mut versions = Vec::new();
     for entry in data.iter(){
@@ -198,10 +307,11 @@ pub async fn version_analysis(data: Vec<AnalyticEntry>, days: Vec<String>) -> Ve
 mod tests {
     use rocket::{tokio, http::ext::IntoCollection};
     use chrono::naive::{NaiveDateTime, NaiveDate};
+    use crate::daos::session_dao::Session;
     use crate::analyse::{AnalyticEntry, sort_data_to_day, display_sizes, calc_average_session_length};
 
     fn get_test_dates(count: usize) -> Vec<String> {
-        let a = vec![NaiveDateTime::from_timestamp(1646870400000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1647093749737 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1647126000000 / 1000, 0).date().to_string()];
+        let a = vec![NaiveDateTime::from_timestamp(1646870400000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1646956800000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1647126000000 / 1000, 0).date().to_string()];
         if count < 3{
             let mut x: Vec<String> = vec![];
             for y in a.iter(){
@@ -253,7 +363,15 @@ mod tests {
         ];
         raw_data
     }
-    
+    fn get_session_data() -> Vec<Session>{
+        let mut data = vec![];
+        for x in get_data(){
+            let mut y = Session::from_analytic_entry(&x);
+            y.length = 100;
+            data.push(y);
+        }
+        data
+    }
     #[tokio::test]
     async fn test_analyse_one_item() {
         //todo test edge cases like what appends if only one entry is there or 3 or 2?
@@ -271,9 +389,11 @@ mod tests {
         use chrono::NaiveDateTime;
         let parse_from_str = NaiveDateTime::parse_from_str;
         // edge case with one day
+        let days = get_test_dates(3);
+        println!("{:?}", days);
         let test2 = sort_data_to_day(get_data(), get_test_dates(3)).await;
         println!("{:?}", test2);
-        assert_eq!(test2[1].counter, 2);
+        assert_eq!(test2[2].counter, 2);
     }
     #[tokio::test]
     async fn test_device_size_func(){
@@ -283,8 +403,8 @@ mod tests {
     }
     #[tokio::test]
     async fn test_calc_average_session_length(){
-        // let data = get_data();
-        // let result = calc_average_session_length(data, get_test_dates()).await;
-        // println!("{:?}", result);
+        let result = calc_average_session_length(get_session_data(), get_test_dates(3)).await;
+        println!("{:?}", result);
+        assert_eq!(result[2].counter, 100);
     }
 }

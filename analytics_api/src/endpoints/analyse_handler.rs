@@ -1,4 +1,4 @@
-use chrono::{NaiveDateTime, Utc};
+use chrono::{NaiveDateTime};
 use rocket::http::Status;
 use rocket::request::{Outcome, Request, FromRequest};
 use serde_json::json;
@@ -7,7 +7,6 @@ use crate::{analytics};
 use crate::daos::{session_dao};
 use crate::db::AnalyticsDB;
 use crate::response::ApiResponse;
-use crate::settings::Settings;
 use crate::time_helper::calc_days_in_timeframe;
 
 #[derive(Debug)]
@@ -162,7 +161,7 @@ pub(crate) async fn get_version_info(
             }));
         }
     };
-    let processed_data: Vec<DayData> = version_analysis(entry_data, timeframe_days).await;
+    let processed_data: Vec<DayData> = version_analysis(entry_data).await;
     ApiResponse::new(Status::Ok, json!({"data": processed_data}))    
 }
 
