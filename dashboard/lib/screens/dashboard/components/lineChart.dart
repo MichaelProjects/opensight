@@ -38,6 +38,11 @@ class _LineChartCardState extends State<LineChartCard> {
 
     LineChartData mainData(List<FlSpot> lalh) {
       return LineChartData(
+          titlesData: FlTitlesData(
+            rightTitles: SideTitles(showTitles: false),
+            bottomTitles: SideTitles(showTitles: true, interval: 1),
+            topTitles: SideTitles(showTitles: false),
+          ),
           lineBarsData: [_lineBarData(lalh)],
           maxY: biggest,
           minX: smallest,

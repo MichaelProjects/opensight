@@ -1,7 +1,7 @@
-use super::schema::analytics;
 use crate::analytics::AnalyticEntry;
 use crate::dao::Dao;
 use crate::db::AnalyticsDB;
+use crate::schema::analytics;
 use crate::schema::analytics::columns::{session_id};
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 use log::debug;

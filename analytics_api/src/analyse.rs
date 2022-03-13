@@ -1,4 +1,5 @@
-use crate::{analytics::AnalyticEntry, session_dao::Session};
+use crate::{analytics::AnalyticEntry};
+use crate::daos::session_dao::Session;
 use serde::Serialize;
 
 #[derive(Debug, Clone, Serialize)]
@@ -33,36 +34,60 @@ pub async fn display_sizes(entrys: Vec<AnalyticEntry>) -> Vec<i64> {
     ]
 }
 
-//todo create a function that merges the days_vec list and stores the current day data, if finished it should append it.
-//todo if there is no data for the day the default value should be 0 for the day
-
 pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>, days_vec: Vec<String>) -> Vec<DayData> {
     let mut days: Vec<DayData> = vec![];
     let mut counter = 0;
+    let mut entry_iter = entrys.iter();
     for day in days_vec.iter(){
         let mut key = day.clone();
-        println!("{:?}", &day);
         days.push(DayData::new(day.to_owned(), 0));
-        for entry in entrys.iter(){
+        loop{
+            let mut entry = entry_iter.next();
+            if entry.is_none(){
+                break
+            }
+            println!("{:?}", entry);
+            let entry = entry.expect("");
             let time = entry.creation_time.to_string();
             let time = time.split(" ").collect::<Vec<&str>>();
-            println!("{:?}", &time);
+            println!("{:?}", time[0]);
             if time[0].ne(key.as_str()) {
-                println!("Stopping");
-                println!("{:?}", &key);
+                println!("Other key");
                 days.last_mut()
                 .expect("Could not get last element from vec!")
                 .counter = counter;
                 //todo slice vec only continue with the not processed ones
                 counter = 0;
-                break
+                continue
             }
+            println!("INCREASE");
             counter+=1;
+            println!("{}", counter);
         }
+
+        // for entry in entrys.iter() {
+        //     let time = entry.creation_time.to_string();
+        //     let time = time.split(" ").collect::<Vec<&str>>();
+        //     println!("{:?}", time[0]);
+        //     if time[0].ne(key.as_str()) {
+        //         println!("Other key");
+        //         days.last_mut()
+        //         .expect("Could not get last element from vec!")
+        //         .counter = counter;
+        //         //todo slice vec only continue with the not processed ones
+        //         counter = 0;
+        //         break
+        //     }
+        //     println!("INCREASE");
+        //     counter+=1;
+        //     println!("{}", counter);
+        // }
     }
-    days.last_mut()
-                .expect("Could not get last element from vec!")
-                .counter = counter;
+    // days.last_mut()
+    //             .expect("Could not get last element from vec!")
+    //             .counter = counter;
+
+
 
     // for entry in entrys.iter() {
     //     let time = entry.creation_time.to_string();
@@ -80,7 +105,6 @@ pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>, days_vec: Vec<Stri
     //             .counter += 1;
     //     }
     // }
-    println!("{:?}",&days);
     days
 }
 
@@ -172,18 +196,38 @@ pub async fn version_analysis(data: Vec<AnalyticEntry>, days: Vec<String>) -> Ve
 }
 
 mod tests {
-    use rocket::tokio;
+    use rocket::{tokio, http::ext::IntoCollection};
     use chrono::naive::{NaiveDateTime, NaiveDate};
     use crate::analyse::{AnalyticEntry, sort_data_to_day, display_sizes, calc_average_session_length};
 
-    fn get_test_dates() -> Vec<String> {
-        let a = vec![NaiveDateTime::from_timestamp(1646953200000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1647093749737 / 1000, 0).date().to_string()];
-        println!("{:?}", &a);
+    fn get_test_dates(count: usize) -> Vec<String> {
+        let a = vec![NaiveDateTime::from_timestamp(1646870400000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1647093749737 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1647126000000 / 1000, 0).date().to_string()];
+        if count < 3{
+            let mut x: Vec<String> = vec![];
+            for y in a.iter(){
+                if x.len().ne(&count) {
+                    x.push(y.to_owned());
+                }else{
+                    return x;
+                }
+            }
+        }
         a
     }
 
     fn get_data() -> Vec<AnalyticEntry> {
         let raw_data = vec![
+            AnalyticEntry {
+                session_id: "1".to_string(),
+                application_id: "1".to_string(),
+                creation_time: NaiveDateTime::parse_from_str("2022-03-10T10:33:28", "%Y-%m-%dT%H:%M:%S").unwrap(),
+                os: "1".to_string(),
+                device_size: "100x100".to_string(),
+                new_user: true,
+                country: "1".to_string(),
+                device_type: "1".to_string(),
+                version: "1".to_string(),
+            },
             AnalyticEntry {
                 session_id: "1".to_string(),
                 application_id: "1".to_string(),
@@ -211,12 +255,25 @@ mod tests {
     }
     
     #[tokio::test]
-    async fn test_analyse() {
+    async fn test_analyse_one_item() {
         //todo test edge cases like what appends if only one entry is there or 3 or 2?
         use chrono::NaiveDateTime;
         let parse_from_str = NaiveDateTime::parse_from_str;
-        let data = sort_data_to_day(get_data(), get_test_dates()).await;
-        assert_eq!(data.len(), 3);
+
+        let test1 = sort_data_to_day(get_data(), get_test_dates(1)).await;
+        println!("{:?}", test1);
+        assert_eq!(test1[0].counter, 1);
+    }
+
+    #[tokio::test]
+    async fn test_analyse_multiple_item() {
+        //todo test edge cases like what appends if only one entry is there or 3 or 2?
+        use chrono::NaiveDateTime;
+        let parse_from_str = NaiveDateTime::parse_from_str;
+        // edge case with one day
+        let test2 = sort_data_to_day(get_data(), get_test_dates(3)).await;
+        println!("{:?}", test2);
+        assert_eq!(test2[1].counter, 2);
     }
     #[tokio::test]
     async fn test_device_size_func(){

@@ -3,8 +3,7 @@ extern crate diesel;
 use chrono::{NaiveDateTime};
 use diesel::{QueryResult, Insertable};
 use serde::{Deserialize, Serialize};
-use crate::{db::AnalyticsDB, analytics::AnalyticEntry};
-use super::schema::sessions;
+use crate::{db::AnalyticsDB, analytics::AnalyticEntry, schema::sessions};
 
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl, BoolExpressionMethods};
 

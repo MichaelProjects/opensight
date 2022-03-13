@@ -1,11 +1,10 @@
 use chrono::{NaiveDateTime, Utc};
-use rocket::State;
 use rocket::http::Status;
 use rocket::request::{Outcome, Request, FromRequest};
 use serde_json::json;
 use crate::analyse::{sort_data_to_day, display_sizes, calc_average_session_length, sort_user_to_day, version_analysis, DayData};
-use crate::{analytics, session_dao};
-use crate::application::Application;
+use crate::{analytics};
+use crate::daos::{session_dao};
 use crate::db::AnalyticsDB;
 use crate::response::ApiResponse;
 use crate::settings::Settings;

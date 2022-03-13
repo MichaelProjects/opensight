@@ -1,13 +1,13 @@
 /// As you can see, in this file are the non admin Rest-Endpoints.
 /// These Endpoints are used to collect/recieve data from the clients using the Opensight SDK's.
 use crate::analytics::{self, AnalyticData, AnalyticEntry};
-use crate::analytics_dao::AnalyticsDao;
+use crate::daos::analytics_dao::AnalyticsDao;
 use crate::application::Application;
 use crate::dao::Dao;
 use crate::db::AnalyticsDB;
 use crate::health;
 use crate::response::ApiResponse;
-use crate::session_dao::{self, SessionIn};
+use crate::daos::session_dao::{self, SessionIn};
 use crate::settings::Settings;
 use rocket::http::Status;
 use rocket::serde::json::Json;

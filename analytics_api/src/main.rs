@@ -9,9 +9,7 @@ extern crate diesel_migrations;
 
 mod endpoints;
 mod analytics;
-mod analytics_dao;
 mod application;
-mod application_dao;
 mod dao;
 mod db;
 mod health;
@@ -20,7 +18,7 @@ mod schema;
 mod settings;
 mod response;
 mod analyse;
-mod session_dao;
+mod daos;
 mod cors;
 mod time_helper;
 
