@@ -65,6 +65,7 @@ pub async fn sort_data_to_day<'a>(entrys: Vec<AnalyticEntry>, days_vec: Vec<Stri
                     days.last_mut()
                                  .expect("Could not get last element from vec!")
                                  .counter = counter;
+                    counter = 0;
                 }
                 break
             }
@@ -129,6 +130,7 @@ pub async fn sort_user_to_day<'a>(entrys: Vec<Session>, days_vec: Vec<String>) -
                     days.last_mut()
                                  .expect("Could not get last element from vec!")
                                  .counter = counter;
+                    counter = 0;
                 }
                 break
             }
@@ -246,41 +248,7 @@ pub async fn calc_average_session_length(entrys: Vec<Session>, days_vec: Vec<Str
     }
     days
 }
-//     let mut days: Vec<DayData> = vec![];
-//     let mut before: String = String::new();
-//     let mut session_counter = 0;
-//     println!("{:?}", &data.len());
-//     for session in data.iter(){
-//         let day = get_day_from_timestamp(session.start_time.to_string());
-//         if day.ne(before.as_str()) {
-//             if !days.is_empty(){
-//             // before adding a new day, divide the session counter by the session length overall
-//             let a = days.last_mut().expect("Could not get last element from vec!");
-//             a.counter = a.counter / session_counter;
-//             // reset counter
-//             session_counter = 0;
-//             }
-//             before = day.to_string();
-//             days.push(DayData {
-//                 day,
-//                 counter: session.length as i64});
-//         }else{
-//             // gets the last day and adds the session length.
-//             days.last_mut()
-//                 .expect("Could not get last element from vec!")
-//                 .counter += session.length as i64;
-//             session_counter += 1;
-//         }
-//     }
 
-//     // quick fix, if only one day or the last day in in data, the session length wont get divided, and returns a false value
-//     if !days.is_empty(){
-//         // before adding a new day, divide the session counter by the session length overall
-//         let a = days.last_mut().expect("Could not get last element from vec!");
-//         a.counter = a.counter / session_counter;
-//         }
-//     days
-// }
 
 pub async fn version_analysis(data: Vec<AnalyticEntry>) -> Vec<DayData>{
     let mut result: Vec<DayData> = vec![];
@@ -311,7 +279,7 @@ mod tests {
     use crate::analyse::{AnalyticEntry, sort_data_to_day, display_sizes, calc_average_session_length};
 
     fn get_test_dates(count: usize) -> Vec<String> {
-        let a = vec![NaiveDateTime::from_timestamp(1646870400000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1646956800000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1647126000000 / 1000, 0).date().to_string()];
+        let a = vec![NaiveDateTime::from_timestamp(1646870400000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1646956800000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1647126000000 / 1000, 0).date().to_string(), NaiveDateTime::from_timestamp(1647256764000 / 1000, 0).date().to_string()];
         if count < 3{
             let mut x: Vec<String> = vec![];
             for y in a.iter(){
@@ -391,9 +359,10 @@ mod tests {
         // edge case with one day
         let days = get_test_dates(3);
         println!("{:?}", days);
-        let test2 = sort_data_to_day(get_data(), get_test_dates(3)).await;
+        let test2 = sort_data_to_day(get_data(), get_test_dates(4)).await;
         println!("{:?}", test2);
         assert_eq!(test2[2].counter, 2);
+        assert_eq!(test2[3].counter, 0);
     }
     #[tokio::test]
     async fn test_device_size_func(){
