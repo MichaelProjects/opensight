@@ -51,9 +51,7 @@ class AnalyticModel with ChangeNotifier {
     List<FlSpot> data = [];
     if (response["error"] == false) {
       for (var day in response["data"]["data"]) {
-        double formatDay = double.parse(day["day"].toString().split("-").last);
-        var dataPoint = FlSpot(formatDay, day["counter"]);
-        data.add(dataPoint);
+        data.add(parseFlspot(day));
       }
     }
     _userHistoryData = data;
@@ -68,9 +66,7 @@ class AnalyticModel with ChangeNotifier {
     List<FlSpot> data = [];
     if (response["error"] == false) {
       for (var day in response["data"]["data"]) {
-        double formatDay = double.parse(day["day"].toString().split("-").last);
-        var dataPoint = FlSpot(formatDay, day["counter"]);
-        data.add(dataPoint);
+        data.add(parseFlspot(day));
       }
     }
     _newUserData = data;
@@ -85,9 +81,7 @@ class AnalyticModel with ChangeNotifier {
     List<FlSpot> data = [];
     if (response["error"] == false) {
       for (var day in response["data"]["data"]) {
-        double formatDay = double.parse(day["day"].toString().split("-").last);
-        var dataPoint = FlSpot(formatDay, day["counter"]);
-        data.add(dataPoint);
+        data.add(parseFlspot(day));
       }
     }
     _sessionCountData = data;
@@ -112,9 +106,7 @@ class AnalyticModel with ChangeNotifier {
     List<FlSpot> data = [];
     if (response["error"] == false) {
       for (var day in response["data"]["data"]) {
-        double formatDay = double.parse(day["day"].toString().split("-").last);
-        var dataPoint = FlSpot(formatDay, day["counter"]);
-        data.add(dataPoint);
+        data.add(parseFlspot(day));
       }
     }
     _sessionLengthHistoryData = data;
@@ -150,4 +142,10 @@ class AnalyticModel with ChangeNotifier {
 double calculatePercentage(int total, int value) {
   double percentage = (value / total) * 100;
   return percentage;
+}
+
+FlSpot parseFlspot(Map day) {
+  double formatDay = double.parse(day["day"].toString().replaceAll("-", ""));
+  var dataPoint = FlSpot(formatDay, day["counter"]);
+  return dataPoint;
 }

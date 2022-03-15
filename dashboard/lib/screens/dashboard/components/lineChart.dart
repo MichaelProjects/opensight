@@ -40,7 +40,11 @@ class _LineChartCardState extends State<LineChartCard> {
       return LineChartData(
           titlesData: FlTitlesData(
             rightTitles: SideTitles(showTitles: false),
-            bottomTitles: SideTitles(showTitles: true, interval: 1),
+            leftTitles: SideTitles(showTitles: true),
+            bottomTitles: SideTitles(
+                showTitles: true,
+                interval: calculateIntervall(widget.data.length),
+                getTitles: formatTitle),
             topTitles: SideTitles(showTitles: false),
           ),
           lineBarsData: [_lineBarData(lalh)],
@@ -57,4 +61,27 @@ class _LineChartCardState extends State<LineChartCard> {
                 ? CircularProgressIndicator()
                 : LineChart(mainData(widget.data))));
   }
+}
+
+String formatTitle(double value) {
+  var a = value.toString();
+  var x = a.split("");
+  x.removeRange(0, 4);
+  return x.join("");
+}
+
+double calculateIntervall(int dataLength) {
+  if (dataLength <= 10) {
+    return 2;
+  }
+  if (dataLength >= 25) {
+    return 10;
+  }
+  if (dataLength >= 30) {
+    return 12;
+  }
+  if (dataLength <= 40) {
+    return 14;
+  }
+  return 1;
 }
