@@ -42,9 +42,7 @@ class _LineChartCardState extends State<LineChartCard> {
             rightTitles: SideTitles(showTitles: false),
             leftTitles: SideTitles(showTitles: true),
             bottomTitles: SideTitles(
-                showTitles: true,
-                interval: calculateIntervall(widget.data.length),
-                getTitles: formatTitle),
+                showTitles: true, getTitles: formatTitle, interval: 1),
             topTitles: SideTitles(showTitles: false),
           ),
           lineBarsData: [_lineBarData(lalh)],
@@ -67,10 +65,17 @@ String formatTitle(double value) {
   var a = value.toString();
   var x = a.split("");
   x.removeRange(0, 4);
-  return x.join("");
+  if (x[0] == "0") {
+    x.insert(2, ".");
+  }
+  var str = x.join("");
+  return str;
 }
 
 double calculateIntervall(int dataLength) {
+  if (dataLength == 2) {
+    return 1;
+  }
   if (dataLength <= 10) {
     return 2;
   }

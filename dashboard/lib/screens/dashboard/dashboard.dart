@@ -78,6 +78,8 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     AnalyticModel analyticsController = Provider.of<AnalyticModel>(context);
+    TimelineController timeController =
+        Provider.of<TimelineController>(context);
     return topOverlay.Overlay(
         child: SizedBox(
             height: size.height - topbarHeight,
