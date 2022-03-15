@@ -8,8 +8,8 @@ const FeatureList = [
     Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Opensight was designed from the ground up to be easily installed 
+        on your server and get to know your users.
       </>
     ),
   },
