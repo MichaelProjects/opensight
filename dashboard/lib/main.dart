@@ -1,6 +1,8 @@
+import 'package:dashboard/config.dart';
 import 'package:dashboard/controllers/dashboard/analytics_model.dart';
 import 'package:dashboard/controllers/app_controller.dart';
 import 'package:dashboard/controllers/global/nav_route.dart';
+import 'package:dashboard/utils/api/urls.dart';
 import 'package:dashboard/utils/dark_theme.dart';
 import 'package:dashboard/utils/light_theme.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +12,13 @@ import 'package:routemaster/routemaster.dart';
 import 'controllers/create_app_controller.dart';
 import 'controllers/timeline_controller.dart';
 
+loadConfig() {
+  Urls.host = config["opensight_stack_url"];
+}
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  loadConfig();
   runApp(const MyApp());
 }
 

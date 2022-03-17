@@ -47,7 +47,7 @@ class _LineChartCardState extends State<LineChartCard> {
               getTextStyles: (context, value) => const TextStyle(fontSize: 10),
             ),
             bottomTitles: SideTitles(
-              interval: 1,
+              interval: (widget.seriesData.value.length / 14),
               getTextStyles: (context, value) => const TextStyle(fontSize: 10),
               getTitles: (values) {
                 return widget.seriesData.date[values.toInt()];

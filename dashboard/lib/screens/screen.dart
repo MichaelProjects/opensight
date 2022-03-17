@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:dashboard/screens/overlay/overlay.dart' as topOverlay;
 
 class MainScreen extends StatefulWidget {
-  MainScreen({Key? key}) : super(key: key);
+  Widget child;
+  MainScreen(this.child);
 
   @override
   State<MainScreen> createState() => MainScreenState();
@@ -10,6 +12,6 @@ class MainScreen extends StatefulWidget {
 class MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return topOverlay.Overlay(child: widget.child);
   }
 }

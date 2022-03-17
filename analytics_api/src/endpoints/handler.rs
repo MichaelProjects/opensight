@@ -78,8 +78,8 @@ pub(crate) async fn update_session(
     }
 }
 
-#[get("/<application_id>/session")]
-pub(crate) async fn get_sessions(conn: AnalyticsDB, application_id: String) -> ApiResponse {
+#[get("/<application_id>/session?<limit>&<start>&<end>")]
+pub(crate) async fn get_sessions(conn: AnalyticsDB, application_id: String, limit: Option<i32>, start: Option<i64>, end: Option<i64>) -> ApiResponse {
     let sessions: Vec<AnalyticEntry> = analytics::get_all_entries(application_id, conn).await;
     ApiResponse::new(Status::Ok, json!({ "sessions": sessions }))
 }

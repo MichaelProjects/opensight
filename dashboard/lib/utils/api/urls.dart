@@ -1,5 +1,5 @@
 class Urls {
-  static const String host = 'https://app-dev.fynancial.de';
+  static String host = '';
 
   // V1 Core Endpoints
   static Uri getAllApplications = Uri.parse('$host/core/v1/application');

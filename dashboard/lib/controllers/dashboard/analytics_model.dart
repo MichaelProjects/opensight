@@ -41,9 +41,14 @@ class AnalyticModel with ChangeNotifier {
 
   Future fetchEntrys(String appId) async {
     _analyticsState = AnalyticsState.loading;
-    var response = await ApiClient().getAnalticsEntrys(appId);
-    _analyticData = response;
-    _analyticsState = AnalyticsState.loaded;
+    Map response = await ApiClient().getAnalticsEntrys(appId);
+    if (response["error"] == false) {
+      _analyticData = response;
+      _analyticsState = AnalyticsState.loaded;
+    } else {
+      _analyticsState = AnalyticsState.error;
+    }
+    notifyListeners();
   }
 
   Future getUserHistory(String appId, int start, int end) async {
