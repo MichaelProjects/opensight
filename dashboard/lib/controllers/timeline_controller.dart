@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 enum TimeFrame { today, days7, days30, monthCurrent, custom, notSpecified }
 
+enum UpdateTimefame { not, updated }
+
 class TimelineController with ChangeNotifier {
   static DateTime end = DateTime.now().toUtc();
   int _startTime =
@@ -12,11 +14,12 @@ class TimelineController with ChangeNotifier {
 
   int get startTime => _startTime;
   int get endTime => _endTime;
+  TimeFrame get timeFrame => _timeFrame;
 
   getLast30Days() {
     _startTime = DateTime.now()
         .toUtc()
-        .subtract(Duration(days: 30))
+        .subtract(const Duration(days: 30))
         .millisecondsSinceEpoch;
     _endTime = DateTime.now().millisecondsSinceEpoch;
     _timeFrame = TimeFrame.days30;
@@ -35,7 +38,7 @@ class TimelineController with ChangeNotifier {
   getLast7Day() {
     var start = DateTime.now()
         .toUtc()
-        .subtract(Duration(days: 7))
+        .subtract(const Duration(days: 7))
         .millisecondsSinceEpoch;
     _startTime = start;
     _endTime = DateTime.now().toUtc().millisecondsSinceEpoch;

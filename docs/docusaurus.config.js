@@ -86,8 +86,8 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'Discord',
+                href: 'https://discord.gg/ZEPegDZnG4',
               },
             ],
           },
@@ -98,6 +98,14 @@ const config = {
               {
                 label: 'GitHub',
                 href: 'https://github.com/facebook/docusaurus',
+              },
+              {
+                label: 'Homepage',
+                href: 'https://opensight.io',
+              },
+              {
+                label: 'Cloud-Console',
+                href: 'https://console.opensight.io',
               },
             ],
           },

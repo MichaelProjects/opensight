@@ -1,9 +1,11 @@
+import 'package:dashboard/model/timeseries.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class LineChartCard extends StatefulWidget {
-  List<FlSpot> data;
-  LineChartCard(this.data, {Key? key}) : super(key: key);
+  Timeseries seriesData;
+  LineChartCard(this.seriesData, {Key? key}) : super(key: key);
   @override
   _LineChartCardState createState() => _LineChartCardState();
 }
@@ -13,7 +15,7 @@ class _LineChartCardState extends State<LineChartCard> {
   double smallest = 0;
   @override
   Widget build(BuildContext context) {
-    for (var x in widget.data) {
+    for (var x in widget.seriesData.value) {
       if (x.y > biggest) {
         biggest = x.y;
       }
@@ -40,14 +42,23 @@ class _LineChartCardState extends State<LineChartCard> {
       return LineChartData(
           titlesData: FlTitlesData(
             rightTitles: SideTitles(showTitles: false),
-            leftTitles: SideTitles(showTitles: true),
+            leftTitles: SideTitles(
+              showTitles: true,
+              getTextStyles: (context, value) => const TextStyle(fontSize: 10),
+            ),
             bottomTitles: SideTitles(
-                showTitles: true, getTitles: formatTitle, interval: 1),
+              interval: 1,
+              getTextStyles: (context, value) => const TextStyle(fontSize: 10),
+              getTitles: (values) {
+                return widget.seriesData.date[values.toInt()];
+              },
+              showTitles: true,
+            ),
             topTitles: SideTitles(showTitles: false),
           ),
           lineBarsData: [_lineBarData(lalh)],
           maxY: biggest,
-          minX: smallest,
+          minX: 0,
           gridData: FlGridData(show: false),
           borderData: FlBorderData(show: false));
     }
@@ -55,38 +66,8 @@ class _LineChartCardState extends State<LineChartCard> {
     return SizedBox(
         child: Padding(
             padding: const EdgeInsets.only(right: 18, top: 10, bottom: 18),
-            child: widget.data.isEmpty == true
+            child: widget.seriesData.value.isEmpty == true
                 ? CircularProgressIndicator()
-                : LineChart(mainData(widget.data))));
+                : LineChart(mainData(widget.seriesData.value))));
   }
-}
-
-String formatTitle(double value) {
-  var a = value.toString();
-  var x = a.split("");
-  x.removeRange(0, 4);
-  if (x[0] == "0") {
-    x.insert(2, ".");
-  }
-  var str = x.join("");
-  return str;
-}
-
-double calculateIntervall(int dataLength) {
-  if (dataLength == 2) {
-    return 1;
-  }
-  if (dataLength <= 10) {
-    return 2;
-  }
-  if (dataLength >= 25) {
-    return 10;
-  }
-  if (dataLength >= 30) {
-    return 12;
-  }
-  if (dataLength <= 40) {
-    return 14;
-  }
-  return 1;
 }

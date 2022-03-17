@@ -1,17 +1,19 @@
+import 'package:dashboard/model/timeseries.dart';
 import 'package:dashboard/utils/api/client.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 enum AnalyticsState { none, loading, loaded, error }
 
 class AnalyticModel with ChangeNotifier {
   Map _analyticData = {};
-  List<FlSpot> _userHistoryData = [];
-  List<FlSpot> _newUserData = [];
+  Timeseries _userHistoryData = Timeseries.newObject();
+  Timeseries _newUserData = Timeseries.newObject();
   String _displaySizeData = "";
-  List<FlSpot> _sessionLengthHistoryData = [];
+  Timeseries _sessionLengthHistoryData = Timeseries.newObject();
   List<PieChartSectionData> _appVersionData = [];
-  List<FlSpot> _sessionCountData = [];
+  Timeseries _sessionCountData = Timeseries.newObject();
 
   AnalyticsState _analyticsState = AnalyticsState.none;
   AnalyticsState _userHistoryState = AnalyticsState.none;
@@ -22,12 +24,12 @@ class AnalyticModel with ChangeNotifier {
   AnalyticsState _sessionCountState = AnalyticsState.none;
 
   Map get analyticData => _analyticData;
-  List<FlSpot> get userHistoryData => _userHistoryData;
-  List<FlSpot> get newUserData => _newUserData;
+  Timeseries get userHistoryData => _userHistoryData;
+  Timeseries get newUserData => _newUserData;
   String get displaySizeData => _displaySizeData;
-  List<FlSpot> get sessionLengthHistoryData => _sessionLengthHistoryData;
+  Timeseries get sessionLengthHistoryData => _sessionLengthHistoryData;
   List<PieChartSectionData> get appVersionData => _appVersionData;
-  List<FlSpot> get sessionCountData => _sessionCountData;
+  Timeseries get sessionCountData => _sessionCountData;
 
   AnalyticsState get analyticsState => _analyticsState;
   AnalyticsState get userHistoryState => _userHistoryState;
@@ -48,14 +50,12 @@ class AnalyticModel with ChangeNotifier {
     _userHistoryState = AnalyticsState.loading;
     notifyListeners();
     Map response = await ApiClient().getUserHistory(appId, start, end);
-    List<FlSpot> data = [];
     if (response["error"] == false) {
-      for (var day in response["data"]["data"]) {
-        data.add(parseFlspot(day));
-      }
+      _userHistoryData = Timeseries.fromJson(response);
+      _userHistoryState = AnalyticsState.loaded;
+    } else {
+      _userHistoryState = AnalyticsState.error;
     }
-    _userHistoryData = data;
-    _userHistoryState = AnalyticsState.loaded;
     notifyListeners();
   }
 
@@ -63,14 +63,12 @@ class AnalyticModel with ChangeNotifier {
     _newUserState = AnalyticsState.loading;
     notifyListeners();
     var response = await ApiClient().getNewUsers(appId, start, end);
-    List<FlSpot> data = [];
     if (response["error"] == false) {
-      for (var day in response["data"]["data"]) {
-        data.add(parseFlspot(day));
-      }
+      _newUserData = Timeseries.fromJson(response);
+      _newUserState = AnalyticsState.loaded;
+    } else {
+      _newUserState = AnalyticsState.error;
     }
-    _newUserData = data;
-    _newUserState = AnalyticsState.loaded;
     notifyListeners();
   }
 
@@ -79,14 +77,14 @@ class AnalyticModel with ChangeNotifier {
     notifyListeners();
     var response = await ApiClient().getDisplaySize(appId, start, end);
     List<FlSpot> data = [];
-    if (response["error"] == false) {
-      for (var day in response["data"]["data"]) {
-        data.add(parseFlspot(day));
-      }
-    }
-    _sessionCountData = data;
+    double counter = 0;
 
-    _sessionCountState = AnalyticsState.loaded;
+    if (response["error"] == false) {
+      _sessionCountData = Timeseries.fromJson(response);
+      _sessionCountState = AnalyticsState.loaded;
+    } else {
+      _sessionCountState = AnalyticsState.error;
+    }
     notifyListeners();
   }
 
@@ -104,13 +102,14 @@ class AnalyticModel with ChangeNotifier {
     notifyListeners();
     var response = await ApiClient().getSessionLengthHistory(appId, start, end);
     List<FlSpot> data = [];
+    double counter = 0;
+
     if (response["error"] == false) {
-      for (var day in response["data"]["data"]) {
-        data.add(parseFlspot(day));
-      }
+      _sessionLengthHistoryData = Timeseries.fromJson(response);
+      _sessionLengthHistoryState = AnalyticsState.loaded;
+    } else {
+      _sessionLengthHistoryState = AnalyticsState.error;
     }
-    _sessionLengthHistoryData = data;
-    _sessionLengthHistoryState = AnalyticsState.loaded;
     notifyListeners();
   }
 
@@ -144,8 +143,11 @@ double calculatePercentage(int total, int value) {
   return percentage;
 }
 
-FlSpot parseFlspot(Map day) {
-  double formatDay = double.parse(day["day"].toString().replaceAll("-", ""));
-  var dataPoint = FlSpot(formatDay, day["counter"]);
+FlSpot parseFlspot(double counter, Map day) {
+  DateFormat format = new DateFormat("yyyy-MM-dd");
+  String rawDate = day["day"];
+  double dateTamp = format.parse(rawDate).millisecondsSinceEpoch.toDouble();
+  var calc = day["day"].toString().split("-");
+  var dataPoint = FlSpot(counter, day["counter"]);
   return dataPoint;
 }

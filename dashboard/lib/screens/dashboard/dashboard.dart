@@ -4,9 +4,7 @@ import 'package:dashboard/controllers/timeline_controller.dart';
 import 'package:dashboard/screens/dashboard/components/chart_wrapper.dart';
 import 'package:dashboard/screens/dashboard/components/lineChart.dart';
 import 'package:dashboard/screens/dashboard/components/pie_chart.dart';
-import 'package:dashboard/screens/overlay/topbar/timeline.dart';
 import 'package:dashboard/utils/sizes.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dashboard/screens/overlay/overlay.dart' as topOverlay;
@@ -18,13 +16,9 @@ class Dashboard extends StatefulWidget {
   _DashboardState createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> {
-  @override
-  void didUpdateWidget(covariant Dashboard oldWidget) {
-    print("update");
-    super.didUpdateWidget(oldWidget);
-  }
+TimeFrame before = TimeFrame.notSpecified;
 
+class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
@@ -48,32 +42,32 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  // todo fl_chart is stuck if there is only one element in the list
-  Widget pieChart = PieChart(
-    PieChartData(sections: [PieChartSectionData()]),
-    swapAnimationDuration: const Duration(milliseconds: 150), // Optional
-    swapAnimationCurve: Curves.linear, // Optional
-  );
+  @override
+  void didChangeDependencies() {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      TimelineController timelineController =
+          Provider.of<TimelineController>(context, listen: false);
+      if (timelineController.timeFrame != before) {
+        AnalyticModel analyticsController =
+            Provider.of<AnalyticModel>(context, listen: false);
+        ApplicationModel appController =
+            Provider.of<ApplicationModel>(context, listen: false);
+        analyticsController.getUserHistory(appController.selectedApp.appID,
+            timelineController.startTime, timelineController.endTime);
+        analyticsController.getNewUserHistory(appController.selectedApp.appID,
+            timelineController.startTime, timelineController.endTime);
+        analyticsController.getSessionLengthHistory(
+            appController.selectedApp.appID,
+            timelineController.startTime,
+            timelineController.endTime);
+        analyticsController.getAppVersion(appController.selectedApp.appID,
+            timelineController.startTime, timelineController.endTime);
+        before = timelineController.timeFrame;
+      }
+    });
+    super.didChangeDependencies();
+  }
 
-  Widget appVersions = BarChart(BarChartData(
-    barGroups: [
-      BarChartGroupData(x: 1, barRods: [
-        BarChartRodData(y: 100),
-      ])
-    ],
-    gridData: FlGridData(show: false),
-    borderData: FlBorderData(show: false),
-  ));
-  Widget screenSizes = BarChart(BarChartData(
-    barGroups: [
-      BarChartGroupData(x: 1, barRods: [
-        BarChartRodData(y: 100),
-        BarChartRodData(y: 80),
-      ])
-    ],
-    gridData: FlGridData(show: false),
-    borderData: FlBorderData(show: false),
-  ));
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -88,7 +82,7 @@ class _DashboardState extends State<Dashboard> {
               return LayoutBuilder(builder: (context, constraints) {
                 return GridView.count(
                   crossAxisCount: constraints.maxWidth > 1200
-                      ? 3
+                      ? 2
                       : constraints.maxWidth < 800
                           ? 1
                           : 2,

@@ -142,7 +142,6 @@ class _TimelineState extends State<Timeline> {
         height: 60,
         child: GestureDetector(
             onTapDown: (TapDownDetails details) {
-              print("Clicked");
               showPopUpMenu(details.globalPosition, context);
             },
             child: Row(
