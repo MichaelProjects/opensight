@@ -9,6 +9,7 @@ use crate::health;
 use crate::response::ApiResponse;
 use crate::daos::session_dao::{self, SessionIn};
 use crate::settings::Settings;
+use chrono::NaiveDateTime;
 use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::State;
@@ -79,7 +80,15 @@ pub(crate) async fn update_session(
 }
 
 #[get("/<application_id>/session?<limit>&<start>&<end>")]
-pub(crate) async fn get_sessions(conn: AnalyticsDB, application_id: String, limit: Option<i32>, start: Option<i64>, end: Option<i64>) -> ApiResponse {
-    let sessions: Vec<AnalyticEntry> = analytics::get_all_entries(application_id, conn).await;
+pub(crate) async fn get_sessions(conn: AnalyticsDB, application_id: String, limit: Option<i64>, start: Option<i64>, end: Option<i64>) -> ApiResponse {
+    let start = NaiveDateTime::from_timestamp(start.unwrap() / 1000, 0);
+    let end = NaiveDateTime::from_timestamp(end.unwrap() / 1000, 0);
+    
+    let mut final_limit: i64 = 100;
+    if limit.is_some(){
+        final_limit = limit.unwrap();
+    }
+    println!("{:?}", &end);
+    let sessions: Vec<AnalyticEntry> = analytics::get_all_entries(application_id, conn, final_limit, start, end).await;
     ApiResponse::new(Status::Ok, json!({ "sessions": sessions }))
 }

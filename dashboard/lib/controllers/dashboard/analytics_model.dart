@@ -1,3 +1,5 @@
+import 'package:dashboard/model/explore_entry.dart';
+import 'package:dashboard/model/session_entry.dart';
 import 'package:dashboard/model/timeseries.dart';
 import 'package:dashboard/utils/api/client.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -7,7 +9,7 @@ import 'package:intl/intl.dart';
 enum AnalyticsState { none, loading, loaded, error }
 
 class AnalyticModel with ChangeNotifier {
-  Map _analyticData = {};
+  ExploreEntry _analyticData = ExploreEntry.newObject();
   Timeseries _userHistoryData = Timeseries.newObject();
   Timeseries _newUserData = Timeseries.newObject();
   String _displaySizeData = "";
@@ -23,7 +25,7 @@ class AnalyticModel with ChangeNotifier {
   AnalyticsState _appVersionState = AnalyticsState.none;
   AnalyticsState _sessionCountState = AnalyticsState.none;
 
-  Map get analyticData => _analyticData;
+  ExploreEntry get analyticData => _analyticData;
   Timeseries get userHistoryData => _userHistoryData;
   Timeseries get newUserData => _newUserData;
   String get displaySizeData => _displaySizeData;

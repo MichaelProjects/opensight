@@ -51,9 +51,11 @@ pub fn insert_entry(data: AnalyticEntry, conn: &mut PgConnection) -> QueryResult
     return response
 }
 
-pub async fn get_all<'a>(app_id: String, conn: AnalyticsDB) -> Vec<AnalyticEntry>  {
-    let response: QueryResult<Vec<AnalyticEntry>> = conn.run(|c| analytics::table
+pub async fn get_all<'a>(app_id: String, conn: AnalyticsDB, limit: i64, start: NaiveDateTime, end: NaiveDateTime) -> Vec<AnalyticEntry>  {
+    let response: QueryResult<Vec<AnalyticEntry>> = conn.run(move |c| analytics::table
         .filter(analytics::application_id.eq(app_id))
+        .filter(analytics::creation_time.between(start, end))
+        .limit(limit)
         .load::<AnalyticEntry>(c))
         .await;
     return response.expect("Entrys");

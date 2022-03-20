@@ -62,8 +62,8 @@ pub async fn insert_entry(data: AnalyticEntry , session_data: Session, conn: Ana
     Ok(json!({"session_id": response.id}))
 }
 
-pub async fn get_all_entries(app_id: String, conn: AnalyticsDB) -> Vec<AnalyticEntry> {
-    let entrys = analytics_dao::get_all(app_id, conn).await;
+pub async fn get_all_entries(app_id: String, conn: AnalyticsDB, limit: i64, start: NaiveDateTime, end: NaiveDateTime) -> Vec<AnalyticEntry> {
+    let entrys = analytics_dao::get_all(app_id, conn, limit, start, end).await;
     return entrys;
 }
 

@@ -15,6 +15,14 @@ class Explore extends StatefulWidget {
   State<Explore> createState() => _ExploreState();
 }
 
+List<String> headers = [
+  "session_id",
+  "application_id",
+  "analytic",
+  "event",
+  "crash"
+];
+
 class _ExploreState extends State<Explore> {
   @override
   Widget build(BuildContext context) {
@@ -28,63 +36,51 @@ class _ExploreState extends State<Explore> {
 
     analyticsController.fetchEntrys(appController.selectedApp.appID);
 
+    List<Widget> gen() {
+      List<Widget> a = [];
+      for (var x in headers) {
+        var y = Container(
+            color: Theme.of(context).primaryColor,
+            child: Center(child: Text(x)));
+        a.add(y);
+      }
+      return a;
+    }
+
+    ExpandableTableHeader header = ExpandableTableHeader(
+        firstCell: Container(child: gen()[0]), children: gen());
+//Creation rows
+    List<ExpandableTableRow> rows = List.generate(
+        headers.length,
+        (rowIndex) => ExpandableTableRow(
+              height: 50,
+              firstCell: Container(
+                  color: Theme.of(context).primaryColor,
+                  margin: EdgeInsets.all(1),
+                  child: Center(
+                      child: Text(
+                    'Row $rowIndex',
+                  ))),
+              children: List<Widget>.generate(
+                  headers.length,
+                  (columnIndex) => Container(
+                      color: Theme.of(context).primaryColor,
+                      margin: EdgeInsets.all(1),
+                      child: Center(
+                          child: Text(
+                        'Cell $rowIndex:$columnIndex',
+                      )))),
+            ));
+
     return topOverlay.Overlay(
         child: Container(
             height: size.height - topbarHeight,
             width: size.width - sidebarWidth,
-            child: ExpandableTable(
-                rows: rows,
-                header: header,
-                scrollShadowColor: Theme.of(context).focusColor)));
+            child: Container(
+                margin: EdgeInsets.all(15),
+                child: ExpandableTable(
+                    rows: rows,
+                    header: header,
+                    scrollShadowColor: Theme.of(context).focusColor))));
   }
 }
-
-const Color primaryColor = Color(0xFF1e2f36); //corner
-const Color accentColor = Color(0xFF0d2026); //background
-const TextStyle textStyle = TextStyle(color: Colors.white);
-const TextStyle textStyleSubItems = TextStyle(color: Colors.grey);
-
-List<String> headers = ["application_id", "analytic", "event", "crash"];
-
-List<Widget> gen() {
-  List<Widget> a = [];
-  for (var x in headers) {
-    var y = Container(child: Center(child: Text(x)));
-    a.add(y);
-  }
-  return a;
-}
-
-ExpandableTableHeader header = ExpandableTableHeader(
-    firstCell: Container(
-        color: primaryColor,
-        child: Center(
-            child: Text(
-          'session_id',
-          style: textStyle,
-        ))),
-    children: gen());
-//Creation rows
-List<ExpandableTableRow> rows = List.generate(
-    headers.length,
-    (rowIndex) => ExpandableTableRow(
-          height: 50,
-          firstCell: Container(
-              color: primaryColor,
-              margin: EdgeInsets.all(1),
-              child: Center(
-                  child: Text(
-                'Row $rowIndex',
-                style: textStyle,
-              ))),
-          children: List<Widget>.generate(
-              headers.length,
-              (columnIndex) => Container(
-                  color: primaryColor,
-                  margin: EdgeInsets.all(1),
-                  child: Center(
-                      child: Text(
-                    'Cell $rowIndex:$columnIndex',
-                    style: textStyle,
-                  )))),
-        ));

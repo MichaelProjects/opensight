@@ -1,4 +1,4 @@
-alter table if exists sessions ADD COLUMN  is_first_login_today boolean;
+alter table if exists sessions ADD COLUMN is_first_login_today boolean;
 
 create table if not exists sessions (
     id text primary key,
