@@ -22,8 +22,9 @@ class ApiClient {
     return response["data"];
   }
 
-  Future getAnalticsEntrys(String appId) async {
-    Map response = await HttpClient().get(Urls.getAllAnalytics(appId));
+  Future getAnalticsEntrys(String appId, int limit, int start, int end) async {
+    Map response =
+        await HttpClient().get(Urls.getAllAnalytics(appId, limit, start, end));
     return response;
   }
   // analytics endpoints

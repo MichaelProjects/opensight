@@ -90,5 +90,5 @@ pub(crate) async fn get_sessions(conn: AnalyticsDB, application_id: String, limi
     }
     println!("{:?}", &end);
     let sessions: Vec<AnalyticEntry> = analytics::get_all_entries(application_id, conn, final_limit, start, end).await;
-    ApiResponse::new(Status::Ok, json!({ "sessions": sessions }))
+    ApiResponse::new(Status::Ok, json!({ "data": sessions }))
 }

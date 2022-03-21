@@ -27,15 +27,29 @@ Opensight consists out of 2 parts, the Client and the Backend. The Backend is bu
 
 ## SDK'S
 Currently we offer following SDK's:
-- Flutter SDk
+- Flutter SDK
 
 Comming soon:
 - IOS SDK (Swift)
 - Android SDK (Kotlin)
-- Javascript / TypeScript SDK
+- Web SDK for js & ts (Webassembly)
+
+Feel free to develop your own SDK's, and submit a PR to the Opensight Repo.
 
 ## How to deploy
 Check out our [documentation](https://docs.opensight.io) to get started with your deployment of opensight.
+
+## Road Map
+The roadmap shows you the high priority features we currently / will work on.
+
+- Event Tracking Microservices
+- Better documentation
+- Crash Reporting Microservices
+- Web SDK for Javascirpt and / Typescript
+- Core service refactoring
+- Implement Project Management
+- Authentication (OAuth2/Openid)
+
 
 ## Want to contribute or contact me ?
 

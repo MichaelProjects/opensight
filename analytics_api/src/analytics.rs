@@ -5,12 +5,9 @@ use std::error::Error;
 use super::schema::analytics;
 use crate::daos::session_dao::Session;
 use crate::daos::{analytics_dao, session_dao};
-use crate::daos::{analytics_dao::AnalyticsDao};
 
-use crate::dao::Dao;
 use crate::db::AnalyticsDB;
 use chrono::NaiveDateTime;
-use diesel::PgConnection;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use uuid::Uuid;

@@ -1,4 +1,5 @@
 import 'package:dashboard/controllers/timeline_controller.dart';
+import 'package:dashboard/model/explore_entry.dart';
 import 'package:dashboard/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:dashboard/screens/overlay/overlay.dart' as topOverlay;
@@ -15,18 +16,22 @@ class Explore extends StatefulWidget {
   State<Explore> createState() => _ExploreState();
 }
 
+//List<String> headers = ["application_id", "analytic", "event", "crash"];
+
 List<String> headers = [
-  "session_id",
   "application_id",
-  "analytic",
-  "event",
-  "crash"
+  "creationTime",
+  "os",
+  "deviceSize",
+  "newUser",
+  "country",
+  "deviceType",
+  "version"
 ];
 
 class _ExploreState extends State<Explore> {
   @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+  void initState() {
     AnalyticModel analyticsController =
         Provider.of<AnalyticModel>(context, listen: false);
     ApplicationModel appController =
@@ -34,7 +39,15 @@ class _ExploreState extends State<Explore> {
     TimelineController timelineController =
         Provider.of<TimelineController>(context, listen: false);
 
-    analyticsController.fetchEntrys(appController.selectedApp.appID);
+    analyticsController.fetchEntrys(appController.selectedApp.appID, 200,
+        timelineController.startTime, timelineController.endTime);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    AnalyticModel analyticsController = Provider.of<AnalyticModel>(context);
 
     List<Widget> gen() {
       List<Widget> a = [];
@@ -48,7 +61,11 @@ class _ExploreState extends State<Explore> {
     }
 
     ExpandableTableHeader header = ExpandableTableHeader(
-        firstCell: Container(child: gen()[0]), children: gen());
+        firstCell: Container(
+            child: Container(
+                color: Theme.of(context).primaryColor,
+                child: Center(child: Text("session_id")))),
+        children: gen());
 //Creation rows
     List<ExpandableTableRow> rows = List.generate(
         headers.length,
@@ -72,15 +89,48 @@ class _ExploreState extends State<Explore> {
                       )))),
             ));
 
+    List<ExpandableTableRow> parseRows(ExploreEntry data) {
+      List<ExpandableTableRow> rows = [];
+      for (var x in data.analytic) {
+        var y = ExpandableTableRow(
+            height: 50,
+            firstCell: Container(
+                color: Theme.of(context).primaryColor,
+                margin: EdgeInsets.all(1),
+                child: Center(
+                    child: Text(
+                  x.sessionId,
+                ))),
+            children: x
+                .to_list()
+                .map((e) => Container(
+                    color: Theme.of(context).primaryColor,
+                    margin: EdgeInsets.all(1),
+                    child: Center(child: Text(e))))
+                .toList());
+        rows.add(y);
+      }
+      return rows;
+    }
+
     return topOverlay.Overlay(
-        child: Container(
+        child: SizedBox(
             height: size.height - topbarHeight,
             width: size.width - sidebarWidth,
-            child: Container(
-                margin: EdgeInsets.all(15),
-                child: ExpandableTable(
-                    rows: rows,
-                    header: header,
-                    scrollShadowColor: Theme.of(context).focusColor))));
+            child: Builder(builder: (context) {
+              switch (analyticsController.exploreState) {
+                case AnalyticsState.loading:
+                  return Center(child: CircularProgressIndicator());
+                case AnalyticsState.loaded:
+                  return Container(
+                      margin: EdgeInsets.all(15),
+                      child: ExpandableTable(
+                          rows: parseRows(analyticsController.exploreData),
+                          header: header,
+                          scrollShadowColor: Theme.of(context).focusColor));
+                default:
+                  return Center(child: Text("An error occurred while loading"));
+              }
+            })));
   }
 }

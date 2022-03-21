@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 enum AnalyticsState { none, loading, loaded, error }
 
 class AnalyticModel with ChangeNotifier {
-  ExploreEntry _analyticData = ExploreEntry.newObject();
+  ExploreEntry _exploreData = ExploreEntry.newObject();
   Timeseries _userHistoryData = Timeseries.newObject();
   Timeseries _newUserData = Timeseries.newObject();
   String _displaySizeData = "";
@@ -17,7 +17,7 @@ class AnalyticModel with ChangeNotifier {
   List<PieChartSectionData> _appVersionData = [];
   Timeseries _sessionCountData = Timeseries.newObject();
 
-  AnalyticsState _analyticsState = AnalyticsState.none;
+  AnalyticsState _exploreState = AnalyticsState.none;
   AnalyticsState _userHistoryState = AnalyticsState.none;
   AnalyticsState _newUserState = AnalyticsState.none;
   AnalyticsState _displaySizeState = AnalyticsState.none;
@@ -25,7 +25,7 @@ class AnalyticModel with ChangeNotifier {
   AnalyticsState _appVersionState = AnalyticsState.none;
   AnalyticsState _sessionCountState = AnalyticsState.none;
 
-  ExploreEntry get analyticData => _analyticData;
+  ExploreEntry get exploreData => _exploreData;
   Timeseries get userHistoryData => _userHistoryData;
   Timeseries get newUserData => _newUserData;
   String get displaySizeData => _displaySizeData;
@@ -33,7 +33,7 @@ class AnalyticModel with ChangeNotifier {
   List<PieChartSectionData> get appVersionData => _appVersionData;
   Timeseries get sessionCountData => _sessionCountData;
 
-  AnalyticsState get analyticsState => _analyticsState;
+  AnalyticsState get exploreState => _exploreState;
   AnalyticsState get userHistoryState => _userHistoryState;
   AnalyticsState get newUserState => _newUserState;
   AnalyticsState get displaySizeState => _displaySizeState;
@@ -41,14 +41,15 @@ class AnalyticModel with ChangeNotifier {
   AnalyticsState get appVersionState => _appVersionState;
   AnalyticsState get sessionCountState => _sessionCountState;
 
-  Future fetchEntrys(String appId) async {
-    _analyticsState = AnalyticsState.loading;
-    Map response = await ApiClient().getAnalticsEntrys(appId);
+  Future fetchEntrys(String appId, int limit, int start, int end) async {
+    _exploreState = AnalyticsState.loading;
+    Map response =
+        await ApiClient().getAnalticsEntrys(appId, limit, start, end);
     if (response["error"] == false) {
-      _analyticData = response;
-      _analyticsState = AnalyticsState.loaded;
+      _exploreData = ExploreEntry.fromJson(response["data"]);
+      _exploreState = AnalyticsState.loaded;
     } else {
-      _analyticsState = AnalyticsState.error;
+      _exploreState = AnalyticsState.error;
     }
     notifyListeners();
   }

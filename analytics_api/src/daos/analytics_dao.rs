@@ -5,7 +5,7 @@ use crate::schema::analytics;
 use crate::schema::analytics::columns::{session_id};
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 use log::debug;
-use chrono::{NaiveDateTime, Utc};
+use chrono::{NaiveDateTime};
 
 pub struct AnalyticsDao {}
 impl Dao<AnalyticEntry, AnalyticEntry> for AnalyticsDao {

@@ -1,4 +1,5 @@
-ALTER TABLE if exists analytics drop column if exists "last_session";
+ALTER TABLE if exists analytics drop column if exists "last_session", "session_length";
+
 CREATE TABLE if not exists analytics ( 
     session_id text NOT NULL, 
     application_id text NOT NULL, 

@@ -5,7 +5,7 @@ class AnalyticEntry {
   String os;
   String deviceSize;
   bool newUser;
-  String counter;
+  String country;
   String deviceType;
   String version;
   AnalyticEntry(
@@ -15,7 +15,7 @@ class AnalyticEntry {
       this.os,
       this.deviceSize,
       this.newUser,
-      this.counter,
+      this.country,
       this.deviceType,
       this.version);
 
@@ -27,9 +27,21 @@ class AnalyticEntry {
       responseData["os"],
       responseData["device_size"],
       responseData["new_user"],
-      responseData["counter"],
+      responseData["country"],
       responseData["device_type"],
       responseData["version"],
     );
+  }
+  List<String> to_list() {
+    return [
+      applicationId,
+      creationTime.toString(),
+      os,
+      deviceSize,
+      newUser.toString(),
+      country,
+      deviceType,
+      version
+    ];
   }
 }

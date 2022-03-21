@@ -12,8 +12,9 @@ class Urls {
   static Uri createApplication = Uri.parse('$host/core/v1/application');
 
   // V1 Analytics Endpoints
-  static Uri getAllAnalytics(String appId) {
-    return Uri.parse('$host/analytic/v1/$appId/session');
+  static Uri getAllAnalytics(String appId, int limit, int start, int end) {
+    return Uri.parse(
+        '$host/analytic/v1/$appId/session?limit=$limit&start=$start&end=$end');
   }
 
   static Uri getAnalyseNewUser(String appid, int startFrame, int endFrame) {

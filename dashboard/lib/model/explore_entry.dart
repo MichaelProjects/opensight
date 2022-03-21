@@ -15,6 +15,10 @@ class ExploreEntry {
     List<SessionEntry> session = [];
     List<AnalyticEntry> analytic = [];
 
+    for (Map item in response["data"]) {
+      AnalyticEntry data = AnalyticEntry.fromJson(item);
+      analytic.add(data);
+    }
     return ExploreEntry(session, analytic);
   }
 }
