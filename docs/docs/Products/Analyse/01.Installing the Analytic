@@ -1,5 +1,6 @@
-### Requirement
+:::tip
 Before you deploy anything please read the Opensight Stack documentation to understand how the whole stack works together.
+:::
 
 ### Deploy 
 We offer a prebuild docker container that contains only the analytic service.
