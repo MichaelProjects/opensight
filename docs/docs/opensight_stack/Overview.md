@@ -1,1 +1,0 @@
-Opensight consits out of multiple microservices to offer a great modularity and save ressources.
