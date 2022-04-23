@@ -1,4 +1,21 @@
-# Opensight
+<p align="center">
+  <a href="https://logchimp.codecarrot.net/">
+    <img src="https://docs.opensight.io/img/logo.png" alt="Opensight" height="72" />
+  </a>
+</p>
+<h1 align="center">
+  Opensight
+</h1>
+
+<p align="center">
+	Get to know your useres without compromising their privacy with Opensight.
+</p>
+
+<p align="center">
+  <a href="https://www.patreon.com/michaelprojects">
+    <img src="https://img.shields.io/badge/become%20a-patron-blue.svg?style=flat&colorA=555555&colorB=F86754" alt="Become a Patreon" />
+  </a>
+</p>
 
 ### Still under heavy construction
 Opensight is still under development and there will be big & breaking changes in the future. This should only be a pre-alpha test release, with a [demo](https://demo.opensight.io/) to check it out.
