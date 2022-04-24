@@ -7,6 +7,7 @@ table! {
         device_size -> Text,
         new_user -> Bool,
         country -> Text,
+        session_length -> Int4,
         device_type -> Text,
         version -> Text,
     }
@@ -24,13 +25,11 @@ table! {
 }
 
 table! {
-    opensight_user (userid, group_id) {
-        userid -> Text,
-        group_id -> Text,
-        username -> Text,
-        email -> Text,
-        password -> Text,
-        creation_time -> Timestamp,
+    projects (id) {
+        id -> Text,
+        projects_name -> Text,
+        created -> Timestamp,
+        updated -> Timestamp,
     }
 }
 
@@ -39,6 +38,7 @@ table! {
         id -> Text,
         application_id -> Text,
         length -> Int4,
+        is_first_login_today -> Bool,
         start_time -> Timestamp,
     }
 }
@@ -51,22 +51,20 @@ table! {
 }
 
 table! {
-    users (userid) {
-        userid -> Text,
-        group_id -> Text,
-        username -> Text,
-        email -> Text,
-        password -> Text,
-        creation_time -> Timestamp,
+    users (user_id) {
+        user_id -> Int4,
+        email -> Varchar,
+        salt -> Varchar,
+        password -> Varchar,
+        created_at -> Timestamp,
+        subscriptions -> Int4,
     }
 }
-
-joinable!(opensight_user -> user_group (group_id));
 
 allow_tables_to_appear_in_same_query!(
     analytics,
     applications,
-    opensight_user,
+    projects,
     sessions,
     user_group,
     users,

@@ -1,1 +1,1 @@
-DROP TABLE opensight_user;
+DROP TABLE users;

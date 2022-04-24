@@ -1,6 +1,6 @@
 use crate::application::Application;
 use diesel;
-use super::schema::applications;
+use crate::schema::applications;
 use diesel::{PgConnection, QueryResult, RunQueryDsl};
 use diesel::prelude::*;
 

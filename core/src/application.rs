@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use uuid::Uuid;
-use crate::application_dao::{insert_application, get_application, get_all_applications};
+use crate::daos::application_dao::{insert_application, get_application, get_all_applications};
 use crate::db::DatabaseConnection;
 use std::error::Error;
 

@@ -4,7 +4,7 @@ use std::error::Error;
 
 use crate::{db::DatabaseConnection, user_dao::{insert_user, get_user}};
 
-use super::schema::opensight_user;
+use super::schema::users;
 use chrono::{NaiveDateTime, Utc};
 use rocket::serde::json::Json;
 use serde::{Serialize, Deserialize};
@@ -25,7 +25,7 @@ pub struct UserData{
 
 
 #[derive(Serialize, Queryable, Insertable)]
-#[table_name = "opensight_user"]
+#[table_name = "users"]
 pub struct User{
     userid: String,
     group_id: String,

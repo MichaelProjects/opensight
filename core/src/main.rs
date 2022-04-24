@@ -12,11 +12,11 @@ mod handle;
 mod health;
 mod application;
 mod schema;
-mod application_dao;
 mod user;
 mod response;
-mod user_dao;
 mod cors;
+mod daos;
+mod project;
 
 use cors::CORS;
 use diesel::{PgConnection, Connection};
