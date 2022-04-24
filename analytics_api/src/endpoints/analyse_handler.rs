@@ -32,6 +32,7 @@ impl<'r> FromRequest<'r> for ApiKey<'r> {
 }
 
 async fn vaildate_key(key: &str, app_id: &String){
+    
 }
 
 #[get("/<application_id>/analyse?<start>&<end>")]

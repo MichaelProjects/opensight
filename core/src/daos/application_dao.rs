@@ -1,4 +1,4 @@
-use crate::application::Application;
+use crate::models::application::Application;
 use diesel;
 use crate::schema::applications;
 use diesel::{PgConnection, QueryResult, RunQueryDsl};

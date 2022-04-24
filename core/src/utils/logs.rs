@@ -1,4 +1,4 @@
-use crate::settings::Settings;
+use super::settings::Settings;
 use log::{LevelFilter};
 use log4rs::append::file::FileAppender;
 use log4rs::config::{Appender, Root};

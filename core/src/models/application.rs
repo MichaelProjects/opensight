@@ -1,6 +1,6 @@
 extern crate diesel;
 
-use super::schema::applications;
+use crate::schema::applications;
 use chrono::{NaiveDateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::hash_map::DefaultHasher;

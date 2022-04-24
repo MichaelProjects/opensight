@@ -2,9 +2,10 @@ extern crate diesel;
 
 use std::error::Error;
 
-use crate::{db::DatabaseConnection, user_dao::{insert_user, get_user}};
+use crate::daos::user_dao::{insert_user, get_user};
+use crate::{db::DatabaseConnection};
 
-use super::schema::users;
+use crate::schema::users;
 use chrono::{NaiveDateTime, Utc};
 use rocket::serde::json::Json;
 use serde::{Serialize, Deserialize};

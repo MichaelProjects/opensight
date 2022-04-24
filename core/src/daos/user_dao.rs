@@ -1,6 +1,6 @@
 use diesel::{QueryResult, PgConnection};
 use crate::schema::users;
-use crate::user::User;
+use crate::models::user::User;
 use diesel::prelude::*;
 
 

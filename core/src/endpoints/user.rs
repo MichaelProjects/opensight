@@ -8,9 +8,12 @@ use crate::models::application::Application;
 use crate::utils::response::ApiResponse;
 
 
-#[get("/health")]
-pub(crate) fn get_health(_conn: DatabaseConnection,) -> Json<Health> {
-    Json(Health::new(200, true))
+#[post("/login", data="<user_data>")]
+pub(crate) async fn login(conn: DatabaseConnection, user_data: Json<UserData>){
+    let user = User::new(&user_data);
 
 }
 
+#[post("/validate", data="<login_data>")]
+pub(crate) async fn validate_user(conn: DatabaseConnection, login_data: Json<LoginData>){
+}  

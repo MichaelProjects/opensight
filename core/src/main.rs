@@ -5,26 +5,23 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-mod logs;
-mod settings;
 mod db;
 mod handle;
-mod health;
-mod application;
 mod schema;
-mod user;
-mod response;
-mod cors;
+mod models;
 mod daos;
-mod project;
+mod utils;
+mod endpoints;
 
-use cors::CORS;
 use diesel::{PgConnection, Connection};
 use rocket::{figment::Figment, Rocket};
-use crate::settings::Settings;
 use rocket::Build;
-use handle::{get_health, create_application, get_application, get_all_application};
+use crate::endpoints::application::{create_application, get_application, get_all_application};
+use handle::get_health;
 use db::DatabaseConnection;
+use crate::utils::settings::Settings;
+use crate::utils::cors::CORS;
+use crate::utils::logs::init_logger;
 
 pub fn insert_conf_values(conf: &Settings) -> Figment {
     let mut logging_string = "critical";
@@ -76,6 +73,6 @@ async fn main(){
         }
     };
     run_migration(&conf);
-    logs::init_logger(&conf);
+    init_logger(&conf);
     rocket_creator(conf).launch().await;
 }

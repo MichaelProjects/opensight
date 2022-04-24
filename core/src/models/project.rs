@@ -1,6 +1,6 @@
 use chrono::{NaiveDateTime, Utc};
 use serde::{Deserialize, Serialize};
-use super::schema::projects;
+use crate::schema::projects;
 
 #[derive(Serialize, Clone, Debug, Hash, Queryable, Insertable)]
 #[table_name = "projects"]
