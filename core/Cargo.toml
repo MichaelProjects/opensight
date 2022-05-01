@@ -18,9 +18,9 @@ diesel = { version = "1.4.4", features = ["postgres", "chrono"] }
 diesel_migrations = "1.4.0"
 log4rs = "1.0.0"
 jsonwebtoken = "8"
-password-hash = "0.4.1"
+bcrypt = "0.12"
 rand = "0.8.5"
-
+chrono = "0.4.19"
 
 [dependencies.rocket_sync_db_pools]
 version = "0.1.0-rc.1"

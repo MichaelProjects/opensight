@@ -1,4 +1,4 @@
-ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS pepper text;
+ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS pepper text NOT NULL;
 CREATE TABLE if not exists users
 (
  id        text,

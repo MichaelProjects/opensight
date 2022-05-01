@@ -33,7 +33,7 @@ table! {
         email -> Text,
         password -> Text,
         creation_time -> Timestamp,
-        pepper -> Nullable<Text>,
+        pepper -> Text,
     }
 }
 
