@@ -4,7 +4,6 @@ use crate::models::{health::{Health}, application::ApplicationData, user::LoginD
 use rocket::serde::json::Json;
 use crate::db::DatabaseConnection;
 use crate::models::user::{UserData, User};
-use crate::models::application::Application;
 use crate::utils::response::ApiResponse;
 
 
@@ -17,3 +16,8 @@ pub(crate) async fn login(conn: DatabaseConnection, user_data: Json<UserData>){
 #[post("/validate", data="<login_data>")]
 pub(crate) async fn validate_user(conn: DatabaseConnection, login_data: Json<LoginData>){
 }  
+
+#[get("/refresh?<refresh_token&<token>&<client_id>")]
+pub(crate) async fn refresh_jwt_token(conn: DatabaseConnection, refresh_token: String, token: String, client_id: String){
+
+}

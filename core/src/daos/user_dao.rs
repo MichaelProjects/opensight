@@ -11,7 +11,7 @@ pub fn insert_user(user: User, conn: &PgConnection) -> Result<User, diesel::resu
     response
 }
 
-pub fn get_user(username: String, conn: &PgConnection) -> Result<User, diesel::result::Error>{
-    let response: QueryResult<User> = users::table.filter(users::username.eq(username)).first(conn);
+pub fn get_user(email: String, conn: &PgConnection) -> Result<User, diesel::result::Error>{
+    let response: QueryResult<User> = users::table.filter(users::email.eq(email)).first(conn);
     response
 }

@@ -1,5 +1,6 @@
 use rocket::http::Status;
 use rocket::request::{Outcome, Request, FromRequest};
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug)]
 pub struct ApiKey<'r>(pub &'r str);
@@ -23,6 +24,14 @@ impl<'r> FromRequest<'r> for ApiKey<'r> {
     }
 }
 
-pub async fn validate_token(token: &str){
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Claims {
+    company: String,
+    user_id: String,
+    scope: String,
+    exp: usize
+}
+
+pub fn create_token(){
     
 }

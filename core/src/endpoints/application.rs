@@ -1,6 +1,6 @@
 use rocket::{self, http::Status};
 use serde_json::{json};
-use crate::{models::{health::{Health}, application::ApplicationData, user::LoginData}, utils::oauth::{ApiKey, validate_token}};
+use crate::{models::{health::{Health}, application::ApplicationData, user::LoginData}, utils::jwt::{ApiKey}};
 use rocket::serde::json::Json;
 use crate::db::DatabaseConnection;
 use crate::models::user::{UserData, User};
@@ -10,7 +10,6 @@ use crate::utils::response::ApiResponse;
 
 #[post("/application", data="<app_data>")]
 pub(crate) async fn create_application(conn: DatabaseConnection, app_data: Json<ApplicationData>, key: ApiKey<'_>) -> ApiResponse{
-    validate_token(key.0).await;
     let apps = Application::get_all(&conn).await.unwrap();
     for app in apps.iter(){
         if app.application_name == app_data.name {

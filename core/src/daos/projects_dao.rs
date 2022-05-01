@@ -1,16 +1,18 @@
 use diesel::{PgConnection, QueryResult, RunQueryDsl};
+use serde::Deserialize;
 use crate::utils::dao_error::DaoError;
 use crate::models::project::Project;
 use crate::schema::projects;
 use diesel::prelude::*;
 use std::error::Error;
 
+#[derive(Debug, Deserialize)]
 pub struct ProjectIn {
     pub projects_name: String,
 }
 
 
-pub async fn create_project(project_details: Project, conn: &mut PgConnection) -> QueryResult<Project>{
+pub  fn create_project(project_details: Project, conn: &mut PgConnection) -> QueryResult<Project>{
     let response: QueryResult<Project> = diesel::insert_into(projects::table)
     .values(project_details)
     .get_result(conn);
