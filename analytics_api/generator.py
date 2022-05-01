@@ -3,7 +3,11 @@
 # Copyright 2022 by Michael Lichtenecker.
 # All rights reserved.
 
-Sample data generator that is used in development to generate sample data to test the analytic api and the analyse endpoints of this service. 
+Sample data generator that is used in development to generate sample data to test the analytic api and the analyse endpoints of this service.
+
+Use cases:
+- demo-console.opensight.io Data Generator
+- Development Data Generator (to test the analytic endpoints) 
 """
 
 from dataclasses import dataclass
@@ -13,11 +17,14 @@ import random
 import os
 import logging
 import json
+import time
+
 
 # env data
 SERVER = ""
 APPID = ""
 TOKEN = ""
+SLEEP = 0 # the time that waits between requests
 AMOUNT = 10000
 
 # todo implement timeframe 
@@ -62,7 +69,7 @@ class SampleData:
         self.version = get_random_value(app_versions)
 
     def update_session_length(self):
-        first_session_today = True if random.randint(0, 1) == 0 else False
+        first_session_today = True if random.randint(0, 10) >= 3 else False
         uri = f"{SERVER}/analytic/v1/{APPID}/session"
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {TOKEN}"}
         data = {"session_id": self.session_id, "length": random.randint(5, 1000), "is_first_today": first_session_today}
@@ -100,5 +107,6 @@ if __name__ == "__main__":
         sample_data.send_data()
         sample_data.update_session_length()
         print(f"Round: {i}")
+        time.sleep(SLEEP)
 
     print("Done")
