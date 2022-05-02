@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../controllers/global/cancleButton.dart';
-import '../app_create/components/createAppForm.dart';
+import 'components/create_project_form.dart';
 
 void createProjectDialog(BuildContext context) {
   var data = MediaQuery.of(context).size;
@@ -19,11 +19,11 @@ void createProjectDialog(BuildContext context) {
                 child: Column(
                   children: [
                     SelectableText(
-                      "Create application",
+                      "Create new project",
                       style: Theme.of(context).textTheme.headline5,
                     ),
                     const SizedBox(height: 20),
-                    CreateAppForm(),
+                    CreateProjectForm(),
                     CancleButton()
                   ],
                 ),

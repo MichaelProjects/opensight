@@ -36,8 +36,8 @@ pub struct Claims {
     company: String,
     user_id: String,
     scope: String,
-    issued: Datetime<Utc>,
-    exp: Datetime<Utc>
+    issued: DateTime<Utc>,
+    exp: DateTime<Utc>
 }
 
 pub fn create_token(user_id: String, scope: String, secret: String) -> Result<String, Box<dyn Error>>{

@@ -24,15 +24,15 @@ pub struct LoginData {
 #[derive(Serialize, Deserialize, Clone)]
 pub struct UserData{
     username: String,
-    email: String,
-    password: String
+    pub email: String,
+    pub password: String
 }
 
 
 #[derive(Serialize, Queryable, Insertable)]
 #[table_name = "users"]
 pub struct User{
-    id: String,
+    pub id: String,
     group_id: String,
     username: String,
     email: String,
@@ -63,6 +63,7 @@ impl User{
         })
     }
     pub async fn insert_user(user: User, conn: DatabaseConnection) -> Result<User, Box<dyn Error>> {
+        //! Takes the a user instance and inserts it into the database. it will get a connection from the connection pool, and send it via the corresponding dao module.
         let user = conn.run(|c| insert_user(user, c)).await?;
         Ok(user)
     }

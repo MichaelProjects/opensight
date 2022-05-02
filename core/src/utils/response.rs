@@ -12,6 +12,10 @@ impl ApiResponse{
     pub fn new(status: Status, payload: Value) -> Self{
         ApiResponse{ status, payload}
     }
+
+    pub fn not_found(error_message: Value) -> Self {
+        ApiResponse{ status: Status::NotFound, payload: error_message }
+    }
 }
 impl<'r> Responder<'r, 'static> for  ApiResponse {
     fn respond_to(self, req: &'r Request<'_>) -> response::Result<'static> {
