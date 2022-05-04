@@ -14,10 +14,18 @@ pub struct General {
     pub address: String,
     pub log_file: String,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct UserAuth{
+    pub jwt_algo: String,
+    pub jwt_secret: String
+}
+
 #[derive(Debug, Deserialize)]
 pub struct Settings {
     pub database: Database,
     pub general: General,
+    pub user_auth: UserAuth
 }
 
 impl Settings {

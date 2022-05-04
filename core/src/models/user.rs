@@ -6,6 +6,7 @@ use crate::daos::user_dao::{insert_user, get_user};
 use crate::{db::DatabaseConnection};
 
 use crate::schema::users;
+use bcrypt::{hash, DEFAULT_COST};
 use chrono::{NaiveDateTime, Utc};
 use rocket::serde::json::Json;
 use serde::{Serialize, Deserialize};
@@ -23,40 +24,46 @@ pub struct LoginData {
 #[derive(Serialize, Deserialize, Clone)]
 pub struct UserData{
     username: String,
-    email: String,
-    password: String
+    pub email: String,
+    pub password: String
 }
 
 
 #[derive(Serialize, Queryable, Insertable)]
 #[table_name = "users"]
 pub struct User{
-    id: String,
+    pub id: String,
     group_id: String,
     username: String,
     email: String,
     pub password: String,
-    pub pepper: String,
     creation_time: NaiveDateTime,
+    pub pepper: String,
 }
 impl User{
-    pub fn new(data: &Json<UserData>) -> User {
+    pub fn new(data: &Json<UserData>) -> Result<User, Box<dyn Error>> {
+        // generates random user password pepper
         let pepper = thread_rng()
         .sample_iter(&Alphanumeric)
         .take(20)
         .map(char::from)
         .collect();
+        // concatinate both strings together, password in the beginning, pepper in the end.
+        let to_hash_pw = format!("{}{}", data.password, pepper);
+        let hashed = hash(to_hash_pw, DEFAULT_COST)?;
+        Ok(
         User{
             id: Uuid::new_v4().to_string(),
             group_id: "".to_string(),
             username: data.username.clone(),
             email: data.email.clone(),
-            password: data.password.clone(),
+            password: hashed,
             pepper,
             creation_time: Utc::now().naive_utc(),
-        }
+        })
     }
     pub async fn insert_user(user: User, conn: DatabaseConnection) -> Result<User, Box<dyn Error>> {
+        //! Takes the a user instance and inserts it into the database. it will get a connection from the connection pool, and send it via the corresponding dao module.
         let user = conn.run(|c| insert_user(user, c)).await?;
         Ok(user)
     }

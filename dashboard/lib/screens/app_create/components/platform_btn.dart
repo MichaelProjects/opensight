@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PlatformBtn extends StatelessWidget {
+class PlatformBtn extends StatefulWidget {
   final String asset;
   final Color color;
   Function onSelect;
@@ -8,19 +8,27 @@ class PlatformBtn extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<PlatformBtn> createState() => _PlatformBtnState();
+}
+
+class _PlatformBtnState extends State<PlatformBtn> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.all(10),
-        height: 40,
-        width: 40,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(40)),
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5), color: widget.color),
         child: InkWell(
             onHover: (value) {
               print(value);
             },
-            onTap: () => onSelect(),
+            onTap: () => widget.onSelect(),
             child: Column(
-              children: [Image.asset(asset, height: 40, width: 40)],
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [Image.asset(widget.asset, height: 40, width: 40)],
             )));
   }
 }

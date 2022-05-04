@@ -18,6 +18,7 @@ use rocket::{figment::Figment, Rocket};
 use rocket::Build;
 use crate::endpoints::application::{create_application, get_application, get_all_application};
 use crate::endpoints::projects::{create_project_endpoint};
+use crate::endpoints::user::{login, user_create};
 use handle::get_health;
 use db::DatabaseConnection;
 use crate::utils::settings::Settings;
@@ -47,7 +48,7 @@ pub fn rocket_creator(conf: Settings) -> Rocket<Build> {
         .manage(conf)
         .mount(
             "/core/v1",
-            routes![get_health, create_application, get_application, get_all_application, create_project_endpoint],
+            routes![get_health, create_application, get_application, get_all_application, create_project_endpoint, login, user_create],
         )
 }
 

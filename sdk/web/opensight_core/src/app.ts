@@ -6,7 +6,6 @@
  *
  * @flow
  */
-import { runInThisContext } from "vm";
 import ConfigFromJson, { Config } from "./config";
 import Transport from "./transport";
 

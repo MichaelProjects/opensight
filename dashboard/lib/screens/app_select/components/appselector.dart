@@ -24,12 +24,12 @@ class _AppSelectorState extends State<AppSelector> {
         width: 230,
         child: Column(
           children: [
-            SelectableText("Your projects",
+            SelectableText("Your Apps",
                 style: Theme.of(context).textTheme.headline6),
             CreateApp(),
             Builder(builder: (context) {
               if (appController.apps.isEmpty) {
-                return Center(child: Text("No projects yet"));
+                return Center(child: Text("No apps yet"));
               } else {
                 return Expanded(
                   child: ListView.builder(
