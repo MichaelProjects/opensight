@@ -24,8 +24,8 @@ import time
 SERVER = ""
 APPID = ""
 TOKEN = ""
-SLEEP = 0 # the time that waits between requests
-AMOUNT = 10000
+SLEEP = 2 # the time that waits between requests
+AMOUNT = 1000
 
 # todo implement timeframe 
 
@@ -101,12 +101,14 @@ def read_conf ():
 
 if __name__ == "__main__":
     SERVER, APPID, TOKEN = read_conf()
-    for i in range(AMOUNT):
-        sample_data = SampleData()
-        sample_data.generate()
-        sample_data.send_data()
-        sample_data.update_session_length()
-        print(f"Round: {i}")
-        time.sleep(SLEEP)
+    while True:
+        for i in range(AMOUNT):
+            sample_data = SampleData()
+            sample_data.generate()
+            sample_data.send_data()
+            sample_data.update_session_length()
+            print(f"Round: {i}")
+            time.sleep(SLEEP)
+        time.sleep(3600)
 
     print("Done")
