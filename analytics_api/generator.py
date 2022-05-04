@@ -25,7 +25,7 @@ SERVER = ""
 APPID = ""
 TOKEN = ""
 SLEEP = 2 # the time that waits between requests
-AMOUNT = 1000
+AMOUNT = 40
 
 # todo implement timeframe 
 
