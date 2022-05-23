@@ -25,7 +25,7 @@ SERVER = ""
 APPID = ""
 TOKEN = ""
 SLEEP = 2 # the time that waits between requests
-AMOUNT = 1000
+AMOUNT = 40
 
 # todo implement timeframe 
 
@@ -102,6 +102,7 @@ def read_conf ():
 if __name__ == "__main__":
     SERVER, APPID, TOKEN = read_conf()
     while True:
+        AMOUNT = random.randint(0, 10)
         for i in range(AMOUNT):
             sample_data = SampleData()
             sample_data.generate()

@@ -1,0 +1,33 @@
+version: "3.3"
+
+services:
+  core:
+    image: michaellichtenecker/core_service:latest
+    networks: 
+      - quick_net
+    ports:
+      - 0.0.0.0:28019:28019
+  
+  analytic:
+    image: michaellichtenecker/opensight_analytics:latest
+    ports:
+      - 0.0.0.0:28018:28018
+    networks: 
+      - quick_net
+
+  postgresql:
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    networks: 
+      - quick_net
+    environment:
+      POSTGRES_USER: opensight
+      POSTGRES_PASSWORD: opensight_admin_password
+    volumes:
+      - /data/databases/postgres:/var/lib/postgresql/data
+networks:
+  quick_net:
+volumes:
+  db-data:

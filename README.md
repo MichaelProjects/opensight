@@ -18,7 +18,7 @@
 </p>
 
 ### Still under heavy construction
-Opensight is still under development and there will be big & breaking changes in the future. This should only be a pre-alpha test release, with a [demo](https://demo.opensight.io/) to check it out.
+Opensight is still under development and there will be big & breaking changes in the future. This should only be a pre-alpha test release, with a [demo](https://demo-console.opensight.io/) to check it out.
 
 ## What is Opensight
 Opensight is an Application Insight Platform, and should be a better alternative to other analytics and Application Insight Platform. You are able to host it On-Premis, or in the cloud managed by Opensight.
