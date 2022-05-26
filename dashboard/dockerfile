@@ -9,8 +9,6 @@ RUN flutter build web --release
 
 FROM nginx:1.21.4-alpine
 
-COPY --from=builder /build/build/web web
+COPY --from=builder /build/build/web /usr/share/nginx/html
 
-RUN useradd -u 8877 notroot
 
-USER notroot

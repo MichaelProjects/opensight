@@ -14,7 +14,7 @@ import 'controllers/timeline_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load();
+  String.fromEnvironment('SOME_VAR', defaultValue: 'SOME_DEFAULT_VALUE');
   Urls.host = dotenv.get("core_host", fallback: "localhost:28019");
   runApp(const MyApp());
 }
