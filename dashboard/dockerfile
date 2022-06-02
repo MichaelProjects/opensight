@@ -10,5 +10,8 @@ RUN flutter build web --release
 FROM nginx:1.21.4-alpine
 
 COPY --from=builder /build/build/web /usr/share/nginx/html
+COPY scripts/bake_env.sh .
+ENV OPENSIGHT_CORE_VERSION=${OPENSIGHT_CORE_VERSION}
 
+CMD [ "sh", "bake_env.sh", ${OPENSIGHT_CORE_VERSION} ]
 
