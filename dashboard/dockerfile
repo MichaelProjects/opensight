@@ -7,8 +7,11 @@ COPY . /build/.
 RUN flutter pub get
 RUN flutter build web --release
 
-FROM nginx:1.21.4-alpine
+FROM nginx:1.22.0
 
 COPY --from=builder /build/build/web /usr/share/nginx/html
+COPY scripts/bake_env.sh .
+ENV OPENSIGHT_CORE_URL 
 
+CMD [  "bash", "bake_env.sh", ${core_url} ]
 

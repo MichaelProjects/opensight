@@ -1,8 +1,8 @@
 import 'package:dashboard/controllers/dashboard/analytics_model.dart';
 import 'package:dashboard/controllers/app_controller.dart';
 import 'package:dashboard/controllers/global/nav_route.dart';
-import 'package:dashboard/utils/api/urls.dart';
 import 'package:dashboard/utils/dark_theme.dart';
+import 'package:dashboard/utils/api/urls.dart';
 import 'package:dashboard/utils/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -14,9 +14,10 @@ import 'controllers/timeline_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //String.fromEnvironment('SOME_VAR', defaultValue: 'SOME_DEFAULT_VALUE');
-  //Urls.host = dotenv.get("core_host", fallback: "localhost:28019");
-  Urls.host = "https://app-dev.fynancial.de";
+  const String core = String.fromEnvironment('OPENSIGHT_CORE_VERSION',
+      defaultValue: 'localhost:28019');
+  print(core);
+  Urls.host = "localhost:28019";
   runApp(const MyApp());
 }
 
