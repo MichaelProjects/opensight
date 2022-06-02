@@ -14,8 +14,9 @@ import 'controllers/timeline_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  String.fromEnvironment('SOME_VAR', defaultValue: 'SOME_DEFAULT_VALUE');
-  Urls.host = dotenv.get("core_host", fallback: "localhost:28019");
+  //String.fromEnvironment('SOME_VAR', defaultValue: 'SOME_DEFAULT_VALUE');
+  //Urls.host = dotenv.get("core_host", fallback: "localhost:28019");
+  Urls.host = "https://app-dev.fynancial.de";
   runApp(const MyApp());
 }
 
