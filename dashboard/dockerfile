@@ -11,7 +11,6 @@ FROM nginx:1.22.0
 
 COPY --from=builder /build/build/web /usr/share/nginx/html
 COPY scripts/bake_env.sh .
-ENV OPENSIGHT_CORE_URL 
+ENV OPENSIGHT_CORE_URL "localhost:28019"
 
-CMD [  "bash", "bake_env.sh", ${core_url} ]
-
+CMD [  "bash", "bake_env.sh", "&&", "nginx", "-g", "daemon off" ]
