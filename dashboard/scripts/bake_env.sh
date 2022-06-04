@@ -1,7 +1,8 @@
 #!/bin/bash
+# This scirpt is used to create a .env file with the values that where specified in the -e of the docker run command.
 
-#env_path="/usr/share/nginx/html/assets/assets/.env"
-env_path="/Users/michael/Documents/Analytics/dashboard/.env"
+env_path="/var/www/dashboard/assets/.env"
+#env_path="/Users/michael/Documents/Analytics/dashboard/.env"
 rm $env_path
 touch $env_path
 
@@ -9,3 +10,6 @@ if [ -z "$OPENSIGHT_CORE_URL" ];
   then echo "$OPENSIGHT_CORE_URL is null";
   else echo "OPENSIGHT_CORE_URL=$OPENSIGHT_CORE_URL" >> $env_path;
 fi
+
+
+exec "$@"

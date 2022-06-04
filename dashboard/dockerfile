@@ -9,8 +9,10 @@ RUN flutter build web --release
 
 FROM nginx:1.22.0
 
-COPY --from=builder /build/build/web /usr/share/nginx/html
+COPY --from=builder /build/build/web /var/www/dashboard
 COPY scripts/bake_env.sh .
+COPY scripts/nginx.conf /etc/nginx/conf.d/dashboard.conf
 ENV OPENSIGHT_CORE_URL "localhost:28019"
+RUN chmod 755 /bake_env.sh
 
-CMD [  "bash", "bake_env.sh", "&&", "nginx", "-g", "daemon off" ]
+CMD [ "/bake_env.sh" , "nginx", "-g", "daemon off;"]
