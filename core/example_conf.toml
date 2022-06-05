@@ -6,3 +6,7 @@ address = "0.0.0.0"
 
 [database]
 connection_string = "postgres://opensight:opensight_admin_password@postgresql/postgres"
+
+[user_auth]
+jwt_algo = "HS256"
+jwt_secret = "h9h5rp29urhfn0weifh782grufnajfisndfo8a73hr9u3nfa983h4f9823hfna7894ha90238rnq0235xna75cqbd34857axn5uzanx875na4z85x7a45"

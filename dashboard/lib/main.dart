@@ -14,6 +14,7 @@ import 'controllers/timeline_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load(fileName: ".env");
   Urls.host = dotenv.env['OPENSIGHT_CORE_URL']!;
   runApp(const MyApp());

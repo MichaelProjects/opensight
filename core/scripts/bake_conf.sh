@@ -1,9 +1,11 @@
 #!/bin/bash
 
 filename="conf.toml"
-conf_url="https://github.com/MichaelProjects/opensight/blob/dev/core/test_conf.toml"
+conf_url="https://raw.githubusercontent.com/MichaelProjects/opensight/dev/core/example_conf.toml"
 
 if [[ -f $filename ]]
     then echo "$filename exists on your filesystem."
-    else wget -O $filename $con_url 
+    else wget -O "$filename" $conf_url 
 fi
+
+exec "$@"

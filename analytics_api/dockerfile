@@ -9,6 +9,8 @@ RUN cargo build --release
 FROM ubuntu:21.04
 RUN apt update && apt install postgresql-client -y
 COPY --from=builder /analytics_api/target/release/opensight_analytics_api opensight_analytics_api
+COPY scripts/bake_conf.sh .
+RUN chmod 755 /bake_conf.sh
 
 RUN useradd -u 8877 notroot
 
@@ -16,4 +18,4 @@ RUN mkdir -p /var/log/opensight/
 RUN chmod -R 777 /var/log/opensight
 ENV RUST_LOG=debug
 USER notroot
-CMD ["./opensight_analytics_api"]
+CMD ["/bake_conf.sh", "./opensight_analytics_api"]

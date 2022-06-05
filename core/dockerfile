@@ -10,11 +10,13 @@ FROM ubuntu:21.04
 RUN apt update && apt install postgresql-client -y && apt install wget -y
 COPY --from=builder /core/target/release/opensight_core opensight_core
 COPY scripts/bake_conf.sh .
-RUN useradd -u 8877 notroot
+RUN chmod 755 /bake_conf.sh
+
+#RUN useradd -u 8877 notroot
 
 RUN mkdir -p /var/log/opensight/
 RUN chmod -R 777 /var/log/opensight
 ENV RUST_LOG=debug
-USER notroot
+#USER notroot
 
 CMD ["/bake_conf.sh", "./opensight_core"]

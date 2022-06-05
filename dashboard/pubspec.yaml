@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  opensight_core: ^0.1.3
   coolicons: ^1.0.0
   http: ^0.13.3
   provider: ^6.0.2
