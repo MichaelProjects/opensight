@@ -12,10 +12,11 @@ COPY --from=builder /analytics_api/target/release/opensight_analytics_api opensi
 COPY scripts/bake_conf.sh .
 RUN chmod 755 /bake_conf.sh
 
-RUN useradd -u 8877 notroot
+#RUN useradd -u 8877 notroot
 
 RUN mkdir -p /var/log/opensight/
 RUN chmod -R 777 /var/log/opensight
 ENV RUST_LOG=debug
-USER notroot
+#USER notroot
+
 CMD ["/bake_conf.sh", "./opensight_analytics_api"]

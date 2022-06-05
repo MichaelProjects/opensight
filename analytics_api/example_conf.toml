@@ -1,0 +1,8 @@
+[general]
+debug = true
+log_file = ""
+port = 28018
+address = "0.0.0.0"
+
+[database]
+connection_string = "postgres://opensight:opensight_admin_password@postgresql/postgres"
