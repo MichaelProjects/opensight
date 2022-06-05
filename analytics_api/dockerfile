@@ -7,7 +7,7 @@ RUN rustup update
 RUN cargo build --release
 
 FROM ubuntu:21.04
-RUN apt update && apt install postgresql-client -y
+RUN apt update && apt install postgresql-client -y && apt install wget -y
 COPY --from=builder /analytics_api/target/release/opensight_analytics_api opensight_analytics_api
 COPY scripts/bake_conf.sh .
 RUN chmod 755 /bake_conf.sh
