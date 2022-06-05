@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   core:
-    image: michaellichtenecker/core_service:latest
+    image: michaellichtenecker/opensight_core:latest
     networks: 
       - quick_net
     ports:
@@ -14,6 +14,16 @@ services:
       - 0.0.0.0:28018:28018
     networks: 
       - quick_net
+
+  dashboard:
+    image: michaellichtenecker/opensight_dashboard:latest
+    ports:
+      - 0.0.0.0:8080:80
+    networks: 
+      - quick_net
+    environment:
+      - OPENSIGHT_CORE_URL="http://core:28019"
+      - OPENSIGHT_ANALYTIC_URL="http://analytic:28018"
 
   postgresql:
     image: postgres:latest

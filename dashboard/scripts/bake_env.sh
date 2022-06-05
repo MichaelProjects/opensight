@@ -3,7 +3,6 @@
 
 env_path="/var/www/dashboard/assets/.env"
 #env_path="/Users/michael/Documents/Analytics/dashboard/.env"
-rm $env_path
 touch $env_path
 
 if [ -z "$OPENSIGHT_CORE_URL" ];

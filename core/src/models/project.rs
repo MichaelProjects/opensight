@@ -18,7 +18,7 @@ impl Project {
     pub fn new(data: ProjectIn) -> Project {
         let project_id:String = Uuid::new_v4().to_string();
         let get_time = Utc::now().naive_utc();
-        let mut project = Project{
+        let mut project = Project {
             id: project_id,
             projects_name: data.projects_name,
             created: get_time,
