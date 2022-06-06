@@ -16,7 +16,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: ".env");
-  Urls.host = dotenv.env['OPENSIGHT_CORE_URL']!;
+  Urls.coreUrl = dotenv.env['OPENSIGHT_CORE_URL']!;
+  Urls.analyticUrl = dotenv.env['OPENSIGHT_ANALYTIC_URL']!;
   runApp(const MyApp());
 }
 
