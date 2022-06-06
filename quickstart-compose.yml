@@ -26,8 +26,8 @@ services:
     networks: 
       - quick_net
     environment:
-      - OPENSIGHT_CORE_URL="http://core:28019"
-      - OPENSIGHT_ANALYTIC_URL="http://analytic:28018"
+      - OPENSIGHT_CORE_URL="http://127.0.0.1:28019"
+      - OPENSIGHT_ANALYTIC_URL="http://127.0.0.1:28018"
 
   postgresql:
     image: postgres:latest
