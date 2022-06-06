@@ -3,13 +3,17 @@ version: "3.3"
 services:
   core:
     image: michaellichtenecker/opensight_core:latest
+    depends_on:
+      - postgresql
     networks: 
       - quick_net
     ports:
       - 0.0.0.0:28019:28019
   
   analytic:
-    image: michaellichtenecker/opensight_analytics:latest
+    image: michaellichtenecker/opensight_analytics_api:latest
+    depends_on:
+      - postgresql
     ports:
       - 0.0.0.0:28018:28018
     networks: 

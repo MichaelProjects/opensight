@@ -5,7 +5,7 @@ port = 28019
 address = "0.0.0.0"
 
 [database]
-connection_string = "postgres://opensight:opensight_admin_password@postgresql/postgres"
+connection_string = "postgres://opensight:opensight_admin_password@postgresql:5432/postgres"
 
 [user_auth]
 jwt_algo = "HS256"
