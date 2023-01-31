@@ -10,5 +10,10 @@ if [ -z "$OPENSIGHT_CORE_URL" ];
   else echo "OPENSIGHT_CORE_URL=$OPENSIGHT_CORE_URL" >> $env_path;
 fi
 
+if [ -z "$OPENSIGHT_ANALYTIC_URL" ];
+  then echo "$OPENSIGHT_ANALYTIC_URL is null";
+  else echo "OPENSIGHT_ANALYTIC_URL=$OPENSIGHT_ANALYTIC_URL" >> $env_path;
+fi
+
 
 exec "$@"

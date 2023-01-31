@@ -3,6 +3,7 @@ debug = true
 log_file = ""
 port = 28018
 address = "0.0.0.0"
+opensight_core = "http://core:28019"
 
 [database]
 connection_string = "postgres://opensight:opensight_admin_password@postgresql:5432/postgres"
