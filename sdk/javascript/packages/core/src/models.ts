@@ -14,27 +14,3 @@ export class Config {
     }
 }
 
-export class Transporter {
-    baseUrl: string;
-    token: string;
-    constructor(baseUrl: string, token: string) {
-        this.baseUrl = baseUrl;
-        this.token = token;
-    }
-}
-
-export class OpensightCore {
-    config: Config;
-    transporter: Transporter;
-    private constructor(config: Config, transporter: Transporter) {
-        this.config;
-        this.transporter = transporter;
-    }
-    static initApp(config: Config) : OpensightCore {
-        return new OpensightCore(config, new Transporter(config.analyticsApi, config.token))
-    }
-}
-
-export interface Payload{
-    
-}

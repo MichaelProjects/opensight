@@ -5,8 +5,8 @@ port = 28019
 address = "0.0.0.0"
 
 [database]
-connection_string = "postgres://analyze_account:Glc95FLYbkgQwCy5KwUu@127.0.0.1/postgres"
+connection_string = "postgresql://opensight_dev_user:2828ojgjqqMrOa8L@127.0.0.1:5432"
 
 [user_auth]
 jwt_algo = "HS256"
-jwt_secret = "f41b07962fb3b27ccb96c7f5320cff9a93545a6f4eab84b759bd904be1c1c9c796361628e97667444857bdde60898f797b59d114dbbc42e28c09e5fe84d4efd3179c387cce4a477894662d83d8dd6c5fbcf5997b7631eee4595d0bb87bdfe2401bbb0c59"
+jwt_secret = "cBnkVpUA2YUBWtPpg2nkbI4jiP33j79hc8Ecv1hB"
